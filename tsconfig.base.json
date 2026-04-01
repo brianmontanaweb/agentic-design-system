@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "strict": true,
+    "exactOptionalPropertyTypes": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "noEmit": false,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
+  }
+}
