@@ -13,7 +13,16 @@
       "Bash(node -e \"const d=JSON.parse\\(require\\(''''fs''''\\).readFileSync\\(''''/dev/stdin'''',''''utf8''''\\)\\); console.log\\(Object.keys\\(d.dependencies||{}\\).filter\\(k=>k.includes\\(''''playwright''''\\)\\)\\)\")",
       "Bash(gh auth:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git remote:*)",
+      "Bash(git push:*)",
+      "Bash(find /Users/brianmontana/code/agentic-design-system/packages/mcp-builder/src -type f \\\\\\(-name *.ts -o -name *.tsx \\\\\\))",
+      "Bash(xargs -I {} basename {})",
+      "Bash(wc -l /Users/brianmontana/code/agentic-design-system/apps/storybook/src/stories/*.tsx)",
+      "WebFetch(domain:www.d4b.dev)",
+      "WebFetch(domain:developers.openai.com)",
+      "WebFetch(domain:blog.modelcontextprotocol.io)",
+      "WebFetch(domain:medium.com)"
     ]
   }
 }
