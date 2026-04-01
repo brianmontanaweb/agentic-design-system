@@ -1,0 +1,24 @@
+{
+  "name": "agentic-design-system",
+  "private": true,
+  "version": "0.0.0",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w packages/tokens && npm run build -w packages/core && npm run build -w packages/agents",
+    "dev": "npm run dev --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "storybook": "npm run dev -w apps/storybook",
+    "build-storybook": "npm run build -w apps/storybook",
+    "test:visual": "npm run test:visual -w apps/storybook",
+    "test:visual:update": "npm run test:visual:update -w apps/storybook"
+  },
+  "devDependencies": {
+    "eslint": "^10.1.0",
+    "prettier": "^3.8.1",
+    "typescript": "^6.0.2"
+  }
+}

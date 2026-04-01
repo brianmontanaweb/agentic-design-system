@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:storybook.js.org)",
+      "WebFetch(domain:github.com)",
+      "Bash(npm run:*)",
+      "Bash(npm view:*)",
+      "Bash(grep -v \"^npm error$\")",
+      "Bash(xargs rm:*)",
+      "Bash(node -e \"const p = require\\(''''./node_modules/@storybook/test-runner/package.json''''\\); console.log\\(JSON.stringify\\(p.dependencies || {}, null, 2\\)\\)\")",
+      "Bash(node -e \"const d=JSON.parse\\(require\\(''''fs''''\\).readFileSync\\(''''/dev/stdin'''',''''utf8''''\\)\\); console.log\\(Object.keys\\(d.dependencies||{}\\).filter\\(k=>k.includes\\(''''playwright''''\\)\\)\\)\")",
+      "Bash(gh auth:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
