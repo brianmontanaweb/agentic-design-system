@@ -1,6 +1,6 @@
 # Agentic Design System
 
-A React component library and design token system built for agentic AI applications — MCP tools, AI chat interfaces, and agent dashboards. Dark-first, TypeScript-first, WCAG 2.2 AA compliant.
+A React component library and design token system built for agentic AI applications — MCP tools, AI chat interfaces, and agent dashboards. Dark-first, TypeScript-first, targeting WCAG 2.2 AA (see [Known Issues](#known-issues--open-discussion)).
 
 ## Packages
 
@@ -157,7 +157,7 @@ ESLint 10 flat config enforces:
 
 **No global styles** — The library sets no styles on `body` or any global selector.
 
-**MCP lifecycle** — Components are designed around MCP task states. `AgentStatus` and `ProgressSteps` map directly to the `working`, `input_required`, `completed`, `failed`, and `cancelled` states from the [MCP 2025-11-25 spec](https://modelcontextprotocol.io/specification/2025-11-25).
+**MCP lifecycle** — Components are designed around MCP task states. `AgentStatus` and `ProgressSteps` currently cover `idle`, `running`, `done`, and `error`. The `waiting` (`input_required`) and `cancelled` states from the [MCP 2025-11-25 spec](https://modelcontextprotocol.io/specification/2025-11-25) are not yet implemented.
 
 ## Standards
 
@@ -165,6 +165,42 @@ ESLint 10 flat config enforces:
 - WAI-ARIA 1.2 patterns for interactive components
 - [W3C Design Tokens Format Module 2025.10](https://www.designtokens.org/tr/2025.10/format/) (migration in progress)
 - [MCP Specification 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25)
+
+## Known Issues / Open Discussion
+
+These gaps are documented and tracked. Contributions and discussion welcome.
+
+### Accessibility (WCAG 2.2 AA)
+
+The README currently claims AA compliance but the following are not yet implemented:
+
+- **Missing ARIA live regions** — `StreamingText`, `ThinkingIndicator`, `AgentStatus`, and `MessageThread` have no `role="log"` or `role="status"` + `aria-live` attributes. Status changes and streaming content are invisible to screen readers. ([SC 4.1.3](https://www.w3.org/WAI/WCAG21/Understanding/status-messages.html))
+- **`ToolCallCard` is not keyboard accessible** — The expand/collapse trigger is a `div` with `onClick`, not a `<button>`. Requires `aria-expanded` + `aria-controls` per the [WAI-ARIA Disclosure pattern](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/).
+- **`ProgressSteps` missing list semantics** — No `role="list"` on the container or `aria-current="step"` on the active item.
+- **No `prefers-reduced-motion` support** — Animated components (`ThinkingIndicator`, `AgentStatus` running dot, `ToolCallCard` pulse, `StreamingText` cursor) animate unconditionally with no reduced-motion override in `AgenticProvider` or `theme.ts`.
+
+### MCP Lifecycle Coverage
+
+`AgentStatus` and `ProgressSteps` are missing two MCP task states defined in the [2025-11-25 spec](https://modelcontextprotocol.io/specification/2025-11-25):
+
+- `waiting` — maps to MCP `input_required` (agent paused, needs user input)
+- `cancelled` — maps to MCP `cancelled` (explicitly stopped)
+
+The `AgentStatus` component table above should currently read `idle | running | done | error` only.
+
+### Token Format
+
+Tokens are not yet in [W3C DTCG 2025.10](https://www.designtokens.org/tr/2025.10/format/) format (`$value`/`$type`/`$description`). This blocks compatibility with Style Dictionary v4 and Tokens Studio pipelines. Migration is in progress.
+
+### Component Spec Docs
+
+Agent-readable spec files (`docs/components/`) only exist for `Button`. The following are missing: `AgentStatus`, `ThinkingIndicator`, `ProgressSteps`, `ToolCallCard`, `StreamingText`, `MessageBubble`, `MessageThread`.
+
+### MCP Apps Bundle
+
+`packages/mcp-builder` is scaffolded but unimplemented. An `iife` bundle is needed for embedding components in MCP App iframes via the `ui://` resource URI scheme.
+
+---
 
 ## For AI Agents
 
