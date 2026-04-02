@@ -93,6 +93,10 @@ const config = defineConfig({
         'accent.green': { value: { _dark: '#3dd68c', _light: '#16a34a' } },
         'accent.amber': { value: { _dark: '#f59e0b', _light: '#d97706' } },
         'accent.red': { value: { _dark: '#f87171', _light: '#dc2626' } },
+        // Step background tints — used by ProgressSteps for active/complete step circles.
+        // Hex 8-digit values encode RRGGBBAA; 0x22 ≈ 13% opacity.
+        'bg.step.active': { value: { _dark: '#4d9fff22', _light: '#2563eb22' } },
+        'bg.step.complete': { value: { _dark: '#3dd68c22', _light: '#16a34a22' } },
       },
     },
   },

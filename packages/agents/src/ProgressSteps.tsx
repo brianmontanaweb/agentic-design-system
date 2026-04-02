@@ -15,9 +15,9 @@ export interface ProgressStepsProps {
 }
 
 const stepColors: Record<StepStatus, { dot: string; label: string }> = {
-  pending: { dot: '#2a2a38', label: '#8888aa' },
-  active: { dot: '#4d9fff', label: '#f0f0f5' },
-  complete: { dot: '#3dd68c', label: '#8888aa' },
+  pending: { dot: 'border.subtle', label: 'text.muted' },
+  active: { dot: 'accent.blue', label: 'text.primary' },
+  complete: { dot: 'accent.green', label: 'text.muted' },
 }
 
 export function ProgressSteps({ steps }: ProgressStepsProps) {
@@ -33,9 +33,9 @@ export function ProgressSteps({ steps }: ProgressStepsProps) {
               borderRadius="full"
               bg={
                 step.status === 'complete'
-                  ? '#3dd68c22'
+                  ? 'bg.step.complete'
                   : step.status === 'active'
-                    ? '#4d9fff22'
+                    ? 'bg.step.active'
                     : 'bg.elevated'
               }
               border="1px solid"
@@ -47,7 +47,7 @@ export function ProgressSteps({ steps }: ProgressStepsProps) {
               mt="1px"
             >
               {step.status === 'complete' ? (
-                <Text fontSize="xs" color="#3dd68c" fontWeight="bold" lineHeight={1}>
+                <Text fontSize="xs" color="accent.green" fontWeight="bold" lineHeight={1}>
                   ✓
                 </Text>
               ) : (

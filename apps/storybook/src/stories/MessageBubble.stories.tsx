@@ -6,7 +6,7 @@ const meta: Meta<typeof MessageBubble> = {
   title: 'Agents/MessageBubble',
   component: MessageBubble,
   argTypes: {
-    role: {
+    sender: {
       control: 'select',
       options: ['user', 'assistant', 'tool'],
     },
@@ -18,7 +18,7 @@ type Story = StoryObj<typeof MessageBubble>
 
 export const User: Story = {
   args: {
-    role: 'user',
+    sender: 'user',
     content: 'Can you analyze this dataset and find anomalies?',
     timestamp: '3:15 PM',
   },
@@ -26,7 +26,7 @@ export const User: Story = {
 
 export const Assistant: Story = {
   args: {
-    role: 'assistant',
+    sender: 'assistant',
     content: "I'll analyze the dataset using statistical methods to identify outliers.",
     timestamp: '3:16 PM',
   },
@@ -48,7 +48,7 @@ export const Tool: Story = {
     />
   ),
   args: {
-    role: 'tool',
+    sender: 'tool',
     label: 'analyze_dataset',
   },
 }
