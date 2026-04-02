@@ -150,8 +150,61 @@ Agent-readable component specs — Markdown files structured so an LLM can imple
 8. ✓ Wire `demo-web` — compose full dashboard
 9. ✓ Write Storybook stories — one file per component
 10. ✓ Add visual regression testing
-11. Implement `Card` and `Badge` in `@agentic-ds/core`
-12. Write spec docs for all remaining components
+11. ✓ Make packages independently publishable — peer deps, externals, publishConfig, LICENSE
+12. ✓ Strict ESLint — typescript-eslint strict, jsx-a11y strict, no-hardcoded-hex, no-restricted-imports
+13. Implement `Card` and `Badge` in `@agentic-ds/core`
+14. Write spec docs for all remaining components (AgentStatus, ThinkingIndicator, ProgressSteps, ToolCallCard, StreamingText, MessageBubble, MessageThread)
+
+---
+
+## Known Gaps / Roadmap
+
+### Accessibility (WCAG 2.2 AA)
+
+| Item | Component(s) | Priority |
+|---|---|---|
+| Add `role="log"` + `aria-live="polite"` + `aria-atomic="false"` | `StreamingText`, `MessageThread` | High |
+| Add `role="status"` + `aria-live="polite"` | `ThinkingIndicator`, `AgentStatus` | High |
+| Convert expand/collapse trigger from `HStack onClick` to `<button>` with `aria-expanded` + `aria-controls` | `ToolCallCard` | High |
+| Add `role="list"` + `aria-current="step"` on active step | `ProgressSteps` | High |
+| Add `prefers-reduced-motion` override in `AgenticProvider` theme | `ThinkingIndicator`, `AgentStatus`, `ToolCallCard`, `StreamingText` | High |
+| Replace native `disabled` with `aria-disabled` + `tabIndex={0}` | `Button` | Medium |
+
+### MCP Lifecycle
+
+| Item | Component(s) | Priority |
+|---|---|---|
+| Add `waiting` state (MCP `input_required`) | `AgentStatus`, `ProgressSteps` | High |
+| Add `cancelled` state (MCP `cancelled`) | `AgentStatus`, `ProgressSteps` | High |
+| Implement `packages/mcp-builder` — IIFE bundle for MCP App iframe embedding | `mcp-builder` | Medium |
+
+### Tokens
+
+| Item | Priority |
+|---|---|
+| Migrate to W3C DTCG 2025.10 format (`$value`, `$type`, `$description`) | Medium |
+| Fix `getCSSVariables()` — scope output to `[data-agentic-ds]` not `:root` | High |
+| Add semantic alias tier — `color.agent.status.*`, `color.tool.status.*`, `color.message.*` | Medium |
+
+### Components
+
+| Item | Priority |
+|---|---|
+| Implement `Card` and `Badge` in `@agentic-ds/core` | Medium |
+| Add `ErrorBoundary` component for agentic error states | Medium |
+| Add `Skeleton` / loading placeholder primitives | Medium |
+| Add `defaultColorScheme` prop to `AgenticProvider` (currently hardcoded dark) | Medium |
+
+### Infrastructure
+
+| Item | Priority |
+|---|---|
+| Add `.github/workflows/` — CI for lint, build, and visual regression on PRs | High |
+| Add `@storybook/addon-a11y` to `apps/storybook/.storybook/main.ts` | High |
+| Add light mode backgrounds and stories to Storybook | Medium |
+| Add versioning strategy — Changesets or semantic-release, `CHANGELOG.md` | Medium |
+| Fix `MessageThread` `useEffect` — add dependency array to prevent scroll-on-every-render | High |
+| Fix TypeScript version mismatch — `packages/mcp-builder` uses `^5.7.2`, rest use `^6.0.2` | Low |
 
 ---
 
