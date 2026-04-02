@@ -22,7 +22,28 @@
       "WebFetch(domain:www.d4b.dev)",
       "WebFetch(domain:developers.openai.com)",
       "WebFetch(domain:blog.modelcontextprotocol.io)",
-      "WebFetch(domain:medium.com)"
+      "WebFetch(domain:medium.com)",
+      "Bash(npx prettier --write:*)",
+      "Bash(npx eslint:*)"
     ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "file=$(echo $CLAUDE_TOOL_INPUT | node -e \"process.stdin.resume();let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{console.log(JSON.parse(d).file_path||'')}catch(e){}})\"); if [[ \"$file\" == *.ts || \"$file\" == *.tsx || \"$file\" == *.json || \"$file\" == *.md ]]; then npx prettier --write \"$file\" 2>/dev/null; fi"
+          }
+        ]
+      }
+    ]
+  },
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    }
   }
 }

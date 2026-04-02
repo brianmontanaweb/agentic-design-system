@@ -60,6 +60,26 @@ Every implemented component needs a spec file at `docs/components/[ComponentName
 6. Tokens are pre-DTCG format — migration to W3C DTCG 2025.10 needed
 7. `mcp-builder` package has no implementation
 
+## Skills
+
+Invoke with `/skill-name` or `/<skill-name>`:
+
+- `/add-component <ComponentName> [core|agents]` — scaffold a component with source, story, spec doc, and index export
+- `/audit-a11y` — audit all components against WCAG 2.2 AA and produce a violation report
+
+## Scaling This CLAUDE.md
+
+The current single-file `CLAUDE.md` works well up to ~5–6 packages. Beyond that, or when packages have meaningfully different conventions, split into path-scoped rules under `.claude/rules/`:
+
+```
+.claude/rules/tokens.md       # paths: packages/tokens/src/**
+.claude/rules/core.md         # paths: packages/core/src/**
+.claude/rules/agents.md       # paths: packages/agents/src/**
+.claude/rules/stories.md      # paths: apps/storybook/src/**
+```
+
+Path-scoped rules only load when editing matching files, keeping context tight. This `CLAUDE.md` stays as the monorepo-wide entry point. Migrate when a package grows its own distinct conventions that don't apply to the others.
+
 ## Linting
 
 Run `npm run lint` from the root. It runs ESLint (flat config in `eslint.config.mjs`) then each package's `tsc --noEmit`.
