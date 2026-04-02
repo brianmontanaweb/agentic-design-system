@@ -1,25 +1,46 @@
 {
   "name": "@agentic-ds/tokens",
   "version": "0.1.0",
+  "description": "Design tokens for the Agentic Design System — framework-agnostic JS constants and CSS custom properties",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brianmontanaweb/agentic-design-system.git",
+    "directory": "packages/tokens"
+  },
+  "keywords": [
+    "design-tokens",
+    "design-system",
+    "agentic",
+    "mcp",
+    "css-variables"
+  ],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "tsup": "^8.5.1",
     "typescript": "^6.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

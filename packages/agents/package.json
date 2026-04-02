@@ -1,36 +1,60 @@
 {
   "name": "@agentic-ds/agents",
   "version": "0.1.0",
+  "description": "Agent-specific UI components for the Agentic Design System — streaming text, tool calls, status indicators, message threads",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brianmontanaweb/agentic-design-system.git",
+    "directory": "packages/agents"
+  },
+  "keywords": [
+    "design-system",
+    "agentic",
+    "mcp",
+    "react",
+    "ai",
+    "agent",
+    "streaming",
+    "components"
+  ],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@agentic-ds/core": "*",
-    "@agentic-ds/tokens": "*",
-    "@chakra-ui/react": "^3.34.0"
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
+    "@agentic-ds/core": "^0.1.0",
+    "@agentic-ds/tokens": "^0.1.0",
+    "@chakra-ui/react": "^3.34.0",
     "react": "^18 || ^19",
     "react-dom": "^18 || ^19"
   },
   "devDependencies": {
+    "@agentic-ds/core": "*",
+    "@agentic-ds/tokens": "*",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "tsup": "^8.5.1",
     "typescript": "^6.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
