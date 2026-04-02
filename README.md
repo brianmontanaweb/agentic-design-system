@@ -200,6 +200,50 @@ Agent-readable spec files (`docs/components/`) only exist for `Button`. The foll
 
 `packages/mcp-builder` is scaffolded but unimplemented. An `iife` bundle is needed for embedding components in MCP App iframes via the `ui://` resource URI scheme.
 
+### `MessageThread` Auto-Scroll Bug
+
+The `useEffect` in `MessageThread` has no dependency array, causing it to fire on every render — not just when children change. Any state update in a parent component forces a scroll to the bottom, making it impossible for users to scroll up to read earlier messages.
+
+### No CI/CD Pipeline
+
+There is no GitHub Actions workflow. Lint, build, and visual regression tests are not run automatically on pull requests. For independently publishable packages this is a significant gap.
+
+### No Storybook Accessibility Addon
+
+`apps/storybook/.storybook/main.ts` has no addons configured. The `@storybook/addon-a11y` addon would catch ARIA violations at the story level automatically, directly supporting the WCAG AA target.
+
+### `getCSSVariables()` Contradicts CSS Isolation Principle
+
+`packages/tokens/src/index.ts` exports a `getCSSVariables()` function that scopes output to `:root {}` — directly contradicting the library's core rule that all styles must be scoped to `[data-agentic-ds]`. Calling it injects globally-scoped CSS variables that leak into host applications.
+
+### `AgenticProvider` Has No `defaultColorScheme` Prop
+
+`defaultTheme="dark"` is hardcoded in `AgenticProvider` with no way for consumers to override it. This makes the provider unsuitable for embedding in light-mode host applications without forking the component.
+
+### `Button` Uses Native `disabled` Instead of `aria-disabled`
+
+The native `disabled` attribute removes the button from the tab order entirely. For agentic UIs where buttons are frequently disabled while waiting for agent output, the preferred pattern is `aria-disabled="true"` with `tabIndex={0}` so the button remains keyboard-discoverable and screen readers can announce its unavailable state.
+
+### No Versioning Strategy
+
+Three independently publishable packages with peer dependency version constraints exist, but there is no documented process for version bumps, no Changesets or semantic-release tooling, and no `CHANGELOG.md`. Coordinated and independent releases are undefined.
+
+### No Error Boundary Component
+
+Agentic UIs have a high failure rate — tool calls fail, APIs time out, streamed output can be malformed. No `ErrorBoundary` or error state primitive exists in the design system to handle these gracefully.
+
+### No Skeleton / Loading Placeholder Components
+
+Agentic UIs are inherently async. There are no `Skeleton` or content placeholder primitives for initial load states before agent output arrives.
+
+### TypeScript Version Mismatch
+
+The root and all packages declare `"typescript": "^6.0.2"` in devDependencies, but `packages/mcp-builder` declares `"typescript": "^5.7.2"`. This creates an inconsistent compiler version across the monorepo.
+
+### No Light Mode Storybook Coverage
+
+`apps/storybook/.storybook/preview.tsx` only registers dark backgrounds (`#0a0a0f`, `#13131a`). The theme fully supports light mode but has zero stories or visual regression baselines testing it.
+
 ---
 
 ## For AI Agents
