@@ -59,7 +59,7 @@ export const radius = Object.freeze({
 
 export function getCSSVariables(): string {
   return [
-    ':root {',
+    '[data-agentic-ds] {',
     `  --ds-bg-base: ${colors.bgBase};`,
     `  --ds-bg-surface: ${colors.bgSurface};`,
     `  --ds-bg-elevated: ${colors.bgElevated};`,

@@ -7,7 +7,7 @@ import storybook from 'eslint-plugin-storybook'
 export default tseslint.config(
   // --- Global ignores ---
   {
-    ignores: ['**/dist/**', '**/node_modules/**'],
+    ignores: ['**/dist/**', '**/node_modules/**', '**/storybook-static/**'],
   },
 
   // --- All TS/TSX source ---

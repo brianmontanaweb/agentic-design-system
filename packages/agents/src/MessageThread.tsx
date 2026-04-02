@@ -5,12 +5,14 @@ export interface MessageThreadProps {
   children: React.ReactNode
   maxHeight?: string
   autoScroll?: boolean
+  'aria-label'?: string
 }
 
 export function MessageThread({
   children,
   maxHeight = '600px',
   autoScroll = true,
+  'aria-label': ariaLabel = 'Message thread',
 }: MessageThreadProps) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
@@ -18,10 +20,12 @@ export function MessageThread({
     if (autoScroll && bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: 'smooth' })
     }
-  })
+  }, [children, autoScroll])
 
   return (
     <Box
+      role="log"
+      aria-label={ariaLabel}
       overflowY="auto"
       maxH={maxHeight}
       px={4}

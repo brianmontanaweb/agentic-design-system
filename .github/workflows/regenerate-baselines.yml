@@ -1,0 +1,61 @@
+name: Regenerate Visual Baselines
+
+# Run manually from the Actions tab when you need to update snapshot baselines
+# (e.g. after an intentional visual change, or after switching CI runner OS).
+# The workflow regenerates all snapshots on ubuntu-latest and commits them back
+# to the branch that triggered the dispatch.
+#
+# Prerequisites:
+#   - Repository Settings → Actions → General → Workflow permissions must be set
+#     to "Read and write permissions" so the GITHUB_TOKEN can push the commit.
+#   - If main is branch-protected (requires PR reviews), trigger this workflow
+#     on a feature branch instead and open a PR to land the new baselines.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    name: Regenerate on ubuntu-latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Fetch the full ref so we can push back to the triggering branch.
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build packages
+        run: npm run build
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      - name: Regenerate baselines
+        run: |
+          npx http-server apps/storybook/storybook-static --port 6006 --silent &
+          npx wait-on http://127.0.0.1:6006 --timeout 60000
+          npm run test:visual:update -w @agentic-ds/storybook
+        env:
+          TARGET_URL: 'http://127.0.0.1:6006'
+
+      - name: Commit updated snapshots
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add apps/storybook/__snapshots__/
+          git diff --staged --quiet && echo "No snapshot changes." || \
+            git commit -m "chore: regenerate visual baselines on ubuntu-latest" && \
+            git push

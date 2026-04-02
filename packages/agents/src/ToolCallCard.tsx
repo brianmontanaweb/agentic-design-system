@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Box, Code, HStack, Text, VStack } from '@chakra-ui/react'
+import React, { useId, useState } from 'react'
+import { Box, Button, Code, Text, VStack } from '@chakra-ui/react'
 
 export type ToolCallStatus = 'pending' | 'running' | 'done' | 'error'
 
@@ -26,6 +26,7 @@ export function ToolCallCard({
   defaultOpen = false,
 }: ToolCallCardProps) {
   const [open, setOpen] = useState(defaultOpen)
+  const contentId = useId()
 
   return (
     <Box
@@ -35,14 +36,24 @@ export function ToolCallCard({
       borderRadius="md"
       overflow="hidden"
     >
-      <HStack
+      <Button
+        variant="ghost"
+        w="100%"
+        h="auto"
+        display="flex"
         px={3}
         py={2}
         gap={2}
-        cursor="pointer"
+        justifyContent="flex-start"
+        alignItems="center"
+        borderRadius={0}
+        fontWeight="normal"
+        transition="background 100ms"
         onClick={() => setOpen((v) => !v)}
         _hover={{ bg: 'bg.elevated' }}
-        transition="background 100ms"
+        _active={{ bg: 'bg.elevated' }}
+        aria-expanded={open}
+        aria-controls={contentId}
       >
         <Box
           w="6px"
@@ -52,16 +63,16 @@ export function ToolCallCard({
           flexShrink={0}
           animation={status === 'running' ? 'ds-pulse 1.5s ease-in-out infinite' : undefined}
         />
-        <Text fontSize="sm" fontFamily="mono" color="text.primary" flex={1}>
+        <Text fontSize="sm" fontFamily="mono" color="text.primary" flex={1} textAlign="left">
           {toolName}
         </Text>
-        <Text fontSize="xs" color="text.muted" userSelect="none">
+        <Text fontSize="xs" color="text.muted" userSelect="none" aria-hidden="true">
           {open ? '▾' : '▸'}
         </Text>
-      </HStack>
+      </Button>
 
       {open && (
-        <VStack gap={0} align="stretch" borderTop="1px solid" borderColor="border.subtle">
+        <VStack id={contentId} gap={0} align="stretch" borderTop="1px solid" borderColor="border.subtle">
           {input !== undefined && (
             <Box
               px={3}
