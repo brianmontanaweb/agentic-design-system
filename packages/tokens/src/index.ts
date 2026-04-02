@@ -1,4 +1,4 @@
-export const colors = {
+export const colors = Object.freeze({
   bgBase: '#0a0a0f',
   bgSurface: '#13131a',
   bgElevated: '#1c1c26',
@@ -9,9 +9,9 @@ export const colors = {
   accentGreen: '#3dd68c',
   accentAmber: '#f59e0b',
   accentRed: '#f87171',
-} as const
+} as const)
 
-export const space = {
+export const space = Object.freeze({
   1: '4px',
   2: '8px',
   3: '12px',
@@ -22,40 +22,40 @@ export const space = {
   10: '40px',
   12: '48px',
   16: '64px',
-} as const
+} as const)
 
-export const fonts = {
+export const fonts = Object.freeze({
   mono: '"JetBrains Mono", "Fira Code", Menlo, monospace',
   sans: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-} as const
+} as const)
 
-export const fontSizes = {
+export const fontSizes = Object.freeze({
   xs: '0.75rem',
   sm: '0.875rem',
   md: '1rem',
   lg: '1.125rem',
   xl: '1.25rem',
   '2xl': '1.5rem',
-} as const
+} as const)
 
-export const fontWeights = {
+export const fontWeights = Object.freeze({
   normal: '400',
   medium: '500',
   semibold: '600',
   bold: '700',
-} as const
+} as const)
 
-export const duration = {
+export const duration = Object.freeze({
   fast: '100ms',
   normal: '200ms',
   slow: '400ms',
-} as const
+} as const)
 
-export const radius = {
+export const radius = Object.freeze({
   sm: '4px',
   md: '8px',
   lg: '12px',
-} as const
+} as const)
 
 export function getCSSVariables(): string {
   return [
@@ -82,5 +82,5 @@ export function getCSSVariables(): string {
   ].join('\n')
 }
 
-export const tokens = { colors, space, fonts, fontSizes, fontWeights, duration, radius }
+export const tokens = Object.freeze({ colors, space, fonts, fontSizes, fontWeights, duration, radius })
 export default tokens

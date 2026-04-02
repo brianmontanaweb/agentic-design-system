@@ -7,8 +7,6 @@ export type { ButtonProps, ButtonVariant, ButtonSize } from './Button'
 export { CodeBlock } from './CodeBlock'
 export type { CodeBlockProps } from './CodeBlock'
 
-export { system } from './theme'
-
 export {
   Badge,
   Box,

@@ -60,6 +60,25 @@ Every implemented component needs a spec file at `docs/components/[ComponentName
 6. Tokens are pre-DTCG format — migration to W3C DTCG 2025.10 needed
 7. `mcp-builder` package has no implementation
 
+## Linting
+
+Run `npm run lint` from the root. It runs ESLint (flat config in `eslint.config.mjs`) then each package's `tsc --noEmit`.
+
+**Rules enforced:**
+- `typescript-eslint` strict + stylistic — no `any`, consistent type imports, unused vars
+- `eslint-plugin-jsx-a11y` strict — WCAG 2.x coverage; catches missing keyboard handlers, invalid ARIA, non-interactive elements with click handlers
+- `eslint-plugin-react` + `react-hooks` — hooks rules, exhaustive-deps as error
+- `eslint-plugin-storybook` — story conventions
+- `no-restricted-syntax` (packages/core, packages/agents only) — bans hardcoded hex color literals; use tokens
+- `no-restricted-imports` — bans importing `system` from `@agentic-ds/core` or `ChakraProvider` from `@chakra-ui/react` directly; use `<AgenticProvider>`
+
+**Current known violations (28 errors — pre-existing, to be fixed):**
+- `packages/agents/src/AgentStatus.tsx`, `MessageBubble.tsx`, `ProgressSteps.tsx`, `ToolCallCard.tsx` — hardcoded hex colors; replace with semantic tokens
+- `apps/demo-web/src/App.tsx`, `apps/storybook/src/stories/MessageThread.stories.tsx` — invalid ARIA role values
+- `apps/demo-web/src/main.tsx` — non-null assertion
+
+Do not add `eslint-disable` comments to work around these — fix the underlying issue.
+
 ## Testing
 
 - Run visual regression tests: `npm run test:visual`

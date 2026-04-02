@@ -9,7 +9,7 @@
   "scripts": {
     "build": "npm run build -w packages/tokens && npm run build -w packages/core && npm run build -w packages/agents",
     "dev": "npm run dev --workspaces --if-present",
-    "lint": "npm run lint --workspaces --if-present",
+    "lint": "eslint . && npm run lint --workspaces --if-present",
     "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
     "storybook": "npm run dev -w apps/storybook",
     "build-storybook": "npm run build -w apps/storybook",
@@ -18,7 +18,12 @@
   },
   "devDependencies": {
     "eslint": "^10.1.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-storybook": "^10.3.3",
     "prettier": "^3.8.1",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.2",
+    "typescript-eslint": "^8.58.0"
   }
 }
