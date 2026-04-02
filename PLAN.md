@@ -202,9 +202,65 @@ Agent-readable component specs — Markdown files structured so an LLM can imple
 | Add `.github/workflows/` — CI for lint, build, and visual regression on PRs | High |
 | Add `@storybook/addon-a11y` to `apps/storybook/.storybook/main.ts` | High |
 | Add light mode backgrounds and stories to Storybook | Medium |
-| Add versioning strategy — Changesets or semantic-release, `CHANGELOG.md` | Medium |
+| Add versioning strategy — see discussion below | Medium |
 | Fix `MessageThread` `useEffect` — add dependency array to prevent scroll-on-every-render | High |
 | Fix TypeScript version mismatch — `packages/mcp-builder` uses `^5.7.2`, rest use `^6.0.2` | Low |
+
+---
+
+## Discussion: Versioning Strategy
+
+The three packages (`@agentic-ds/tokens`, `@agentic-ds/core`, `@agentic-ds/agents`) are independently publishable but have a strict dependency chain. A versioning strategy must handle both coordinated releases (token change that cascades through all three) and isolated releases (a single component fix in `agents`).
+
+**Decision needed:** Changesets vs semantic-release.
+
+### Option A — Changesets
+
+[Changesets](https://github.com/changesets/changesets) is a monorepo-first tool. Contributors add a `.changeset/*.md` file describing what changed and at what semver level. On release, Changesets consumes them to bump versions and generate `CHANGELOG.md`.
+
+| | |
+|---|---|
+| **Pro** | Built for monorepos — understands inter-package dependencies |
+| **Pro** | Humans explicitly declare the impact of each PR (patch/minor/major) |
+| **Pro** | Generates per-package `CHANGELOG.md` automatically |
+| **Pro** | Supports linked packages (bumping `tokens` can auto-bump `core` and `agents`) |
+| **Pro** | GitHub Action available (`changesets/action`) for automated publish on merge |
+| **Con** | Requires contributors to add a changeset file in every PR — easy to forget |
+| **Con** | One more file to review in PRs |
+| **Con** | Setup has more moving parts than semantic-release |
+
+### Option B — semantic-release
+
+[semantic-release](https://semantic-release.gitbook.io) infers version bumps automatically from [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:` prefixes). No manual changeset files — the commit message is the release note.
+
+| | |
+|---|---|
+| **Pro** | Zero manual steps — fully automated on push to `main` |
+| **Pro** | Enforces Conventional Commits discipline (readable git log) |
+| **Pro** | No extra PR artifacts |
+| **Con** | Monorepo support requires `semantic-release-monorepo` plugin — less mature |
+| **Con** | All contributors must follow Conventional Commits strictly; one bad commit message breaks automation |
+| **Con** | Inter-package dependency bumps (e.g. bumping `tokens` version in `core`'s peer deps) require extra config |
+| **Con** | Less explicit — a commit message typo can result in a wrong semver bump |
+
+### Recommendation
+
+**Changesets** is the better fit for this repo because:
+
+1. The three packages have hard version coupling — `@agentic-ds/agents` peer-depends on `^0.1.0` of `core` and `tokens`. Changesets' linked-packages feature handles this automatically; semantic-release requires manual config.
+2. This is a design system with intentional, reviewed releases — the human-in-the-loop of writing a changeset is a feature, not a burden.
+3. The [changesets/action](https://github.com/changesets/action) GitHub Action creates a "Version Packages" PR automatically, making releases a one-click merge.
+
+**Conventional Commits** should still be adopted alongside Changesets for log readability, without wiring it to automation.
+
+### Implementation steps (when ready)
+
+1. `npm install -D @changesets/cli`
+2. `npx changeset init` — creates `.changeset/config.json`
+3. Set `linked` in config to `[["@agentic-ds/tokens", "@agentic-ds/core", "@agentic-ds/agents"]]` for coordinated bumps
+4. Add `.github/workflows/release.yml` using `changesets/action`
+5. Add `CHANGELOG.md` per package (auto-generated on first release)
+6. Document the PR workflow in `CLAUDE.md`: "Run `npx changeset` before opening a PR if your change affects a published package"
 
 ---
 
