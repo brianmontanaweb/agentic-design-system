@@ -16,7 +16,7 @@ const preview: Preview = {
   decorators: [
     (Story) => (
       <AgenticProvider>
-        <div style={{ padding: '2rem', minWidth: '400px' }}>
+        <div style={{ padding: '2rem', minWidth: '400px', backgroundColor: '#0a0a0f' }}>
           <Story />
         </div>
       </AgenticProvider>
