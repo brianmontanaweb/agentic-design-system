@@ -9,10 +9,10 @@ export interface AgentStatusProps {
 }
 
 const statusConfig: Record<AgentStatusValue, { color: string; label: string }> = {
-  idle: { color: '#8888aa', label: 'Idle' },
-  running: { color: '#4d9fff', label: 'Running' },
-  done: { color: '#3dd68c', label: 'Done' },
-  error: { color: '#f87171', label: 'Error' },
+  idle: { color: 'text.muted', label: 'Idle' },
+  running: { color: 'accent.blue', label: 'Running' },
+  done: { color: 'accent.green', label: 'Done' },
+  error: { color: 'accent.red', label: 'Error' },
 }
 
 export function AgentStatus({ status, label }: AgentStatusProps) {

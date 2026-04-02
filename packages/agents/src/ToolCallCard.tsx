@@ -12,10 +12,10 @@ export interface ToolCallCardProps {
 }
 
 const statusColors: Record<ToolCallStatus, string> = {
-  pending: '#8888aa',
-  running: '#4d9fff',
-  done: '#3dd68c',
-  error: '#f87171',
+  pending: 'text.muted',
+  running: 'accent.blue',
+  done: 'accent.green',
+  error: 'accent.red',
 }
 
 export function ToolCallCard({

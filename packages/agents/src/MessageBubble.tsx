@@ -4,20 +4,20 @@ import { Box, HStack, Text } from '@chakra-ui/react'
 export type MessageRole = 'user' | 'assistant' | 'tool'
 
 export interface MessageBubbleProps {
-  role: MessageRole
+  sender: MessageRole
   content: React.ReactNode
   label?: string
   timestamp?: string
 }
 
 const roleConfig: Record<MessageRole, { label: string; labelColor: string }> = {
-  user: { label: 'You', labelColor: '#8888aa' },
-  assistant: { label: 'Assistant', labelColor: '#4d9fff' },
-  tool: { label: 'Tool', labelColor: '#3dd68c' },
+  user: { label: 'You', labelColor: 'text.muted' },
+  assistant: { label: 'Assistant', labelColor: 'accent.blue' },
+  tool: { label: 'Tool', labelColor: 'accent.green' },
 }
 
-export function MessageBubble({ role, content, label, timestamp }: MessageBubbleProps) {
-  const config = roleConfig[role]
+export function MessageBubble({ sender, content, label, timestamp }: MessageBubbleProps) {
+  const config = roleConfig[sender]
   return (
     <Box
       bg="bg.surface"

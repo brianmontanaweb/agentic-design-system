@@ -53,12 +53,12 @@ export default function App() {
 
             <MessageThread maxHeight="400px">
               <MessageBubble
-                role="user"
+                sender="user"
                 content="Summarize the key findings from the latest research papers on diffusion models."
                 timestamp="2:34 PM"
               />
               <MessageBubble
-                role="tool"
+                sender="tool"
                 label="search_papers"
                 content={
                   <ToolCallCard
@@ -71,7 +71,7 @@ export default function App() {
                 }
               />
               <MessageBubble
-                role="assistant"
+                sender="assistant"
                 content={
                   <StreamingText
                     text="Based on the search results, here are the key findings from recent diffusion model research..."
