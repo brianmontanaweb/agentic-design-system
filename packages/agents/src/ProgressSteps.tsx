@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 
-export type StepStatus = 'pending' | 'active' | 'complete'
+export type StepStatus = 'pending' | 'active' | 'complete' | 'waiting' | 'cancelled'
 
 export interface Step {
   id: string
@@ -18,26 +18,37 @@ const stepColors: Record<StepStatus, { dot: string; label: string }> = {
   pending: { dot: 'border.subtle', label: 'text.muted' },
   active: { dot: 'accent.blue', label: 'text.primary' },
   complete: { dot: 'accent.green', label: 'text.muted' },
+  waiting: { dot: 'accent.amber', label: 'text.primary' },
+  cancelled: { dot: 'text.muted', label: 'text.muted' },
+}
+
+function stepBg(status: StepStatus): string {
+  switch (status) {
+    case 'complete': return 'bg.step.complete'
+    case 'active': return 'bg.step.active'
+    case 'waiting': return 'bg.step.waiting'
+    default: return 'bg.elevated'
+  }
 }
 
 export function ProgressSteps({ steps }: ProgressStepsProps) {
   return (
-    <VStack gap={2} align="stretch">
+    <VStack gap={2} align="stretch" role="list">
       {steps.map((step, index) => {
         const colors = stepColors[step.status]
         return (
-          <HStack key={step.id} gap={3} alignItems="flex-start">
+          <HStack
+            key={step.id}
+            gap={3}
+            alignItems="flex-start"
+            role="listitem"
+            aria-current={step.status === 'active' ? 'step' : undefined}
+          >
             <Box
               w="24px"
               h="24px"
               borderRadius="full"
-              bg={
-                step.status === 'complete'
-                  ? 'bg.step.complete'
-                  : step.status === 'active'
-                    ? 'bg.step.active'
-                    : 'bg.elevated'
-              }
+              bg={stepBg(step.status)}
               border="1px solid"
               borderColor={colors.dot}
               display="flex"
@@ -49,6 +60,10 @@ export function ProgressSteps({ steps }: ProgressStepsProps) {
               {step.status === 'complete' ? (
                 <Text fontSize="xs" color="accent.green" fontWeight="bold" lineHeight={1}>
                   ✓
+                </Text>
+              ) : step.status === 'cancelled' ? (
+                <Text fontSize="xs" color="text.muted" fontWeight="bold" lineHeight={1}>
+                  —
                 </Text>
               ) : (
                 <Text
@@ -66,7 +81,7 @@ export function ProgressSteps({ steps }: ProgressStepsProps) {
               <Text
                 fontSize="sm"
                 color={colors.label}
-                fontWeight={step.status === 'active' ? 'medium' : 'normal'}
+                fontWeight={step.status === 'active' || step.status === 'waiting' ? 'medium' : 'normal'}
                 lineHeight="24px"
               >
                 {step.label}

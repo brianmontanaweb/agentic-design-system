@@ -6,6 +6,7 @@ export interface StreamingTextProps {
   isStreaming?: boolean
   fontSize?: string
   color?: string
+  'aria-label'?: string
 }
 
 export function StreamingText({
@@ -13,9 +14,10 @@ export function StreamingText({
   isStreaming = false,
   fontSize = 'sm',
   color = 'text.primary',
+  'aria-label': ariaLabel = 'Streaming output',
 }: StreamingTextProps) {
   return (
-    <Box as="span" display="inline">
+    <Box role="log" aria-live="polite" aria-atomic="false" aria-label={ariaLabel}>
       <Text as="span" fontSize={fontSize} color={color} whiteSpace="pre-wrap">
         {text}
       </Text>

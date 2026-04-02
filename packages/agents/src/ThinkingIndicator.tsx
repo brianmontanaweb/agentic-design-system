@@ -7,7 +7,7 @@ export interface ThinkingIndicatorProps {
 
 export function ThinkingIndicator({ label = 'Thinking' }: ThinkingIndicatorProps) {
   return (
-    <HStack gap={2} alignItems="center">
+    <HStack gap={2} alignItems="center" role="status" aria-live="polite">
       <HStack gap="3px" alignItems="center">
         {[0, 1, 2].map((i) => (
           <Box

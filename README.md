@@ -78,7 +78,9 @@ radius.md           // '8px'
 ```ts
 import { getCSSVariables } from '@agentic-ds/tokens'
 
-// Inject into a style tag for use outside the Chakra context
+// Inject into a style tag for use outside the Chakra context.
+// Output is scoped to [data-agentic-ds] — wrap your app in an element with
+// that attribute so the CSS custom properties apply.
 document.head.insertAdjacentHTML('beforeend', `<style>${getCSSVariables()}</style>`)
 ```
 

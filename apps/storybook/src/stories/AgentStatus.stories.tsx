@@ -7,7 +7,7 @@ const meta: Meta<typeof AgentStatus> = {
   argTypes: {
     status: {
       control: 'select',
-      options: ['idle', 'running', 'done', 'error'],
+      options: ['idle', 'running', 'waiting', 'done', 'error', 'cancelled'],
     },
   },
 }
@@ -17,6 +17,8 @@ type Story = StoryObj<typeof AgentStatus>
 
 export const Idle: Story = { args: { status: 'idle' } }
 export const Running: Story = { args: { status: 'running' } }
+export const Waiting: Story = { args: { status: 'waiting' } }
 export const Done: Story = { args: { status: 'done' } }
 export const Error: Story = { args: { status: 'error' } }
+export const Cancelled: Story = { args: { status: 'cancelled' } }
 export const CustomLabel: Story = { args: { status: 'running', label: 'Processing...' } }

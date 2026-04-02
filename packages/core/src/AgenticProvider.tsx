@@ -21,6 +21,19 @@ const keyframes = `
     50%      { opacity: 0; }
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-agentic-ds] {
+    @keyframes ds-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 1; transform: scale(1); }
+    }
+    @keyframes ds-blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 1; }
+    }
+  }
+}
 `
 
 export function AgenticProvider({ children }: AgenticProviderProps) {
