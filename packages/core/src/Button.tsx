@@ -169,7 +169,7 @@ export function Button({
         display="inline-flex"
         alignItems="center"
         gap="inherit"
-        visibility={loading ? 'hidden' : 'visible'}
+        opacity={loading ? 0 : 1}
       >
         {leftIcon && (
           <Box as="span" display="inline-flex" flexShrink={0} aria-hidden>
