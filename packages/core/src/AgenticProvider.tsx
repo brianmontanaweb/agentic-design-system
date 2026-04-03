@@ -5,6 +5,7 @@ import { system } from './theme'
 
 export interface AgenticProviderProps {
   children: React.ReactNode
+  defaultColorScheme?: 'dark' | 'light'
 }
 
 // Keyframes are scoped to [data-agentic-ds] so they don't pollute the host
@@ -36,7 +37,7 @@ const keyframes = `
 }
 `
 
-export function AgenticProvider({ children }: AgenticProviderProps) {
+export function AgenticProvider({ children, defaultColorScheme = 'dark' }: AgenticProviderProps) {
   return (
     // data-agentic-ds is the cssVarsRoot selector in theme.ts — all Chakra
     // CSS custom properties are scoped to this element, not :root.
@@ -46,7 +47,7 @@ export function AgenticProvider({ children }: AgenticProviderProps) {
       <ChakraProvider value={system}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme={defaultColorScheme}
           disableTransitionOnChange
         >
           {children}

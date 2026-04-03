@@ -159,24 +159,11 @@ Agent-readable component specs — Markdown files structured so an LLM can imple
 
 ## Known Gaps / Roadmap
 
-### Accessibility (WCAG 2.2 AA)
-
-| Item | Component(s) | Priority |
-|---|---|---|
-| Replace native `disabled` with `aria-disabled` + `tabIndex={0}` | `Button` | Medium |
-
 ### MCP Lifecycle
 
 | Item | Component(s) | Priority |
 |---|---|---|
 | Implement `packages/mcp-builder` — IIFE bundle for MCP App iframe embedding | `mcp-builder` | Medium |
-
-### Tokens
-
-| Item | Priority |
-|---|---|
-| Migrate to W3C DTCG 2025.10 format (`$value`, `$type`, `$description`) | Medium |
-| Add semantic alias tier — `color.agent.status.*`, `color.tool.status.*`, `color.message.*` | Medium |
 
 ### Components
 
@@ -185,13 +172,11 @@ Agent-readable component specs — Markdown files structured so an LLM can imple
 | Implement `Card` and `Badge` in `@agentic-ds/core` | Medium |
 | Add `ErrorBoundary` component for agentic error states | Medium |
 | Add `Skeleton` / loading placeholder primitives | Medium |
-| Add `defaultColorScheme` prop to `AgenticProvider` (currently hardcoded dark) | Medium |
 
 ### Infrastructure
 
 | Item | Priority |
 |---|---|
-| Add light mode backgrounds and stories to Storybook | Medium |
 | Add versioning strategy — see discussion below | Medium |
 
 ---

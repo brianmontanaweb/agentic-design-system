@@ -7,20 +7,40 @@ const preview: Preview = {
     backgrounds: {
       default: 'dark',
       values: [
-        { name: 'dark', value: '#0a0a0f' },
+        { name: 'dark',    value: '#0a0a0f' },
         { name: 'surface', value: '#13131a' },
+        { name: 'light',   value: '#f8f9fa' },
       ],
     },
     layout: 'centered',
   },
+  globalTypes: {
+    colorScheme: {
+      description: 'Color scheme for AgenticProvider',
+      defaultValue: 'dark',
+      toolbar: {
+        title: 'Color scheme',
+        icon: 'circlehollow',
+        items: [
+          { value: 'dark',  title: 'Dark',  icon: 'moon' },
+          { value: 'light', title: 'Light', icon: 'sun' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
   decorators: [
-    (Story) => (
-      <AgenticProvider>
-        <div style={{ padding: '2rem', minWidth: '400px', backgroundColor: '#0a0a0f' }}>
-          <Story />
-        </div>
-      </AgenticProvider>
-    ),
+    (Story, context) => {
+      const scheme = (context.globals['colorScheme'] ?? 'dark') as 'dark' | 'light'
+      const bg = scheme === 'light' ? '#f8f9fa' : '#0a0a0f'
+      return (
+        <AgenticProvider defaultColorScheme={scheme}>
+          <div style={{ padding: '2rem', minWidth: '400px', backgroundColor: bg }}>
+            <Story />
+          </div>
+        </AgenticProvider>
+      )
+    },
   ],
 }
 
