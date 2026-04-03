@@ -17,12 +17,20 @@ If the package is not specified, infer it:
 ### 1. Read existing conventions
 
 Before writing any code:
-- Read `docs/best-practices.md` in full
+- Read `docs/best-practices.md` in full — including section 8 (Figma MCP Usage)
 - Read `packages/<package>/src/index.ts` to understand the current export pattern
 - Read one existing component in the target package to understand the code style
 - Read `docs/components/Button.md` to understand the spec doc format
 
-### 2. Create the component source file
+### 2. Fetch the Figma component node
+
+Ask the user for the Figma component node link if not already provided:
+
+> Please provide the Figma link for the **\<ComponentName\>** component node.
+
+Then follow the extraction and conflict resolution process in `docs/best-practices.md` section 8. Do not proceed to implementation until all conflicts are resolved.
+
+### 3. Create the component source file
 
 File: `packages/<package>/src/<ComponentName>.tsx`
 
@@ -39,7 +47,7 @@ Requirements (all are MUST):
 - If the component animates, it MUST respect `prefers-reduced-motion` (handled at theme level in AgenticProvider — do not add per-component overrides)
 - Animated decorative elements MUST be `aria-hidden="true"`
 
-### 3. Add export to package index
+### 4. Add export to package index
 
 File: `packages/<package>/src/index.ts`
 
@@ -49,7 +57,7 @@ export { <ComponentName> } from './<ComponentName>'
 export type { <ComponentName>Props } from './<ComponentName>'
 ```
 
-### 4. Create Storybook story
+### 5. Create Storybook story
 
 File: `apps/storybook/src/stories/<ComponentName>.stories.tsx`
 
@@ -60,7 +68,7 @@ Requirements:
 - Include a story for every status/state value if the component is stateful
 - Do NOT import `React` explicitly (jsx-runtime transform is configured)
 
-### 5. Create component spec doc
+### 6. Create component spec doc
 
 File: `docs/components/<ComponentName>.md`
 
@@ -82,7 +90,7 @@ mcp-states: [list MCP states surfaced, if applicable]
 
 Body MUST include: description, variants table (if applicable), props table, accessibility requirements with WCAG SC references, do/don't examples. Use MUST/SHOULD/MAY (RFC 2119).
 
-### 6. Build and lint
+### 7. Build and lint
 
 Run in order:
 ```sh

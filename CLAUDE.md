@@ -60,11 +60,16 @@ Every implemented component needs a spec file at `docs/components/[ComponentName
 6. Tokens are pre-DTCG format — migration to W3C DTCG 2025.10 needed
 7. `mcp-builder` package has no implementation
 
+## Figma
+
+Figma is the authoritative design reference for all component work. Use the Figma MCP when implementing or updating components — see `docs/best-practices.md` section 8 for usage conventions.
+
 ## Skills
 
 Invoke with `/skill-name` or `/<skill-name>`:
 
 - `/add-component <ComponentName> [core|agents]` — scaffold a component with source, story, spec doc, and index export
+- `/update-component <ComponentName>` — audit and update an existing component; fixes violations, story gaps, and spec doc drift; plans first, waits for approval
 - `/audit-a11y` — audit all components against WCAG 2.2 AA and produce a violation report
 
 ## Scaling This CLAUDE.md
