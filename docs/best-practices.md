@@ -1,7 +1,7 @@
 ---
 title: Agentic Design System — Best Practices
 scope: all packages
-last-reviewed: 2026-04-01
+last-reviewed: 2026-04-02
 sources:
   - https://modelcontextprotocol.io/specification/2025-11-25
   - https://modelcontextprotocol.io/extensions/apps/overview
@@ -249,6 +249,85 @@ The `mcp-builder` IIFE bundle MUST be self-contained — no external imports, al
 ## 7. CSS Scoping Rule
 
 ALL styles MUST be scoped to `[data-agentic-ds]` — never to `:root`. This prevents style leakage when the design system is embedded in a host application or MCP App iframe. This invariant MUST be preserved across all build targets including the IIFE bundle.
+
+---
+
+## 8. Figma MCP Usage
+
+The official [Figma MCP](https://www.figma.com/developers/mcp) is the authoritative design reference for all component work. It MUST be consulted when implementing a new component (`/add-component`) or updating an existing one (`/update-component`).
+
+### Design file organisation
+
+Design files are split by package:
+
+| Package | Figma file |
+|---|---|
+| `@agentic-ds/core` | Core design file |
+| `@agentic-ds/agents` | Agents design file |
+
+### Getting the component node
+
+Component names in Figma do not necessarily match component names in code. The user MUST provide a direct link to the specific Figma component node. A Figma node link looks like:
+
+```
+https://www.figma.com/design/<fileKey>/<fileName>?node-id=<nodeId>
+```
+
+Extract the `fileKey` and `nodeId` from the URL and use the Figma MCP `get_file_nodes` tool to fetch the node:
+
+```
+get_file_nodes(fileKey, [nodeId])
+```
+
+If the user has not provided a Figma link, ask for it before proceeding:
+
+> Please provide the Figma link for the **\<ComponentName\>** component node so I can extract the design values.
+
+### What to extract
+
+For every component, extract all of the following from the Figma node:
+
+| Category | What to look for |
+|---|---|
+| **Colors** | Fill, stroke, and background values for every state — map to semantic tokens |
+| **Spacing & sizing** | Padding, gap, width, height, border radius, border width |
+| **Typography** | Font family, size, weight, line height, letter spacing |
+| **State variants** | Every variant defined in the component set (hover, focus, disabled, loading, error, etc.) |
+| **MCP lifecycle states** | For status-bearing components: idle, running, waiting, done, error, cancelled |
+| **Component props** | Variant property names and their values as defined in the Figma component set |
+
+Extract values by inspecting the node properties returned by the MCP. Prefer the Figma token/variable name over the raw value when Figma variables are in use — these map directly to `@agentic-ds/tokens`.
+
+### Mapping Figma values to tokens
+
+Figma values MUST be mapped to semantic tokens from `packages/tokens/src/index.ts`. Do not use raw hex or px values from Figma directly in component source — always route through a token.
+
+```ts
+// CORRECT — map Figma fill value to the semantic token it represents
+color: tokens['color.agent.status.running']   // Figma: #6ee7b7
+
+// WRONG — copy the raw value from Figma into the component
+color: '#6ee7b7'
+```
+
+If a Figma value has no matching token in `packages/tokens/src/index.ts`, a new token MUST be added before the component is implemented. Follow the naming convention in section 4.
+
+### Conflict resolution
+
+If a value in Figma conflicts with the current implementation or an existing token, do not resolve it unilaterally. Present the conflict to the user:
+
+> **Figma conflict — \<ComponentName\>**
+>
+> | Property | Figma value | Current code value |
+> |---|---|---|
+> | `color.agent.status.waiting` | `#fbbf24` | `#f59e0b` |
+>
+> Which value should be treated as correct? Options:
+> - **Figma is correct** — update the token and any components that use it
+> - **Code is correct** — the Figma file needs updating (flag this to the design team)
+> - **Neither** — provide the correct value
+
+Apply the resolution the user specifies. Do not proceed with the rest of the implementation until all conflicts are resolved.
 
 ---
 
