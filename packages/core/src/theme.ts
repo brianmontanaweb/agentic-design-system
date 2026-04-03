@@ -1,5 +1,5 @@
 import { createSystem, defaultConfig, defineConfig, defineRecipe } from '@chakra-ui/react'
-import { fonts } from '@agentic-ds/tokens'
+import { fonts, colors } from '@agentic-ds/tokens'
 
 const buttonRecipe = defineRecipe({
   base: {
@@ -75,29 +75,54 @@ const config = defineConfig({
     },
     tokens: {
       fonts: {
-        mono: { value: fonts.mono },
-        sans: { value: fonts.sans },
-        heading: { value: fonts.sans },
-        body: { value: fonts.sans },
+        mono:    { value: fonts.mono.$value },
+        sans:    { value: fonts.sans.$value },
+        heading: { value: fonts.sans.$value },
+        body:    { value: fonts.sans.$value },
       },
     },
     semanticTokens: {
       colors: {
-        'bg.base': { value: { _dark: '#0a0a0f', _light: '#f8f9fa' } },
-        'bg.surface': { value: { _dark: '#13131a', _light: '#ffffff' } },
-        'bg.elevated': { value: { _dark: '#1c1c26', _light: '#f0f0f5' } },
-        'border.subtle': { value: { _dark: '#2a2a38', _light: '#e2e2e8' } },
-        'text.primary': { value: { _dark: '#f0f0f5', _light: '#0a0a0f' } },
-        'text.muted': { value: { _dark: '#8888aa', _light: '#6666aa' } },
-        'accent.blue': { value: { _dark: '#4d9fff', _light: '#2563eb' } },
-        'accent.green': { value: { _dark: '#3dd68c', _light: '#16a34a' } },
-        'accent.amber': { value: { _dark: '#f59e0b', _light: '#d97706' } },
-        'accent.red': { value: { _dark: '#f87171', _light: '#dc2626' } },
-        // Step background tints — used by ProgressSteps for active/complete/waiting step circles.
-        // Hex 8-digit values encode RRGGBBAA; 0x22 ≈ 13% opacity.
-        'bg.step.active': { value: { _dark: '#4d9fff22', _light: '#2563eb22' } },
+        // ---- Base surfaces ----
+        'bg.base':      { value: { _dark: colors.bgBase.$value,       _light: '#f8f9fa' } },
+        'bg.surface':   { value: { _dark: colors.bgSurface.$value,    _light: '#ffffff' } },
+        'bg.elevated':  { value: { _dark: colors.bgElevated.$value,   _light: '#f0f0f5' } },
+        'border.subtle':{ value: { _dark: colors.borderSubtle.$value, _light: '#e2e2e8' } },
+        'text.primary': { value: { _dark: colors.textPrimary.$value,  _light: '#0a0a0f' } },
+        'text.muted':   { value: { _dark: colors.textMuted.$value,    _light: '#6666aa' } },
+
+        // ---- Accent palette ----
+        'accent.blue':  { value: { _dark: colors.accentBlue.$value,  _light: '#2563eb' } },
+        'accent.green': { value: { _dark: colors.accentGreen.$value, _light: '#16a34a' } },
+        'accent.amber': { value: { _dark: colors.accentAmber.$value, _light: '#d97706' } },
+        'accent.red':   { value: { _dark: colors.accentRed.$value,   _light: '#dc2626' } },
+
+        // ---- Step background tints (ProgressSteps) ----
+        // 8-digit hex: RRGGBBAA — 0x22 ≈ 13% opacity tint over the step circle background.
+        'bg.step.active':   { value: { _dark: '#4d9fff22', _light: '#2563eb22' } },
         'bg.step.complete': { value: { _dark: '#3dd68c22', _light: '#16a34a22' } },
-        'bg.step.waiting': { value: { _dark: '#f59e0b22', _light: '#d9770622' } },
+        'bg.step.waiting':  { value: { _dark: '#f59e0b22', _light: '#d9770622' } },
+
+        // ---- Semantic alias tier: MCP agent lifecycle states ----
+        // Use these in agent components instead of raw accent tokens.
+        'color.agent.status.idle':      { value: { _dark: colors.textMuted.$value,    _light: '#6666aa' } },
+        'color.agent.status.running':   { value: { _dark: colors.accentBlue.$value,   _light: '#2563eb' } },
+        'color.agent.status.waiting':   { value: { _dark: colors.accentAmber.$value,  _light: '#d97706' } },
+        'color.agent.status.done':      { value: { _dark: colors.accentGreen.$value,  _light: '#16a34a' } },
+        'color.agent.status.error':     { value: { _dark: colors.accentRed.$value,    _light: '#dc2626' } },
+        'color.agent.status.cancelled': { value: { _dark: colors.textMuted.$value,    _light: '#6666aa' } },
+
+        // ---- Semantic alias tier: tool call lifecycle states ----
+        'color.tool.status.pending': { value: { _dark: colors.textMuted.$value,    _light: '#6666aa' } },
+        'color.tool.status.running': { value: { _dark: colors.accentBlue.$value,   _light: '#2563eb' } },
+        'color.tool.status.done':    { value: { _dark: colors.accentGreen.$value,  _light: '#16a34a' } },
+        'color.tool.status.error':   { value: { _dark: colors.accentRed.$value,    _light: '#dc2626' } },
+
+        // ---- Semantic alias tier: message role backgrounds ----
+        'color.message.user.bg':      { value: { _dark: colors.bgElevated.$value,   _light: '#f0f0f5' } },
+        'color.message.assistant.bg': { value: { _dark: colors.bgSurface.$value,    _light: '#ffffff' } },
+        'color.message.tool.bg':      { value: { _dark: colors.bgElevated.$value,   _light: '#f0f0f5' } },
+        'color.message.tool.border':  { value: { _dark: colors.borderSubtle.$value, _light: '#e2e2e8' } },
       },
     },
   },

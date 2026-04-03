@@ -124,7 +124,8 @@ export function Button({
   return (
     <ButtonEl
       type={type}
-      disabled={disabled}
+      aria-disabled={disabled ? true : undefined}
+      tabIndex={disabled ? 0 : undefined}
       aria-busy={loading || undefined}
       aria-label={loading && loadingText ? loadingText : ariaLabel}
       pointerEvents={loading ? 'none' : undefined}
