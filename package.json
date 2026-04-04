@@ -14,9 +14,13 @@
     "storybook": "npm run dev -w apps/storybook",
     "build-storybook": "npm run build -w apps/storybook",
     "test:visual": "npm run test:visual -w apps/storybook",
-    "test:visual:update": "npm run test:visual:update -w apps/storybook"
+    "test:visual:update": "npm run test:visual:update -w apps/storybook",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "npm run build && changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.12",
     "eslint": "^10.1.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",

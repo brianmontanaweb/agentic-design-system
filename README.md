@@ -1,6 +1,23 @@
 # Agentic Design System
 
+[![CI](https://github.com/brianmontanaweb/agentic-design-system/actions/workflows/ci.yml/badge.svg)](https://github.com/brianmontanaweb/agentic-design-system/actions/workflows/ci.yml)
+[![Storybook](https://img.shields.io/badge/Storybook-live-ff4785?logo=storybook&logoColor=white)](https://brianmontanaweb.github.io/agentic-design-system/)
+[![WCAG 2.2 AA](https://img.shields.io/badge/WCAG_2.2-AA_target-0057b8)](https://www.w3.org/WAI/WCAG22/quickref/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A React component library and design token system built for agentic AI applications — MCP tools, AI chat interfaces, and agent dashboards. Dark-first, TypeScript-first, targeting WCAG 2.2 AA (see [Known Issues](#known-issues--open-discussion)).
+
+## Why Agentic DS?
+
+Generic design systems (Radix, Shadcn, MUI) are built for forms, dashboards, and navigation. Agentic UIs have a different set of primitives — streaming text, tool call visualization, multi-step progress, and lifecycle state that changes asynchronously. This library is built around those patterns.
+
+| Problem | How this library solves it |
+|---|---|
+| Streaming text needs live region ARIA to be accessible | `StreamingText` uses `role="log"` + `aria-live` by design |
+| Agent status changes must be announced to screen readers | `AgentStatus` uses `role="status"` + `aria-live="polite"` |
+| MCP lifecycle has 6 states generic libs don't model | Components are built around `idle`, `running`, `waiting`, `done`, `error`, `cancelled` |
+| Component styles leak when embedded in MCP App iframes | All CSS is scoped to `[data-agentic-ds]`, never `:root` |
+| Dark-first is an afterthought in most systems | Dark is the default; light mode is a first-class override |
 
 ## Packages
 

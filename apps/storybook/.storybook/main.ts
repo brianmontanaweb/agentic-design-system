@@ -7,6 +7,12 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
+  viteFinal: async (viteConfig) => {
+    if (process.env.GITHUB_PAGES === 'true') {
+      viteConfig.base = '/agentic-design-system/'
+    }
+    return viteConfig
+  },
 }
 
 export default config
