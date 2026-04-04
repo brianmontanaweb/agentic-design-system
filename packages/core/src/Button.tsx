@@ -53,7 +53,7 @@ const baseStyles = {
 const variantStyles: Record<ButtonVariant, object> = {
   solid: {
     bg: 'accent.blue',
-    color: 'white',
+    color: 'color.on.accent',
     _hover: { opacity: 0.85 },
     _active: { transform: 'scale(0.97)', opacity: 0.75 },
   },
@@ -74,7 +74,7 @@ const variantStyles: Record<ButtonVariant, object> = {
   },
   danger: {
     bg: 'accent.red',
-    color: 'white',
+    color: 'color.on.accent',
     _hover: { opacity: 0.85 },
     _active: { transform: 'scale(0.97)', opacity: 0.75 },
   },

@@ -26,7 +26,7 @@ const buttonRecipe = defineRecipe({
     variant: {
       solid: {
         bg: 'accent.blue',
-        color: 'white',
+        color: 'color.on.accent',
         _hover: { opacity: 0.85 },
         _active: { transform: 'scale(0.97)', opacity: 0.75 },
       },
@@ -47,7 +47,7 @@ const buttonRecipe = defineRecipe({
       },
       danger: {
         bg: 'accent.red',
-        color: 'white',
+        color: 'color.on.accent',
         _hover: { opacity: 0.85 },
         _active: { transform: 'scale(0.97)', opacity: 0.75 },
       },
@@ -96,6 +96,12 @@ const config = defineConfig({
         'accent.green': { value: { _dark: colors.accentGreen.$value, _light: '#16a34a' } },
         'accent.amber': { value: { _dark: colors.accentAmber.$value, _light: '#d97706' } },
         'accent.red':   { value: { _dark: colors.accentRed.$value,   _light: '#dc2626' } },
+
+        // ---- Contrast-safe text color for use on accent backgrounds ----
+        // Dark mode accent colors are light pastels (#4d9fff, #f87171) — white
+        // text fails WCAG AA (≈2.7:1). Flip to near-black so contrast exceeds 7:1.
+        // Light mode accent colors are dark (#2563eb, #dc2626) — white text passes.
+        'color.on.accent': { value: { _dark: colors.bgBase.$value, _light: '#ffffff' } },
 
         // ---- Step background tints (ProgressSteps) ----
         // 8-digit hex: RRGGBBAA — 0x22 ≈ 13% opacity tint over the step circle background.
