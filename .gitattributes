@@ -1,0 +1,6 @@
+# Treat snapshot PNGs as binary so git never attempts text diffs or merges.
+# When a rebase or merge conflict arises on these files, `git checkout --ours`
+# gives you the branch being rebased onto (the upstream/CI baselines) and
+# `git checkout --theirs` gives the commit being replayed (your local changes).
+# Always use `--ours` during a rebase to keep the CI-generated baselines.
+apps/storybook/__snapshots__/**/*.png binary
