@@ -1,6 +1,6 @@
 ---
 name: update-component
-description: Audit and update an existing component — source, story, and spec doc — fixing pre-existing violations, story gaps, and spec drift. Plans changes first and waits for approval before writing. Use when a component has been modified or needs to be brought up to standard.
+description: Audit and update an existing component — source, story, and spec doc — fixing pre-existing violations, story gaps, and spec drift. Always plans changes and waits for approval before writing any files. Use when: (1) user invokes /update-component, (2) a component has been modified and needs to be brought up to standard, (3) user asks to fix, update, or improve a specific existing component.
 argument-hint: "<ComponentName>"
 ---
 
@@ -28,82 +28,48 @@ Do not proceed further.
 
 ---
 
-## Step 2 — Fetch the Figma component node
+## Step 2 — Read everything
 
-Ask the user for the Figma component node link if not already provided:
+Read all three component files in full, plus:
 
-> Please provide the Figma link for the **\<ComponentName\>** component node so I can compare the current implementation against the design.
+- `docs/best-practices.md` — authoritative standard, including section 8 (Figma MCP Usage)
+- `references/violation-criteria.md` — checklist used in Steps 4–6 below
+- `packages/<package>/src/index.ts` — verify the export is current
+- `packages/tokens/src/index.ts` — verify token references used in the source
 
-Use the `get_file_nodes` tool to fetch the node, then extract all design values per `docs/best-practices.md` section 8. Record any conflicts between Figma and the current implementation — these will be surfaced in the plan (Step 7) before any files are written.
+---
 
-## Step 3 — Read everything
+## Step 3 — Fetch the Figma component node (conditional)
 
-Read all three files in full, plus:
+If the user provided a Figma link, extract `fileKey` and `nodeId` and call `get_file_nodes(fileKey, [nodeId])`. Extract all design values per `docs/best-practices.md` section 8. Record conflicts between Figma and the current implementation — surface them in the plan (Step 8).
 
-- `docs/best-practices.md` — authoritative standard for this codebase, including section 8 (Figma MCP Usage)
-- `packages/<package>/src/index.ts` — to check the export is current
-- `packages/tokens/src/index.ts` — to verify any token references used in the source
+If no Figma link was provided, ask:
+
+> Please provide the Figma link for the **\<ComponentName\>** component node (skip if unavailable).
+
+If the user skips, note **Figma: skipped** in the plan and proceed.
 
 ---
 
 ## Step 4 — Analyse: source violations
 
-Check the source file for every item below. Record each violation found.
-
-**Tokens**
-- [ ] Hardcoded hex color literals (any `#rrggbb`, `#rgb`, `#rrggbbaa`) — replace with semantic tokens from `@agentic-ds/tokens`
-- [ ] Hardcoded `px` timing values — replace with `duration.*` tokens
-- [ ] Any raw CSS color keyword (`red`, `blue`, etc.) not routed through a token
-
-**ARIA / accessibility**
-- [ ] `StreamingText` — must have `role="log"` + `aria-live="polite"` + `aria-atomic="false"`
-- [ ] `ThinkingIndicator` — must have `role="status"` + `aria-live="polite"`
-- [ ] `AgentStatus` — must have `role="status"` + `aria-live="polite"` + visually-hidden status text
-- [ ] `MessageThread` — must have `role="log"` + `aria-label`
-- [ ] Any expand/collapse trigger — must be `<button>` with `aria-expanded` + `aria-controls` (not `<div>` or `<span>`)
-- [ ] `ProgressSteps` — must have `role="list"` + `aria-current="step"` on the active item
-- [ ] Animated decorative elements — must be `aria-hidden="true"`
-
-**MCP lifecycle states** (for `AgentStatus` and `ProgressSteps` only)
-- [ ] All 6 states supported: `idle`, `running`, `waiting`, `done`, `error`, `cancelled`
-
-**CSS scoping**
-- [ ] All styles scoped to `[data-agentic-ds]` — not `:root`
-
-**Code quality**
-- [ ] No `any` types
-- [ ] No unused vars or imports
-- [ ] Props interface is exported alongside the component
+Using the **Source Violations** section of `references/violation-criteria.md` (already read), check every item against the source file. Record each violation found.
 
 ---
 
 ## Step 5 — Analyse: story gaps
 
-Compare the story file against the source. Record every gap found.
-
-- Missing story for a `variant` or `size` value
-- Missing story for a named state (`loading`, `disabled`, `error`, `cancelled`, `waiting`, etc.)
-- Stories that reference props that no longer exist in the source
-- Story title format incorrect (`'Core/<ComponentName>'` or `'Agents/<ComponentName>'`)
-- Explicit `React` import present (jsx-runtime transform — remove it)
+Using the **Story Gaps** section of `references/violation-criteria.md`, compare the story file against the source. Record every gap.
 
 ---
 
 ## Step 6 — Analyse: spec doc drift
 
-Compare `docs/components/<ComponentName>.md` against the source. Record every drift found.
-
-- Props table missing entries that exist in the source
-- Props table contains entries that no longer exist in the source
-- Prop types, defaults, or descriptions that don't match the implementation
-- Variants or states table out of sync with the source
-- YAML frontmatter `tokens` list incomplete or stale
-- `mcp-states` frontmatter missing or incomplete (for `AgentStatus` / `ProgressSteps`)
-- Implementation notes that contradict current code
+Using the **Spec Doc Drift** section of `references/violation-criteria.md`, compare `docs/components/<ComponentName>.md` against the source. Record every drift.
 
 ---
 
-## Step 7 — Scoped a11y audit
+## Step 7 — Scoped a11y audit (separate from Step 4)
 
 Run a focused accessibility check against the source and story using the WCAG 2.2 AA criteria in `docs/best-practices.md`. This is separate from the structural checks in Step 3 — look specifically for:
 
@@ -184,7 +150,15 @@ npm run build
 npm run lint
 ```
 
-Fix any errors that arise — do not use `eslint-disable` comments. If a fix is non-trivial, describe what you changed and why.
+If any visual changes were made (new variants, state changes, animation updates), also run:
+
+```sh
+npm run test:visual
+```
+
+If snapshots need updating after intentional changes: `npm run test:visual:update`.
+
+Fix any errors — do not use `eslint-disable` comments. If a fix is non-trivial, describe what you changed and why.
 
 ---
 
@@ -201,4 +175,8 @@ Output a concise summary:
 **Spec doc fields updated:** <list>
 **A11y fixes applied:** <count or "none — deferred">
 **Build + lint:** passing
+**Visual tests:** passing | skipped (no visual changes) | updated (<n> snapshots)
+**Figma:** reviewed | skipped
 ```
+
+To score the quality of this run against known test cases, see `references/eval-rubric.md`.
