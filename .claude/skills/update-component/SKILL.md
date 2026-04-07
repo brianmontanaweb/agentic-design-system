@@ -1,12 +1,27 @@
 ---
 name: update-component
 description: Audit and update an existing component — source, story, and spec doc — fixing pre-existing violations, story gaps, and spec drift. Always plans changes and waits for approval before writing any files. Use when: (1) user invokes /update-component, (2) a component has been modified and needs to be brought up to standard, (3) user asks to fix, update, or improve a specific existing component.
-argument-hint: "<ComponentName>"
+compatibility: Designed for Claude Code. Figma MCP is used for the optional design review step (step 3).
+metadata:
+  argument-hint: "<ComponentName>"
 ---
 
 # Update Component
 
 Audit and update an existing component given `$ARGUMENTS` in the format `<ComponentName>`.
+
+---
+
+## Gotchas
+
+These defuse the most common mistakes before you encounter them:
+
+- **Read `references/violation-criteria.md` once in Step 2** — it stays in context for Steps 4–6; do not re-read it.
+- **Figma is optional** — if the user skips the link, mark "Figma: skipped" in the plan and proceed immediately; never block on it.
+- **`color.on.accent` is not a hex violation** — it is a Chakra semantic token name; do not flag it as a hardcoded color.
+- **`import React` in source files is valid** when `React.*` type annotations appear (e.g. `React.ReactElement`, `React.MouseEvent`); only flag the default import in story files where no `React.*` types are used.
+- **Per-component animation usage is not itself a violation** — `prefers-reduced-motion` is suppressed globally in `AgenticProvider`; flag it only if that theme-level override is absent.
+- **`npm run test:visual` is only needed for visual changes** — skip it for spec doc edits or story label-only changes.
 
 ---
 
@@ -69,7 +84,7 @@ Using the **Spec Doc Drift** section of `references/violation-criteria.md`, comp
 
 ---
 
-## Step 7 — Scoped a11y audit (separate from Step 4)
+## Step 7 — Scoped a11y audit
 
 Run a focused accessibility check against the source and story using the WCAG 2.2 AA criteria in `docs/best-practices.md`. This is separate from the structural checks in Step 3 — look specifically for:
 
@@ -179,4 +194,4 @@ Output a concise summary:
 **Figma:** reviewed | skipped
 ```
 
-To score the quality of this run against known test cases, see `references/eval-rubric.md`.
+To score this run against known test cases, see `evals/evals.json` (agentskills.io format) or the human-readable `references/eval-rubric.md`.

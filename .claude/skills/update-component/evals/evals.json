@@ -1,0 +1,60 @@
+{
+  "skill_name": "update-component",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Update the ToolCallCard component",
+      "expected_output": "A structured plan identifying: hardcoded hex values in statusColors (#8888aa, #4d9fff, #3dd68c, #f87171), a div expand/collapse trigger that must be replaced with a button element with aria-expanded and aria-controls, an unused React default import in the source, a missing Pending story, and spec doc drift including a missing defaultOpen prop, incorrect input type (object vs Record<string, unknown>), missing pending state in the states table, no ARIA section, and empty tokens frontmatter. The plan must present all findings and wait for user approval before modifying any files.",
+      "setup": "cp .claude/skills/update-component/references/fixtures/ToolCallCard/source.tsx packages/agents/src/ToolCallCard.tsx && cp .claude/skills/update-component/references/fixtures/ToolCallCard/story.tsx apps/storybook/src/stories/ToolCallCard.stories.tsx && cp .claude/skills/update-component/references/fixtures/ToolCallCard/spec.md docs/components/ToolCallCard.md",
+      "teardown": "git restore packages/agents/src/ToolCallCard.tsx apps/storybook/src/stories/ToolCallCard.stories.tsx && rm docs/components/ToolCallCard.md",
+      "assertions": [
+        "Plan identifies hardcoded hex values in statusColors as a token violation",
+        "Plan identifies the div expand/collapse trigger as an ARIA violation requiring replacement with a button element",
+        "Plan specifies that the button must have aria-expanded and aria-controls attributes",
+        "Plan identifies the unused React default import in the source file",
+        "Plan identifies the missing Pending story as a story gap",
+        "Plan identifies the missing defaultOpen prop in the spec doc props table",
+        "Plan identifies the incorrect input prop type in the spec doc",
+        "Plan includes an A11y report section",
+        "Plan does not write any files before receiving user approval",
+        "Plan does not flag color='accent.green' as a hardcoded hex violation"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Update the AgentStatus component",
+      "expected_output": "A structured plan identifying: hardcoded hex values in statusConfig (#8888aa, #4d9fff, #3dd68c, #f87171), missing role=status on the container, missing aria-live=polite, no visually-hidden text (color is the only state indicator — WCAG SC 1.4.1 violation), missing waiting and cancelled states from the AgentStatusValue type and statusConfig, missing Waiting and Cancelled stories, missing waiting/cancelled from argTypes options, and spec doc drift including wrong mcp-states frontmatter, missing states in the table, wrong prop type, and no ARIA section. Plan must wait for user approval.",
+      "setup": "cp .claude/skills/update-component/references/fixtures/AgentStatus/source.tsx packages/agents/src/AgentStatus.tsx && cp .claude/skills/update-component/references/fixtures/AgentStatus/story.tsx apps/storybook/src/stories/AgentStatus.stories.tsx && cp .claude/skills/update-component/references/fixtures/AgentStatus/spec.md docs/components/AgentStatus.md",
+      "teardown": "git restore packages/agents/src/AgentStatus.tsx apps/storybook/src/stories/AgentStatus.stories.tsx && rm docs/components/AgentStatus.md",
+      "assertions": [
+        "Plan identifies hardcoded hex values in statusConfig as token violations",
+        "Plan identifies missing role=status as an ARIA violation",
+        "Plan identifies missing aria-live=polite as an ARIA violation",
+        "Plan identifies the absence of visually-hidden text with a WCAG SC 1.4.1 reference",
+        "Plan identifies missing waiting and cancelled states as MCP lifecycle violations",
+        "Plan identifies missing Waiting story as a story gap",
+        "Plan identifies missing Cancelled story as a story gap",
+        "Plan identifies the argTypes options list as needing waiting and cancelled added",
+        "Plan includes an A11y report section with WCAG SC references for the live region and color violations",
+        "Plan does not write any files before receiving user approval"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Update the Button component",
+      "expected_output": "A structured plan identifying: hardcoded 100ms timing value in transition (should reference var(--ds-duration-fast)), unused React default import in the story file, aria-label prop missing from the spec doc props table, color.on.accent missing from the frontmatter tokens list, and a contradictory tabIndex note in the accessibility section. The plan must NOT flag the React import in the source file (used for type annotations) or the LoadingDots animation (suppressed at theme level). A11y report should say no violations found.",
+      "setup": "cp .claude/skills/update-component/references/fixtures/Button/source.tsx packages/core/src/Button.tsx && cp .claude/skills/update-component/references/fixtures/Button/story.tsx apps/storybook/src/stories/Button.stories.tsx && cp .claude/skills/update-component/references/fixtures/Button/spec.md docs/components/Button.md",
+      "teardown": "git restore packages/core/src/Button.tsx apps/storybook/src/stories/Button.stories.tsx docs/components/Button.md",
+      "assertions": [
+        "Plan identifies the hardcoded 100ms timing value in transition as a token violation",
+        "Plan identifies the unused React default import in the story file",
+        "Plan identifies aria-label prop missing from the spec doc props table",
+        "Plan identifies color.on.accent missing from the frontmatter tokens list",
+        "Plan does NOT flag the React import in the source file as a violation",
+        "Plan does NOT flag the LoadingDots animation as a prefers-reduced-motion violation",
+        "A11y report section says no violations found",
+        "Plan does not write any files before receiving user approval"
+      ]
+    }
+  ]
+}
