@@ -1,4 +1,3 @@
-import React from 'react'
 import { Badge, Box, HStack } from '@chakra-ui/react'
 
 // VIOLATION: missing 'waiting' and 'cancelled' — only 4 of 6 MCP lifecycle states
@@ -21,8 +20,7 @@ export function AgentStatus({ status, label }: AgentStatusProps) {
   const config = statusConfig[status]
   const displayLabel = label ?? config.label
   return (
-    // VIOLATION: missing role="status" + aria-live="polite"
-    // VIOLATION: no visually-hidden text — color is the only status indicator (SC 1.4.1)
+    // VIOLATION: missing ARIA live region (role + aria-live) and visually-hidden text (SC 1.4.1)
     <HStack
       gap={2}
       display="inline-flex"

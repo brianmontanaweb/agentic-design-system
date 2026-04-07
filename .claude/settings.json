@@ -43,7 +43,12 @@
   "mcpServers": {
     "playwright": {
       "command": "npx",
-      "args": ["@playwright/mcp@latest"]
+      "args": [
+        "@playwright/mcp@latest"
+      ]
     }
+  },
+  "enabledPlugins": {
+    "skill-creator@claude-plugins-official": true
   }
 }
