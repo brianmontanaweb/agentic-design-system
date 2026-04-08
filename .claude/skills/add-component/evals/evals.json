@@ -1,0 +1,63 @@
+{
+  "skill_name": "add-component",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Add a StatusPill component",
+      "expected_output": "Package inferred as agents (status component). Source file created at packages/agents/src/StatusPill.tsx with: named exports StatusPill and StatusPillProps, role=\"status\" + aria-live=\"polite\" ARIA live region, Chakra semantic tokens only (no hardcoded hex), no React default import. Index export added to packages/agents/src/index.ts. Story at apps/storybook/src/stories/StatusPill.stories.tsx with Agents/StatusPill title, stories for each status value, no React import. Spec doc at docs/components/StatusPill.md with mcp-states frontmatter. npm run build and npm run lint both pass.",
+      "setup": "none",
+      "teardown": "git restore packages/agents/src/index.ts && rm -f packages/agents/src/StatusPill.tsx apps/storybook/src/stories/StatusPill.stories.tsx docs/components/StatusPill.md",
+      "assertions": [
+        "Package correctly inferred as agents (not core)",
+        "Source file created at packages/agents/src/StatusPill.tsx",
+        "Source exports StatusPill as named export (not default)",
+        "Source exports StatusPillProps interface",
+        "Source includes role=\"status\" and aria-live=\"polite\" ARIA attributes",
+        "Source uses only Chakra semantic tokens — no hardcoded hex values",
+        "Source does NOT have a default React import",
+        "packages/agents/src/index.ts exports StatusPill and StatusPillProps",
+        "Story file created at apps/storybook/src/stories/StatusPill.stories.tsx",
+        "Story does NOT have a default React import",
+        "Story title is 'Agents/StatusPill'",
+        "Spec doc created at docs/components/StatusPill.md",
+        "Spec doc frontmatter includes mcp-states field",
+        "npm run build passes",
+        "npm run lint passes"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Add an IconButton component to core",
+      "expected_output": "Source file at packages/core/src/IconButton.tsx with: named exports IconButton and IconButtonProps, aria-label as a required prop in the interface (icon buttons must have accessible names), rendered as a <button> element or extending Chakra Button, token-based styling. Index export added. Story at apps/storybook/src/stories/IconButton.stories.tsx with Core/IconButton title and a Default story. Spec doc at docs/components/IconButton.md with accessibility section noting aria-label is required per SC 4.1.2. npm run build and npm run lint both pass.",
+      "setup": "none",
+      "teardown": "git restore packages/core/src/index.ts && rm -f packages/core/src/IconButton.tsx apps/storybook/src/stories/IconButton.stories.tsx docs/components/IconButton.md",
+      "assertions": [
+        "Source file created at packages/core/src/IconButton.tsx",
+        "IconButtonProps interface includes aria-label as a required prop",
+        "Source exports IconButton as named export (not default)",
+        "Source exports IconButtonProps interface",
+        "packages/core/src/index.ts exports IconButton and IconButtonProps",
+        "Story file created at apps/storybook/src/stories/IconButton.stories.tsx",
+        "Story title is 'Core/IconButton'",
+        "Spec doc includes accessibility section referencing aria-label requirement",
+        "npm run build passes",
+        "npm run lint passes"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Add a ToolProgress component",
+      "expected_output": "Package inferred as agents (tool-related component). Source at packages/agents/src/ToolProgress.tsx with appropriate ARIA for a progress/status indicator (role=\"status\" or role=\"progressbar\" with aria-valuenow/aria-valuemin/aria-valuemax). Named exports, index entry added, story with Agents/ToolProgress title, spec doc with mcp-states frontmatter. npm run build passes.",
+      "setup": "none",
+      "teardown": "git restore packages/agents/src/index.ts && rm -f packages/agents/src/ToolProgress.tsx apps/storybook/src/stories/ToolProgress.stories.tsx docs/components/ToolProgress.md",
+      "assertions": [
+        "Package correctly inferred as agents (not core)",
+        "Source file created at packages/agents/src/ToolProgress.tsx",
+        "Source includes ARIA attributes appropriate for a progress/status display",
+        "Story title is 'Agents/ToolProgress'",
+        "Spec doc frontmatter includes mcp-states field",
+        "npm run build passes"
+      ]
+    }
+  ]
+}
