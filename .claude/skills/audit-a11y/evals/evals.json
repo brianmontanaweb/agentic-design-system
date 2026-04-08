@@ -1,0 +1,39 @@
+{
+  "skill_name": "audit-a11y",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run the accessibility audit",
+      "expected_output": "A full audit report covering all .tsx files in packages/core/src/ and packages/agents/src/. With fixture versions of ToolCallCard and AgentStatus in place, violations must include: ToolCallCard div/HStack expand trigger without button semantics (SC 4.1.2, High), AgentStatus missing role=status (SC 4.1.3, High), AgentStatus missing aria-live=polite (SC 4.1.3, High), AgentStatus color-only status indicator with no visually-hidden text (SC 1.4.1, High). Report must include file paths with line numbers, a Passing section for clean components, and a Summary. No files must be modified.",
+      "setup": "cp .claude/skills/update-component/references/fixtures/ToolCallCard/source.tsx packages/agents/src/ToolCallCard.tsx && cp .claude/skills/update-component/references/fixtures/AgentStatus/source.tsx packages/agents/src/AgentStatus.tsx",
+      "teardown": "git restore packages/agents/src/ToolCallCard.tsx packages/agents/src/AgentStatus.tsx",
+      "assertions": [
+        "Report identifies ToolCallCard expand/collapse non-button trigger as SC 4.1.2 violation",
+        "Report identifies AgentStatus missing role=status as SC 4.1.3 violation",
+        "Report identifies AgentStatus missing aria-live=polite as SC 4.1.3 violation",
+        "Report identifies AgentStatus color-only status indicator as SC 1.4.1 violation",
+        "All violations include file path and line number",
+        "Report includes a Passing section listing clean components",
+        "Report includes a Summary with violation and severity counts",
+        "No source files are modified — report only",
+        "Report does NOT flag color.agent.status.* token names as hex violations",
+        "Report does NOT flag per-component animation as a violation if AgenticProvider theme-level override exists"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Run the accessibility audit",
+      "expected_output": "With only the AgentStatus fixture in place (single-component focus), the audit still covers all .tsx files in both packages but correctly calls out the AgentStatus violations. Passing section must include Button with a note about its accessible features. The report format must be a markdown table with Component, File, Line, Rule, WCAG SC, and Severity columns.",
+      "setup": "cp .claude/skills/update-component/references/fixtures/AgentStatus/source.tsx packages/agents/src/AgentStatus.tsx",
+      "teardown": "git restore packages/agents/src/AgentStatus.tsx",
+      "assertions": [
+        "Report covers all .tsx files in packages/core/src/ and packages/agents/src/",
+        "Report identifies AgentStatus missing ARIA live region attributes",
+        "Report identifies AgentStatus SC 1.4.1 color-only violation",
+        "Report includes Button in the Passing section",
+        "Report uses correct markdown table format with all required columns",
+        "No files are modified"
+      ]
+    }
+  ]
+}
