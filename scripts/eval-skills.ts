@@ -169,14 +169,7 @@ async function runEval(
     }
   }
 
-  let output = ''
-  try {
-    const run = await runSkill(evalCase.prompt)
-    output = run.output
-    result.cost_usd = run.cost_usd
-  } catch (e) {
-    result.error = `Skill run failed: ${String(e)}`
-  } finally {
+  const teardown = () => {
     if (evalCase.teardown) {
       try {
         execSync(evalCase.teardown, { cwd: ROOT, stdio: 'pipe' })
@@ -186,9 +179,18 @@ async function runEval(
     }
   }
 
-  if (result.error) return result
+  let output = ''
+  try {
+    const run = await runSkill(evalCase.prompt)
+    output = run.output
+    result.cost_usd = run.cost_usd
+  } catch (e) {
+    result.error = `Skill run failed: ${String(e)}`
+    teardown()
+    return result
+  }
 
-  // Grade assertions in parallel
+  // Grade assertions in parallel — files still exist on disk
   const grades = await Promise.all(
     evalCase.assertions.map(assertion => gradeAssertion(output, assertion)),
   )
@@ -202,6 +204,7 @@ async function runEval(
     }
   })
 
+  teardown()
   return result
 }
 
