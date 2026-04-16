@@ -21,7 +21,7 @@ If the package is not specified, infer it:
 These defuse the most common mistakes before you encounter them:
 
 - **Figma is optional** — if the user skips the link, mark "Figma: skipped" in output and proceed immediately; never block on it.
-- **Never import `React` in story files** — jsx-runtime transform is configured; use named imports only (e.g., `import { useState } from 'react'`) if needed.
+- **Never use `import React from 'react'` in source or story files** — jsx-runtime transform is configured for all packages. Use named imports only (e.g., `import { useState } from 'react'`) if React APIs are needed.
 - **Agent-specific ARIA is mandatory from the start** — do not scaffold first and audit later; apply the correct live region from step 3 based on component type.
 - **Package inference default** — when ambiguous, lean `agents` for status/streaming/tool-related names; lean `core` for anything that reads like a generic UI primitive.
 - **`color.on.accent` and similar token names are not hex violations** — only flag `#`-prefixed literal values.
@@ -49,6 +49,7 @@ File: `packages/<package>/src/<ComponentName>.tsx`
 
 Requirements (all MUST):
 - Functional component, named export (no default export)
+- Do NOT add `import React from 'react'` — jsx-runtime handles it
 - Export the props interface: `export interface <ComponentName>Props { ... }`
 - All color values MUST reference Chakra semantic tokens — no hardcoded hex
 - All timing values MUST reference `duration.*` tokens from `@agentic-ds/tokens`
@@ -107,10 +108,10 @@ Body MUST include: description, variants table (if applicable), props table, acc
 Run in order:
 ```sh
 npm run build
-npm run lint
+eslint packages/<package>/src/<ComponentName>.tsx apps/storybook/src/stories/<ComponentName>.stories.tsx
 ```
 
-Fix any lint errors before finishing. Do not use `eslint-disable` comments.
+Only lint the files this skill creates — pre-existing violations in other files are not your responsibility. Fix any errors ESLint reports on your files before finishing. Do not use `eslint-disable` comments.
 
 ## Step 8 — Report
 

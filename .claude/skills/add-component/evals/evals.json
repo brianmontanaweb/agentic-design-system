@@ -22,7 +22,7 @@
         "Spec doc created at docs/components/StatusPill.md",
         "Spec doc frontmatter includes mcp-states field",
         "npm run build passes",
-        "npm run lint passes"
+        "ESLint reports no errors in the scaffolded source and story files (pre-existing violations in other files are acceptable)"
       ]
     },
     {
@@ -41,7 +41,7 @@
         "Story title is 'Core/IconButton'",
         "Spec doc includes accessibility section referencing aria-label requirement",
         "npm run build passes",
-        "npm run lint passes"
+        "ESLint reports no errors in the scaffolded source and story files (pre-existing violations in other files are acceptable)"
       ]
     },
     {
