@@ -22,6 +22,10 @@ Dimensions 1–3 are scorable from the plan alone (before approving). Dimensions
 
 ## How to Run an Eval
 
+Two modes are available. Use both to get a full 100-point score.
+
+### Planning evals (dimensions 1–3) — evals.json ids 1, 2, 3
+
 ```bash
 # 1. Copy fixture files to the real paths
 #    (see each test case below for the exact commands)
@@ -32,12 +36,30 @@ Dimensions 1–3 are scorable from the plan alone (before approving). Dimensions
 # 3. Score dimensions 1–3 from the plan, using the Expected violations table below.
 #    Do NOT approve the changes yet.
 
-# 4. Optionally approve and execute to score dimensions 4–5.
-
-# 5. Restore original files
+# 4. Restore original files
 git restore packages/agents/src/<ComponentName>.tsx \
-            apps/storybook/src/stories/<ComponentName>.stories.tsx \
-            docs/components/<ComponentName>.md
+            apps/storybook/src/stories/<ComponentName>.stories.tsx
+rm -f docs/components/<ComponentName>.md   # if it was created from fixture
+```
+
+### Execution evals (dimensions 4–5) — evals.json ids 4, 5, 6
+
+The prompt pre-approves the plan so the skill writes files. After the run, grade the
+actual file state against the assertions, then teardown restores everything.
+
+```bash
+# 1. Copy fixture files (same setup commands as the planning eval)
+
+# 2. Run the skill with pre-approval prompt
+#    /update-component <ComponentName>
+#    (prompt includes "apply all changes without pausing for approval")
+
+# 3. Grade the actual file state against dimensions 4–5.
+
+# 4. Restore — teardown in evals.json handles this automatically:
+git restore packages/<pkg>/src/<ComponentName>.tsx \
+            apps/storybook/src/stories/<ComponentName>.stories.tsx
+rm -f docs/components/<ComponentName>.md   # for agent-package components without a committed spec
 ```
 
 ---
