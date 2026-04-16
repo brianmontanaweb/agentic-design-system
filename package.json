@@ -15,11 +15,13 @@
     "build-storybook": "npm run build -w apps/storybook",
     "test:visual": "npm run test:visual -w apps/storybook",
     "test:visual:update": "npm run test:visual:update -w apps/storybook",
+    "eval:skills": "npx tsx scripts/eval-skills.ts",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "npm run build && changeset publish"
   },
   "devDependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.2.90",
     "@changesets/cli": "^2.27.12",
     "eslint": "^10.1.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
