@@ -20,6 +20,9 @@ These defuse the most common mistakes before you encounter them:
 - **Figma is optional** — if the user skips the link, mark "Figma: skipped" in the plan and proceed immediately; never block on it.
 - **`color.on.accent` is not a hex violation** — it is a Chakra semantic token name; do not flag it as a hardcoded color.
 - **`import React` in source files is valid** when `React.*` type annotations appear (e.g. `React.ReactElement`, `React.MouseEvent`); only flag the default import in story files where no `React.*` types are used.
+- **Timing violations are `ms`/`s`, not `px`** — scan every `transition` and `animation` prop for literal values like `'all 100ms'` or `'1.2s ease-in-out'`; these are token violations even though they contain no `#`.
+- **Frontmatter token completeness requires active scanning** — extract every token string from the source style objects and compare against the frontmatter `tokens` lists; do not rely on memory or assume the list is complete.
+- **`'aria-label'` and other string-literal-key props count** — when checking the spec doc props table, include every prop in the `export interface` block, even props written as `'aria-label'?: string`.
 - **Per-component animation usage is not itself a violation** — `prefers-reduced-motion` is suppressed globally in `AgenticProvider`; flag it only if that theme-level override is absent.
 - **`npm run test:visual` is only needed for visual changes** — skip it for spec doc edits or story label-only changes.
 
@@ -58,11 +61,7 @@ Read all three component files in full, plus:
 
 If the user provided a Figma link, extract `fileKey` and `nodeId` and call `get_file_nodes(fileKey, [nodeId])`. Extract all design values per `docs/best-practices.md` section 8. Record conflicts between Figma and the current implementation — surface them in the plan (Step 8).
 
-If no Figma link was provided, ask:
-
-> Please provide the Figma link for the **\<ComponentName\>** component node (skip if unavailable).
-
-If the user skips, note **Figma: skipped** in the plan and proceed.
+If no Figma link was provided, note **Figma: skipped** in the plan and proceed immediately. Do not ask.
 
 ---
 

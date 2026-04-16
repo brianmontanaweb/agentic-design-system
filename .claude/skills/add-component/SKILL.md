@@ -39,13 +39,9 @@ Before writing any code:
 
 ## Step 2 — Fetch the Figma component node
 
-Ask the user for the Figma component node link if not already provided:
+If the user provided a Figma component node link in their request, extract `fileKey` and `nodeId` and call `get_file_nodes(fileKey, [nodeId])`. Follow the extraction and conflict resolution process in `docs/best-practices.md` section 8.
 
-> Please provide the Figma link for the **\<ComponentName\>** component node (skip if unavailable).
-
-If the user skips, note **Figma: skipped** and proceed.
-
-Otherwise follow the extraction and conflict resolution process in `docs/best-practices.md` section 8.
+If no Figma link was provided, note **Figma: skipped** and proceed immediately. Do not ask.
 
 ## Step 3 — Create the component source file
 

@@ -2,7 +2,7 @@
 
 ### Tokens
 - Hardcoded hex color literals (any `#rrggbb`, `#rgb`, `#rrggbbaa`) — replace with semantic tokens from `@agentic-ds/tokens`
-- Hardcoded `px` timing values — replace with `duration.*` tokens
+- Hardcoded timing values — any literal `ms` or `s` value in a `transition`, `animation`, or `animationDuration` prop (e.g., `transition: 'all 100ms'`, `animation: \`ds-pulse 1.2s ease\``) — replace with `duration.*` tokens. Scan every `transition` and `animation` prop in the source to find these; they will not contain `#`.
 - Raw CSS color keywords (`red`, `blue`, etc.) not routed through a token
 
 ### ARIA / Accessibility
@@ -27,6 +27,8 @@ All styles scoped to `[data-agentic-ds]` — not `:root`
 ### Code Quality
 - No `any` types
 - No unused vars or imports
+  - **Story files:** flag `import React from 'react'` if no `React.*` type annotations appear anywhere in the file — jsx-runtime makes the default import unnecessary
+  - **Source files:** `import React from 'react'` is VALID when `React.ReactElement`, `React.MouseEvent`, `React.ReactNode`, or similar `React.*` type annotations are present — do NOT flag this
 - Props interface exported alongside the component
 
 ---
@@ -43,10 +45,10 @@ All styles scoped to `[data-agentic-ds]` — not `:root`
 
 ## Spec Doc Drift
 
-- Props table missing entries that exist in the source
+- Props table missing entries — read the full `export interface <ComponentName>Props` block in the source; every prop, including those with string-literal keys (e.g., `'aria-label'?: string`), must appear in the spec doc props table
 - Props table contains entries that no longer exist in the source
 - Prop types, defaults, or descriptions that don't match the implementation
 - Variants or states table out of sync with the source
-- YAML frontmatter `tokens` list incomplete or stale
+- YAML frontmatter `tokens` list incomplete — extract every semantic token reference from the source (any quoted string in a Chakra style prop that is not `#`-hex), then verify each one appears in the appropriate `tokens.*` list in the frontmatter. Any token used in source but absent from the list is a drift violation.
 - `mcp-states` frontmatter missing or incomplete (for `AgentStatus` / `ProgressSteps`)
-- Implementation notes that contradict current code
+- Implementation notes or accessibility notes that contradict current code — verify stated prop values (e.g., `tabIndex` values, `aria-disabled` usage) against the actual source implementation
