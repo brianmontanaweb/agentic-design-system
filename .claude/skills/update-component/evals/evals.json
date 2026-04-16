@@ -5,8 +5,8 @@
       "id": 1,
       "prompt": "Update the ToolCallCard component",
       "expected_output": "A structured plan identifying: hardcoded hex values in statusColors (#8888aa, #4d9fff, #3dd68c, #f87171), a div expand/collapse trigger that must be replaced with a button element with aria-expanded and aria-controls, an unused React default import in the source, a missing Pending story, and spec doc drift including a missing defaultOpen prop, incorrect input type (object vs Record<string, unknown>), missing pending state in the states table, no ARIA section, and empty tokens frontmatter. The plan must present all findings and wait for user approval before modifying any files.",
-      "setup": "cp .claude/skills/update-component/references/fixtures/ToolCallCard/source.tsx packages/agents/src/ToolCallCard.tsx && cp .claude/skills/update-component/references/fixtures/ToolCallCard/story.tsx apps/storybook/src/stories/ToolCallCard.stories.tsx && cp .claude/skills/update-component/references/fixtures/ToolCallCard/spec.md docs/components/ToolCallCard.md",
-      "teardown": "git restore packages/agents/src/ToolCallCard.tsx apps/storybook/src/stories/ToolCallCard.stories.tsx && rm docs/components/ToolCallCard.md",
+      "setup": ".claude/skills/update-component/evals/scripts/setup-toolcallcard.sh",
+      "teardown": ".claude/skills/update-component/evals/scripts/teardown-toolcallcard.sh",
       "assertions": [
         "Plan identifies hardcoded hex values in statusColors as a token violation",
         "Plan identifies the div expand/collapse trigger as an ARIA violation requiring replacement with a button element",
@@ -24,8 +24,8 @@
       "id": 2,
       "prompt": "Update the AgentStatus component",
       "expected_output": "A structured plan identifying: hardcoded hex values in statusConfig (#8888aa, #4d9fff, #3dd68c, #f87171), missing role=status on the container, missing aria-live=polite, no visually-hidden text (color is the only state indicator — WCAG SC 1.4.1 violation), missing waiting and cancelled states from the AgentStatusValue type and statusConfig, missing Waiting and Cancelled stories, missing waiting/cancelled from argTypes options, and spec doc drift including wrong mcp-states frontmatter, missing states in the table, wrong prop type, and no ARIA section. Plan must wait for user approval.",
-      "setup": "cp .claude/skills/update-component/references/fixtures/AgentStatus/source.tsx packages/agents/src/AgentStatus.tsx && cp .claude/skills/update-component/references/fixtures/AgentStatus/story.tsx apps/storybook/src/stories/AgentStatus.stories.tsx && cp .claude/skills/update-component/references/fixtures/AgentStatus/spec.md docs/components/AgentStatus.md",
-      "teardown": "git restore packages/agents/src/AgentStatus.tsx apps/storybook/src/stories/AgentStatus.stories.tsx && rm docs/components/AgentStatus.md",
+      "setup": ".claude/skills/update-component/evals/scripts/setup-agentstatus.sh",
+      "teardown": ".claude/skills/update-component/evals/scripts/teardown-agentstatus.sh",
       "assertions": [
         "Plan identifies hardcoded hex values in statusConfig as token violations",
         "Plan identifies missing role=status as an ARIA violation",
@@ -43,8 +43,8 @@
       "id": 3,
       "prompt": "Update the Button component",
       "expected_output": "A structured plan identifying: hardcoded 100ms timing value in transition (should reference var(--ds-duration-fast)), unused React default import in the story file, aria-label prop missing from the spec doc props table, color.on.accent missing from the frontmatter tokens list, and a contradictory tabIndex note in the accessibility section. The plan must NOT flag the React import in the source file (used for type annotations) or the LoadingDots animation (suppressed at theme level). A11y report should say no violations found.",
-      "setup": "cp .claude/skills/update-component/references/fixtures/Button/source.tsx packages/core/src/Button.tsx && cp .claude/skills/update-component/references/fixtures/Button/story.tsx apps/storybook/src/stories/Button.stories.tsx && cp .claude/skills/update-component/references/fixtures/Button/spec.md docs/components/Button.md",
-      "teardown": "git restore packages/core/src/Button.tsx apps/storybook/src/stories/Button.stories.tsx docs/components/Button.md",
+      "setup": ".claude/skills/update-component/evals/scripts/setup-button.sh",
+      "teardown": ".claude/skills/update-component/evals/scripts/teardown-button.sh",
       "assertions": [
         "Plan identifies the hardcoded 100ms timing value in transition as a token violation",
         "Plan identifies the unused React default import in the story file",
@@ -54,6 +54,70 @@
         "Plan does NOT flag the LoadingDots animation as a prefers-reduced-motion violation",
         "A11y report section says no violations found",
         "Plan does not write any files before receiving user approval"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Update the ToolCallCard component. Apply all changes including a11y fixes — do not pause for approval at any step.",
+      "expected_output": "All 9 violations resolved in the actual files: statusColors replaced with semantic tokens, expand/collapse trigger replaced with a button element bearing aria-expanded and aria-controls, unused React default import removed, Pending story added, spec doc updated with defaultOpen prop, correct input type, pending state row, ARIA section, and non-empty tokens frontmatter. color='accent.green' on the output Code block is unchanged. Build and lint pass.",
+      "setup": ".claude/skills/update-component/evals/scripts/setup-toolcallcard.sh",
+      "grade": ".claude/skills/update-component/evals/scripts/grade-toolcallcard.sh",
+      "teardown": ".claude/skills/update-component/evals/scripts/teardown-toolcallcard.sh",
+      "assertions": [
+        "The updated source file contains no hardcoded hex values (#8888aa, #4d9fff, #3dd68c, #f87171) in statusColors",
+        "statusColors in the updated source references semantic tokens (e.g. values from color.tool.status.* or equivalent token paths)",
+        "The expand/collapse trigger in the updated source is a button element (not a plain Box or div with onClick)",
+        "The button trigger has an aria-expanded prop wired to the open state",
+        "The button trigger has an aria-controls prop pointing to the content panel id",
+        "The updated source import line no longer includes the React default import — only named imports remain",
+        "The updated story file contains a Pending story (a story where status='pending')",
+        "The updated spec doc props table contains a row for defaultOpen",
+        "The updated spec doc describes the input prop type as Record<string, unknown> not object",
+        "The updated spec doc contains an ARIA section",
+        "The updated spec doc frontmatter tokens list is not empty",
+        "color='accent.green' on the output Code block is unchanged in the source",
+        "npm run build exits with no errors after the changes"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Update the AgentStatus component. Apply all changes including a11y fixes — do not pause for approval at any step.",
+      "expected_output": "All 11 violations resolved: statusConfig replaced with color.agent.status.* semantic tokens, waiting and cancelled added to AgentStatusValue type and statusConfig, role='status' and aria-live='polite' added to the container, visually-hidden text added for the current status, Waiting and Cancelled stories added, argTypes.status.options updated to include all 6 states, spec doc mcp-states frontmatter lists all 6 states, states table includes waiting and cancelled rows, status prop type updated, ARIA section added. Build and lint pass.",
+      "setup": ".claude/skills/update-component/evals/scripts/setup-agentstatus.sh",
+      "grade": ".claude/skills/update-component/evals/scripts/grade-agentstatus.sh",
+      "teardown": ".claude/skills/update-component/evals/scripts/teardown-agentstatus.sh",
+      "assertions": [
+        "The updated source file contains no hardcoded hex values in statusConfig",
+        "statusConfig in the updated source references color.agent.status.* semantic tokens",
+        "AgentStatusValue type in the updated source includes 'waiting' and 'cancelled'",
+        "statusConfig in the updated source includes entries for 'waiting' and 'cancelled'",
+        "The container element in the updated source has role='status'",
+        "The container element in the updated source has aria-live='polite'",
+        "The updated source renders visually-hidden text representing the current status value",
+        "The updated story file contains a Waiting story (status='waiting')",
+        "The updated story file contains a Cancelled story (status='cancelled')",
+        "argTypes.status.options in the updated story includes 'waiting' and 'cancelled'",
+        "The updated spec doc frontmatter mcp-states lists all 6 values: idle, running, waiting, done, error, cancelled",
+        "The updated spec doc states table contains rows for waiting and cancelled",
+        "The updated spec doc contains an ARIA section documenting role='status', aria-live='polite', and visually-hidden text",
+        "npm run build exits with no errors after the changes"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Update the Button component. Apply all changes — do not pause for approval at any step.",
+      "expected_output": "All 5 violations resolved: transition timing replaced with var(--ds-duration-fast), unused React default import removed from the story, aria-label added to the spec doc props table, color.on.accent added to the frontmatter tokens.colors list, accessibility note corrected to tabIndex={0}. React default import in the source file is NOT removed (valid for type annotations). Build and lint pass.",
+      "setup": ".claude/skills/update-component/evals/scripts/setup-button.sh",
+      "grade": ".claude/skills/update-component/evals/scripts/grade-button.sh",
+      "teardown": ".claude/skills/update-component/evals/scripts/teardown-button.sh",
+      "assertions": [
+        "The updated source baseStyles transition no longer contains '100ms' — it references var(--ds-duration-fast)",
+        "The updated story file no longer contains 'import React from 'react'' as a standalone default import",
+        "The updated spec doc props table contains a row for aria-label",
+        "The updated spec doc frontmatter tokens.colors list includes color.on.accent",
+        "The updated spec doc accessibility section states tabIndex={0} (not tabIndex={-1}) for disabled buttons",
+        "The React default import in the updated source file is preserved (not removed)",
+        "npm run build exits with no errors after the changes"
       ]
     }
   ]
