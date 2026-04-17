@@ -19,7 +19,7 @@ These defuse the most common mistakes before you encounter them:
 - **Read `references/violation-criteria.md` once in Step 2** — it stays in context for Steps 4–6; do not re-read it.
 - **Figma is optional** — if the user skips the link, mark "Figma: skipped" in the plan and proceed immediately; never block on it.
 - **`color.on.accent` is not a hex violation** — it is a Chakra semantic token name; do not flag it as a hardcoded color.
-- **`import React` in source files is valid** when `React.*` type annotations appear (e.g. `React.ReactElement`, `React.MouseEvent`); only flag the default import in story files where no `React.*` types are used.
+- **`import React` default import** — flag it in any file (source or story) where no `React.*` type annotations (`React.ReactElement`, `React.MouseEvent`, `React.ReactNode`) appear; do not flag it if any such annotations are present. Actively scan before deciding.
 - **Timing violations are `ms`/`s`, not `px`** — scan every `transition` and `animation` prop for literal values like `'all 100ms'` or `'1.2s ease-in-out'`; these are token violations even though they contain no `#`.
 - **Frontmatter token completeness requires active scanning** — extract every token string from the source style objects and compare against the frontmatter `tokens` lists; do not rely on memory or assume the list is complete.
 - **`'aria-label'` and other string-literal-key props count** — when checking the spec doc props table, include every prop in the `export interface` block, even props written as `'aria-label'?: string`.
@@ -93,6 +93,7 @@ Run a focused accessibility check against the source and story using the WCAG 2.
 - Focus management issues (modals, drawers, popovers trapping or releasing focus incorrectly)
 - Missing or incorrect `role` values
 - `aria-*` attributes set to incorrect values or applied to wrong elements
+- **Use of Color (WCAG SC 1.4.1)** — if color is the **only** visual means of conveying a state or status (e.g., a colored dot with no text equivalent, or badge text where `color` is the sole differentiator), flag it as a SC 1.4.1 violation and require visually-hidden text that names the current state
 
 Collect all findings into a separate **A11y Report** list with WCAG SC references.
 
