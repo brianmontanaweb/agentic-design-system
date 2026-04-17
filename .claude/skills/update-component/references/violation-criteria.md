@@ -8,7 +8,7 @@
 ### ARIA / Accessibility
 - `StreamingText` — must have `role="log"` + `aria-live="polite"` + `aria-atomic="false"`
 - `ThinkingIndicator` — must have `role="status"` + `aria-live="polite"`
-- `AgentStatus` — must have `role="status"` + `aria-live="polite"` + visually-hidden status text
+- `AgentStatus` — must have `role="status"` + `aria-live="polite"` + visually-hidden status text; if color is the only visual state indicator and visually-hidden text is absent, this is also a **WCAG SC 1.4.1** (Use of Color) violation — surface it in both the source changes and the A11y report
 - `MessageThread` — must have `role="log"` + `aria-label`
 - Any expand/collapse trigger — must be `<button>` with `aria-expanded` + `aria-controls` (not `<div>` or `<span>`)
 - `ProgressSteps` — must have `role="list"` + `aria-current="step"` on the active item
@@ -28,7 +28,7 @@ All styles scoped to `[data-agentic-ds]` — not `:root`
 - No `any` types
 - No unused vars or imports
   - **Story files:** flag `import React from 'react'` if no `React.*` type annotations appear anywhere in the file — jsx-runtime makes the default import unnecessary
-  - **Source files:** `import React from 'react'` is VALID when `React.ReactElement`, `React.MouseEvent`, `React.ReactNode`, or similar `React.*` type annotations are present — do NOT flag this
+  - **Source files:** flag `import React from 'react'` if no `React.*` type annotations (`React.ReactElement`, `React.MouseEvent`, `React.ReactNode`) appear anywhere in the file; do not flag it if any such annotations are present
 - Props interface exported alongside the component
 
 ---
@@ -47,7 +47,7 @@ All styles scoped to `[data-agentic-ds]` — not `:root`
 
 - Props table missing entries — read the full `export interface <ComponentName>Props` block in the source; every prop, including those with string-literal keys (e.g., `'aria-label'?: string`), must appear in the spec doc props table
 - Props table contains entries that no longer exist in the source
-- Prop types, defaults, or descriptions that don't match the implementation
+- Prop types, defaults, or descriptions that don't match the implementation — **compare exact TypeScript types**: generic types like `Record<string, unknown>` are not equivalent to `object`; union types must include all members; report the spec doc type vs. the source type as `old → new`
 - Variants or states table out of sync with the source
 - YAML frontmatter `tokens` list incomplete — extract every semantic token reference from the source (any quoted string in a Chakra style prop that is not `#`-hex), then verify each one appears in the appropriate `tokens.*` list in the frontmatter. Any token used in source but absent from the list is a drift violation.
 - `mcp-states` frontmatter missing or incomplete (for `AgentStatus` / `ProgressSteps`)

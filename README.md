@@ -265,6 +265,36 @@ The root and all packages declare `"typescript": "^6.0.2"` in devDependencies, b
 
 ---
 
+## Agent Skills & Evals
+
+This repo ships Claude Code skills for component authoring, alongside an eval harness that measures skill quality.
+
+### Skills
+
+Three skills are available via `/skill-name` in Claude Code:
+
+| Skill | What it does |
+|---|---|
+| `/add-component <Name> [core\|agents]` | Scaffolds source, story, spec doc, and index export |
+| `/update-component <Name>` | Audits source, story, and spec doc; plans fixes and waits for approval |
+| `/audit-a11y` | Audits all components against WCAG 2.2 AA; reports violations with file + line refs |
+
+### Evals
+
+Each skill has an `evals/evals.json` with test cases graded by an LLM judge. The runner at [`scripts/eval-skills.ts`](scripts/eval-skills.ts) uses the [Claude Agent SDK](https://docs.anthropic.com/en/docs/claude-code/sdk) to invoke the skill, then grades each assertion independently.
+
+```sh
+npx tsx scripts/eval-skills.ts                          # all skills
+npx tsx scripts/eval-skills.ts update-component         # one skill
+npx tsx scripts/eval-skills.ts update-component --id 1  # one case
+```
+
+Eval design follows Anthropic's guidance on [evaluating agent outputs](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) — each case has a specific prompt, graded assertions, and setup/teardown scripts. Setup copies fixture files into the real component paths (`packages/agents/src/`, `apps/storybook/src/stories/`, `docs/components/`) so the skill runs against its normal file resolution logic, including cross-referencing live token and theme files. Teardown uses `git restore` to guarantee a clean state regardless of what the skill did.
+
+Assertions mix recall checks (did the plan catch all violations?) and precision checks (did it avoid false positives?). See [`.claude/skills/update-component/references/eval-rubric.md`](.claude/skills/update-component/references/eval-rubric.md) for scoring dimensions.
+
+---
+
 ## For AI Agents
 
 See [`CLAUDE.md`](CLAUDE.md) for agent instructions and [`docs/best-practices.md`](docs/best-practices.md) for the full standards reference including ARIA patterns, token naming conventions, and MCP integration requirements.
