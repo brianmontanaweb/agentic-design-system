@@ -20,6 +20,8 @@ These defuse the most common mistakes before you encounter them:
 - **Figma is optional** — if the user skips the link, mark "Figma: skipped" in the plan and proceed immediately; never block on it.
 - **`color.on.accent` is not a hex violation** — it is a Chakra semantic token name; do not flag it as a hardcoded color.
 - **`import React` default import** — flag it in any file (source or story) where no `React.*` type annotations (`React.ReactElement`, `React.MouseEvent`, `React.ReactNode`) appear; do not flag it if any such annotations are present. Actively scan before deciding.
+- **SC 1.4.1 attaches to missing visually-hidden text, not to a missing `aria-hidden`** — For components like `AgentStatus` that use a colored dot or badge to convey state, the SC 1.4.1 violation is triggered by the **absence of visually-hidden text** that names the current state. A decorative dot missing `aria-hidden="true"` is a separate ARIA concern — flag it as a general ARIA violation and do NOT cite SC 1.4.1 for it.
+- **Fixing SC 1.4.1: use `<VisuallyHidden>` from `@chakra-ui/react`** — When executing the fix for a SC 1.4.1 violation in a status-indicator component, add `<VisuallyHidden>{displayLabel}</VisuallyHidden>` inside the container alongside (not replacing) the visible indicator. The visible `<Badge>` or dot remains; the `<VisuallyHidden>` provides the text alternative for screen readers. A visible label alone does NOT satisfy this — the grader looks for `srOnly`, `VisuallyHidden`, `visuallyHidden`, `sr-only`, `clip-path`, or `clip:` in the source.
 - **Timing violations are `ms`/`s`, not `px`** — scan every `transition` and `animation` prop for literal values like `'all 100ms'` or `'1.2s ease-in-out'`; these are token violations even though they contain no `#`.
 - **Frontmatter token completeness requires active scanning** — extract every token string from the source style objects and compare against the frontmatter `tokens` lists; do not rely on memory or assume the list is complete.
 - **`'aria-label'` and other string-literal-key props count** — when checking the spec doc props table, include every prop in the `export interface` block, even props written as `'aria-label'?: string`.
@@ -93,7 +95,7 @@ Run a focused accessibility check against the source and story using the WCAG 2.
 - Focus management issues (modals, drawers, popovers trapping or releasing focus incorrectly)
 - Missing or incorrect `role` values
 - `aria-*` attributes set to incorrect values or applied to wrong elements
-- **Use of Color (WCAG SC 1.4.1)** — if color is the **only** visual means of conveying a state or status (e.g., a colored dot with no text equivalent, or badge text where `color` is the sole differentiator), flag it as a SC 1.4.1 violation and require visually-hidden text that names the current state
+- **Use of Color (WCAG SC 1.4.1)** — if a component conveys state through color (a colored dot, a colored badge) and there is **no visually-hidden text** that names the current state in plain words, flag the *absence of visually-hidden text* as a SC 1.4.1 violation. The violation is located at the missing text, not at any attribute on the colored element. A colored decorative element missing `aria-hidden="true"` is a separate ARIA issue — do not cite SC 1.4.1 for it.
 
 Collect all findings into a separate **A11y Report** list with WCAG SC references.
 
