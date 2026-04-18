@@ -1,13 +1,6 @@
 ---
 name: audit-a11y
-description: >
-  Use this skill when asked to audit, check, review, or report on accessibility compliance of
-  components in this codebase — including prompts like "a11y audit", "WCAG check", "screen reader
-  review", "are these components accessible", or "find accessibility violations". Reads every .tsx
-  file in packages/core/src/ and packages/agents/src/, checks against WCAG 2.2 AA and the
-  project's ARIA requirements, and produces a structured violation report with file and line
-  references. Does not auto-fix — report only.
-compatibility: Designed for the agentic-design-system monorepo. Requires packages/core/src/, packages/agents/src/, and docs/best-practices.md to be present.
+description: Audits every .tsx component in packages/core/src/ and packages/agents/src/ against WCAG 2.2 AA and the project's ARIA requirements, producing a structured violation report with file and line references. Does not auto-fix — report only. Use when asked to audit accessibility, run a WCAG check, find a11y violations, or review screen reader support.
 ---
 
 # Accessibility Audit
@@ -99,4 +92,4 @@ Severity levels:
 - **Medium** — degrades experience for screen reader users
 - **Low** — best practice not followed but not a blocker
 
-If `evals/evals.json` exists in the skill directory, read it after producing the report to score your output against known test cases. Each entry specifies an expected violation; check that your report captured it.
+To score this run against known test cases, see `evals/evals.json` (assertions) or the human-readable `evals/eval-rubric.md` (scoring dimensions and expected violation tables).

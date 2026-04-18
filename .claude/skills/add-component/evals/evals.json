@@ -3,23 +3,23 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Add a StatusPill component",
-      "expected_output": "Package inferred as agents (status component). Source file created at packages/agents/src/StatusPill.tsx with: named exports StatusPill and StatusPillProps, role=\"status\" + aria-live=\"polite\" ARIA live region, Chakra semantic tokens only (no hardcoded hex), no React default import. Index export added to packages/agents/src/index.ts. Story at apps/storybook/src/stories/StatusPill.stories.tsx with Agents/StatusPill title, stories for each status value, no React import. Spec doc at docs/components/StatusPill.md with mcp-states frontmatter. npm run build and npm run lint both pass.",
+      "prompt": "Add an EvalStatusPill component",
+      "expected_output": "Package inferred as agents (status component). Source file created at packages/agents/src/EvalStatusPill.tsx with: named exports EvalStatusPill and EvalStatusPillProps, role=\"status\" + aria-live=\"polite\" ARIA live region, Chakra semantic tokens only (no hardcoded hex), no React default import. Index export added to packages/agents/src/index.ts. Story at apps/storybook/src/stories/EvalStatusPill.stories.tsx with Agents/EvalStatusPill title, stories for each status value, no React import. Spec doc at docs/components/EvalStatusPill.md with mcp-states frontmatter. npm run build and npm run lint both pass.",
       "setup": "none",
-      "teardown": "git restore packages/agents/src/index.ts && rm -f packages/agents/src/StatusPill.tsx apps/storybook/src/stories/StatusPill.stories.tsx docs/components/StatusPill.md",
+      "teardown": "git restore packages/agents/src/index.ts && rm -f packages/agents/src/EvalStatusPill.tsx apps/storybook/src/stories/EvalStatusPill.stories.tsx docs/components/EvalStatusPill.md",
       "assertions": [
         "Package correctly inferred as agents (not core)",
-        "Source file created at packages/agents/src/StatusPill.tsx",
-        "Source exports StatusPill as named export (not default)",
-        "Source exports StatusPillProps interface",
+        "Source file created at packages/agents/src/EvalStatusPill.tsx",
+        "Source exports EvalStatusPill as named export (not default)",
+        "Source exports EvalStatusPillProps interface",
         "Source includes role=\"status\" and aria-live=\"polite\" ARIA attributes",
         "Source uses only Chakra semantic tokens — no hardcoded hex values",
         "Source does NOT have a default React import",
-        "packages/agents/src/index.ts exports StatusPill and StatusPillProps",
-        "Story file created at apps/storybook/src/stories/StatusPill.stories.tsx",
+        "packages/agents/src/index.ts exports EvalStatusPill and EvalStatusPillProps",
+        "Story file created at apps/storybook/src/stories/EvalStatusPill.stories.tsx",
         "Story does NOT have a default React import",
-        "Story title is 'Agents/StatusPill'",
-        "Spec doc created at docs/components/StatusPill.md",
+        "Story title is 'Agents/EvalStatusPill'",
+        "Spec doc created at docs/components/EvalStatusPill.md",
         "Spec doc frontmatter includes mcp-states field",
         "npm run build passes",
         "ESLint reports no errors in the scaffolded source and story files (pre-existing violations in other files are acceptable)"
@@ -57,6 +57,21 @@
         "Story title is 'Agents/ToolProgress'",
         "Spec doc frontmatter includes mcp-states field",
         "npm run build passes"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Add an EvalStatusPill component to agents",
+      "expected_output": "Skill detects that packages/agents/src/EvalStatusPill.tsx already exists, stops immediately without writing any files, and tells the user to run /update-component EvalStatusPill instead.",
+      "setup": "echo 'export const EvalStatusPill = () => null; export type EvalStatusPillProps = Record<string, never>;' > packages/agents/src/EvalStatusPill.tsx",
+      "teardown": "rm -f packages/agents/src/EvalStatusPill.tsx",
+      "assertions": [
+        "Skill did not overwrite packages/agents/src/EvalStatusPill.tsx",
+        "Skill reported that the component already exists",
+        "Skill suggested using /update-component EvalStatusPill",
+        "No story file was created at apps/storybook/src/stories/EvalStatusPill.stories.tsx",
+        "No spec doc was created at docs/components/EvalStatusPill.md",
+        "packages/agents/src/index.ts was not modified"
       ]
     }
   ]

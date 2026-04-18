@@ -1,9 +1,6 @@
 ---
 name: add-component
-description: Use when adding, creating, or scaffolding a new component in @agentic-ds/core or @agentic-ds/agents. Produces the source file, Storybook story, spec doc, and index export — with correct ARIA live regions, semantic tokens, and CSS scoping applied from the start.
-compatibility: Designed for Claude Code. Figma MCP is used for the design review step (step 2).
-metadata:
-  argument-hint: "<ComponentName> [core|agents]"
+description: Scaffolds a new component in @agentic-ds/core or @agentic-ds/agents, producing the source file, Storybook story, spec doc, and index export — with correct ARIA live regions, semantic tokens, and CSS scoping applied from the start. Use when adding, creating, or scaffolding a new component.
 ---
 
 # Add Component
@@ -27,6 +24,27 @@ These defuse the most common mistakes before you encounter them:
 - **Package inference default** — when ambiguous, lean `agents` for status/streaming/tool-related names; lean `core` for anything that reads like a generic UI primitive.
 - **`color.on.accent` and similar token names are not hex violations** — only flag `#`-prefixed literal values.
 - **Run `npm run build` before `npm run lint`** — `tsc --noEmit` in lint requires the tokens package to be built first.
+
+---
+
+## Step 0 — Check for existing component
+
+Before doing anything else, check whether the component already exists in either package:
+
+```sh
+ls packages/core/src/<ComponentName>.tsx packages/agents/src/<ComponentName>.tsx 2>/dev/null
+```
+
+If any output is produced, the component already exists. **Stop immediately** and respond:
+
+```
+## Already exists: <ComponentName>
+
+`<path shown in ls output>` already exists.
+Use `/update-component <ComponentName>` to audit and update it instead.
+```
+
+Do not read, write, or modify any files. Do not proceed to Step 1.
 
 ---
 
