@@ -87,10 +87,10 @@
       "grade": ".claude/skills/update-component/evals/scripts/grade-agentstatus.sh",
       "teardown": ".claude/skills/update-component/evals/scripts/teardown-agentstatus.sh",
       "assertions": [
-        "The updated source file contains no hardcoded hex values in statusConfig",
-        "statusConfig in the updated source references color.agent.status.* semantic tokens",
+        "The updated source file contains no hardcoded hex values for status colors",
+        "The color values for each status in the updated source reference color.agent.status.* semantic tokens",
         "AgentStatusValue type in the updated source includes 'waiting' and 'cancelled'",
-        "statusConfig in the updated source includes entries for 'waiting' and 'cancelled'",
+        "The updated source includes color and label entries for 'waiting' and 'cancelled' states",
         "The container element in the updated source has role='status'",
         "The container element in the updated source has aria-live='polite'",
         "The updated source renders visually-hidden text representing the current status value",
