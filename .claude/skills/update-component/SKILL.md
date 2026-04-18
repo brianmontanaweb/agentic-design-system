@@ -18,7 +18,7 @@ These defuse the most common mistakes before you encounter them:
 
 - **Read `references/violation-criteria.md` once in Step 2** — it stays in context for Steps 4–6; do not re-read it.
 - **Figma is optional** — if the user skips the link, mark "Figma: skipped" in the plan and proceed immediately; never block on it.
-- **`color.on.accent` is not a hex violation** — it is a Chakra semantic token name; do not flag it as a hardcoded color.
+- **`color.on.accent` is not a hex violation** — it is a Chakra semantic token name; do not flag it as a hardcoded color. Do add it to the spec doc frontmatter `tokens.colors` list if it appears in source style props — it is a real token reference that belongs in the frontmatter completeness inventory.
 - **`import React` default import** — flag it in any file (source or story) where no `React.*` type annotations (`React.ReactElement`, `React.MouseEvent`, `React.ReactNode`) appear; do not flag it if any such annotations are present. Actively scan before deciding.
 - **SC 1.4.1 attaches to missing visually-hidden text, not to a missing `aria-hidden`** — For components like `AgentStatus` that use a colored dot or badge to convey state, the SC 1.4.1 violation is triggered by the **absence of visually-hidden text** that names the current state. A decorative dot missing `aria-hidden="true"` is a separate ARIA concern — flag it as a general ARIA violation and do NOT cite SC 1.4.1 for it.
 - **Fixing SC 1.4.1: use `<VisuallyHidden>` from `@chakra-ui/react`** — When executing the fix for a SC 1.4.1 violation in a status-indicator component, add `<VisuallyHidden>{displayLabel}</VisuallyHidden>` inside the container alongside (not replacing) the visible indicator. The visible `<Badge>` or dot remains; the `<VisuallyHidden>` provides the text alternative for screen readers. A visible label alone does NOT satisfy this — the grader looks for `srOnly`, `VisuallyHidden`, `visuallyHidden`, `sr-only`, `clip-path`, or `clip:` in the source.
@@ -166,6 +166,8 @@ Then run:
 npm run build
 npm run lint
 ```
+
+Include the actual command output (exit code and last few lines of stdout/stderr) in your response so results are verifiable from the transcript.
 
 If any visual changes were made (new variants, state changes, animation updates), also run:
 

@@ -17,6 +17,10 @@ import { fileURLToPath } from 'url'
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const SKILLS_DIR = join(ROOT, '.claude', 'skills')
 
+// Each concurrent gradeAssertion() call opens a query() stream that registers
+// an exit listener. Raise the cap to cover the largest assertion batch we run.
+process.setMaxListeners(50)
+
 // ── Types ──────────────────────────────────────────────────────────────────
 
 interface EvalCase {

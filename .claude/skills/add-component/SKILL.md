@@ -1,6 +1,6 @@
 ---
 name: add-component
-description: Scaffold a new component in the correct package with source file, Storybook story, spec doc, and index export. Use when adding a new component to @agentic-ds/core or @agentic-ds/agents.
+description: Use when adding, creating, or scaffolding a new component in @agentic-ds/core or @agentic-ds/agents. Produces the source file, Storybook story, spec doc, and index export — with correct ARIA live regions, semantic tokens, and CSS scoping applied from the start.
 compatibility: Designed for Claude Code. Figma MCP is used for the design review step (step 2).
 metadata:
   argument-hint: "<ComponentName> [core|agents]"
@@ -21,7 +21,8 @@ If the package is not specified, infer it:
 These defuse the most common mistakes before you encounter them:
 
 - **Figma is optional** — if the user skips the link, mark "Figma: skipped" in output and proceed immediately; never block on it.
-- **Never use `import React from 'react'` in source or story files** — jsx-runtime transform is configured for all packages. Use named imports only (e.g., `import { useState } from 'react'`) if React APIs are needed.
+- **Never use `import React from 'react'` in story files** — jsx-runtime handles JSX and Storybook's own types cover everything else.
+- **Never use `import React from 'react'` in source files either.** When the props interface needs React types, use named type imports: `import type { ReactElement, ReactNode, MouseEventHandler } from 'react'`. This lets you write `leftIcon?: ReactElement` without the default import. Do not write `React.ReactElement` — that requires the default import and will trigger a lint violation.
 - **Agent-specific ARIA is mandatory from the start** — do not scaffold first and audit later; apply the correct live region from step 3 based on component type.
 - **Package inference default** — when ambiguous, lean `agents` for status/streaming/tool-related names; lean `core` for anything that reads like a generic UI primitive.
 - **`color.on.accent` and similar token names are not hex violations** — only flag `#`-prefixed literal values.
@@ -32,7 +33,7 @@ These defuse the most common mistakes before you encounter them:
 ## Step 1 — Read existing conventions
 
 Before writing any code:
-- Read `docs/best-practices.md` in full — including section 8 (Figma MCP Usage)
+- Read `docs/best-practices.md` sections 1–7 (MCP lifecycle, accessibility, tokens, naming, docs, build targets, CSS scoping). Read section 8 (Figma MCP Usage) only if the user provided a Figma link.
 - Read `packages/<package>/src/index.ts` to understand the current export pattern
 - Read one existing component in the target package to understand the code style
 - Read `docs/components/Button.md` to understand the spec doc format
@@ -49,7 +50,7 @@ File: `packages/<package>/src/<ComponentName>.tsx`
 
 Requirements (all MUST):
 - Functional component, named export (no default export)
-- Do NOT add `import React from 'react'` — jsx-runtime handles it
+- Do NOT add `import React from 'react'`. For React type annotations in the props interface, use named type imports: `import type { ReactElement, ReactNode, MouseEventHandler } from 'react'`. Write `leftIcon?: ReactElement`, not `leftIcon?: React.ReactElement`.
 - Export the props interface: `export interface <ComponentName>Props { ... }`
 - All color values MUST reference Chakra semantic tokens — no hardcoded hex
 - All timing values MUST reference `duration.*` tokens from `@agentic-ds/tokens`
@@ -94,7 +95,9 @@ category: <category>
 status: implemented
 tokens:
   colors: [list semantic tokens used]
+  radius: [list if component uses radius tokens]
   duration: [list if animated]
+  fonts: [list if component uses font tokens]
 wcag: AA
 aria-pattern: <URL to WAI-ARIA APG pattern if applicable>
 mcp-states: [list MCP states surfaced, if applicable]
@@ -112,6 +115,8 @@ eslint packages/<package>/src/<ComponentName>.tsx apps/storybook/src/stories/<Co
 ```
 
 Only lint the files this skill creates — pre-existing violations in other files are not your responsibility. Fix any errors ESLint reports on your files before finishing. Do not use `eslint-disable` comments.
+
+Include the actual command output (exit code and last few lines of stdout/stderr) in your response so results are verifiable from the transcript.
 
 ## Step 8 — Report
 
