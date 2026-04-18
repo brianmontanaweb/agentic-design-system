@@ -2,6 +2,14 @@
 
 Use this file to score the quality of a `/update-component` run against a known fixture state.
 
+## Contents
+- [Scoring Dimensions](#scoring-dimensions)
+- [How to Run an Eval](#how-to-run-an-eval)
+- [Test Case 1 — ToolCallCard](#test-case-1--toolcallcard)
+- [Test Case 2 — AgentStatus](#test-case-2--agentstatus)
+- [Test Case 3 — Button](#test-case-3--button)
+- [Iteration Log](#iteration-log)
+
 ---
 
 ## Scoring Dimensions
@@ -39,7 +47,7 @@ Two modes are available. Use both to get a full 100-point score.
 # 4. Restore original files
 git restore packages/agents/src/<ComponentName>.tsx \
             apps/storybook/src/stories/<ComponentName>.stories.tsx
-rm -f docs/components/<ComponentName>.md   # if it was created from fixture
+git restore docs/components/<ComponentName>.md 2>/dev/null || rm -f docs/components/<ComponentName>.md
 ```
 
 ### Execution evals (dimensions 4–5) — evals.json ids 4, 5, 6
@@ -59,7 +67,7 @@ actual file state against the assertions, then teardown restores everything.
 # 4. Restore — teardown in evals.json handles this automatically:
 git restore packages/<pkg>/src/<ComponentName>.tsx \
             apps/storybook/src/stories/<ComponentName>.stories.tsx
-rm -f docs/components/<ComponentName>.md   # for agent-package components without a committed spec
+git restore docs/components/<ComponentName>.md 2>/dev/null || rm -f docs/components/<ComponentName>.md
 ```
 
 ---
