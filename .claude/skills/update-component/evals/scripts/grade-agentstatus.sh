@@ -10,7 +10,6 @@ FAILS=0
 
 pass() { echo "[PASS] $1"; }
 fail() { echo "[FAIL] $1"; FAILS=$((FAILS + 1)); }
-skip() { echo "[SKIP] $1"; }
 
 # 1. No hardcoded hex values in source
 HEX=$(grep -oE '#[0-9a-fA-F]{3,8}' "$SOURCE" || true)
@@ -126,8 +125,12 @@ else
   fail "No ARIA/Accessibility section in spec doc"
 fi
 
-# 14. npm run build — grader verifies from transcript
-skip "npm run build — verify exit code from transcript"
+# 14. ESLint on modified files
+if npx eslint "$SOURCE" "$STORY" > /dev/null 2>&1; then
+  pass "ESLint passes on modified source and story files"
+else
+  fail "ESLint errors in modified files — run: npx eslint $SOURCE $STORY"
+fi
 
 echo ""
 echo "Result: $FAILS check(s) failed"

@@ -41,6 +41,11 @@
       "expected_output": "Audit run against the real codebase with no fixture overrides. Report correctly identifies pre-existing violations in ToolCallCard and AgentStatus. Does not flag color.agent.status.* or color.on.accent token names as hex violations. Button appears in the Passing section. No source files are modified.",
       "setup": "none",
       "teardown": "none",
+      "scope": [
+        "packages/agents/src/AgentStatus.tsx",
+        "packages/agents/src/ToolCallCard.tsx",
+        "packages/core/src/Button.tsx"
+      ],
       "assertions": [
         "Report identifies ToolCallCard non-button expand trigger as SC 4.1.2 violation",
         "Report identifies AgentStatus missing role=status and aria-live=polite as SC 4.1.3 violations",

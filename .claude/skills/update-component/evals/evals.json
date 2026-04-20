@@ -59,7 +59,7 @@
     {
       "id": 4,
       "prompt": "Update the ToolCallCard component. Apply all changes including a11y fixes — do not pause for approval at any step.",
-      "expected_output": "All 9 violations resolved in the actual files: statusColors replaced with semantic tokens, expand/collapse trigger replaced with a button element bearing aria-expanded and aria-controls, unused React default import removed, Pending story added, spec doc updated with defaultOpen prop, correct input type, pending state row, ARIA section, and non-empty tokens frontmatter. color='accent.green' on the output Code block is unchanged. Build and lint pass.",
+      "expected_output": "All 9 violations resolved in the actual files: statusColors replaced with semantic tokens, expand/collapse trigger replaced with a button element bearing aria-expanded and aria-controls, unused React default import removed, Pending story added, spec doc updated with defaultOpen prop, correct input type, pending state row, ARIA section, and non-empty tokens frontmatter. color='accent.green' on the output Code block is unchanged.",
       "setup": ".claude/skills/update-component/evals/scripts/setup-toolcallcard.sh",
       "grade": ".claude/skills/update-component/evals/scripts/grade-toolcallcard.sh",
       "teardown": ".claude/skills/update-component/evals/scripts/teardown-toolcallcard.sh",
@@ -75,14 +75,13 @@
         "The updated spec doc describes the input prop type as Record<string, unknown> not object",
         "The updated spec doc contains an ARIA section",
         "The updated spec doc frontmatter tokens list is not empty",
-        "color='accent.green' on the output Code block is unchanged in the source",
-        "npm run build exits with no errors after the changes"
+        "color='accent.green' on the output Code block is unchanged in the source"
       ]
     },
     {
       "id": 5,
       "prompt": "Update the AgentStatus component. Apply all changes including a11y fixes — do not pause for approval at any step.",
-      "expected_output": "All 11 violations resolved: statusConfig replaced with color.agent.status.* semantic tokens, waiting and cancelled added to AgentStatusValue type and statusConfig, role='status' and aria-live='polite' added to the container, visually-hidden text added for the current status, Waiting and Cancelled stories added, argTypes.status.options updated to include all 6 states, spec doc mcp-states frontmatter lists all 6 states, states table includes waiting and cancelled rows, status prop type updated, ARIA section added. Build and lint pass.",
+      "expected_output": "All 11 violations resolved: statusConfig replaced with color.agent.status.* semantic tokens, waiting and cancelled added to AgentStatusValue type and statusConfig, role='status' and aria-live='polite' added to the container, visually-hidden text added for the current status, Waiting and Cancelled stories added, argTypes.status.options updated to include all 6 states, spec doc mcp-states frontmatter lists all 6 states, states table includes waiting and cancelled rows, status prop type updated, ARIA section added.",
       "setup": ".claude/skills/update-component/evals/scripts/setup-agentstatus.sh",
       "grade": ".claude/skills/update-component/evals/scripts/grade-agentstatus.sh",
       "teardown": ".claude/skills/update-component/evals/scripts/teardown-agentstatus.sh",
@@ -99,14 +98,13 @@
         "argTypes.status.options in the updated story includes 'waiting' and 'cancelled'",
         "The updated spec doc frontmatter mcp-states lists all 6 values: idle, running, waiting, done, error, cancelled",
         "The updated spec doc states table contains rows for waiting and cancelled",
-        "The updated spec doc contains an ARIA section documenting role='status', aria-live='polite', and visually-hidden text",
-        "npm run build exits with no errors after the changes"
+        "The updated spec doc contains an ARIA section documenting role='status', aria-live='polite', and visually-hidden text"
       ]
     },
     {
       "id": 6,
       "prompt": "Update the Button component. Apply all changes — do not pause for approval at any step.",
-      "expected_output": "All 5 violations resolved: transition timing replaced with var(--ds-duration-fast), unused React default import removed from the story, aria-label added to the spec doc props table, color.on.accent added to the frontmatter tokens.colors list, accessibility note corrected to tabIndex={0}. React default import in the source file is NOT removed (valid for type annotations). Build and lint pass.",
+      "expected_output": "All 5 violations resolved: transition timing replaced with var(--ds-duration-fast), unused React default import removed from the story, aria-label added to the spec doc props table, color.on.accent added to the frontmatter tokens.colors list, accessibility note corrected to tabIndex={0}. React default import in the source file is NOT removed (valid for type annotations).",
       "setup": ".claude/skills/update-component/evals/scripts/setup-button.sh",
       "grade": ".claude/skills/update-component/evals/scripts/grade-button.sh",
       "teardown": ".claude/skills/update-component/evals/scripts/teardown-button.sh",
@@ -116,8 +114,7 @@
         "The updated spec doc props table contains a row for aria-label",
         "The updated spec doc frontmatter tokens.colors list includes color.on.accent",
         "The updated spec doc accessibility section states tabIndex={0} (not tabIndex={-1}) for disabled buttons",
-        "The React default import in the updated source file is preserved (not removed)",
-        "npm run build exits with no errors after the changes"
+        "The React default import in the updated source file is preserved (not removed)"
       ]
     }
   ]

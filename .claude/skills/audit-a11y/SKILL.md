@@ -27,6 +27,8 @@ Read `docs/best-practices.md` section 2 (Accessibility) in full before auditing 
 
 ## Step 2 — Audit each component
 
+> **Scope constraint:** If the invocation prompt includes a `Scope:` section listing specific files, audit only those files and skip all others. The section format is: `Scope: limit to these files only:\n<path>\n<path>`
+
 For each `.tsx` file in `packages/core/src/` and `packages/agents/src/`, work through every check below. Mark each item as you go.
 
 **Live regions (SC 4.1.3)**

@@ -24,7 +24,8 @@
       "WebFetch(domain:blog.modelcontextprotocol.io)",
       "WebFetch(domain:medium.com)",
       "Bash(npx prettier --write:*)",
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Edit(/.claude/skills/update-component/**)"
     ]
   },
   "hooks": {
@@ -40,6 +41,9 @@
       }
     ]
   },
+  "enabledPlugins": {
+    "skill-creator@claude-plugins-official": true
+  },
   "mcpServers": {
     "playwright": {
       "command": "npx",
@@ -47,8 +51,5 @@
         "@playwright/mcp@latest"
       ]
     }
-  },
-  "enabledPlugins": {
-    "skill-creator@claude-plugins-official": true
   }
 }

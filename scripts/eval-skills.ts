@@ -29,6 +29,8 @@ interface EvalCase {
   expected_output: string
   setup: string
   teardown: string
+  grade?: string    // path to shell grader script — run manually, not by this runner
+  scope?: string[]  // if present, injected as a Scope: constraint into the prompt
   assertions: string[]
 }
 
@@ -44,6 +46,7 @@ interface EvalResult {
   passed: string[]
   failed: { assertion: string; reason: string }[]
   error?: string
+  assertion_count: number
   cost_usd: number
 }
 
@@ -121,14 +124,14 @@ Reply with JSON only, no markdown fences: {"pass": true or false, "reason": "one
 
 // ── Skill invocation ───────────────────────────────────────────────────────
 
-async function runSkill(prompt: string): Promise<{ output: string; cost_usd: number }> {
+async function runSkill(prompt: string, cwd: string): Promise<{ output: string; cost_usd: number }> {
   let output = ''
   let cost_usd = 0
 
   for await (const message of query({
     prompt,
     options: {
-      cwd: ROOT,
+      cwd,
       settingSources: ['user', 'project'],
       tools: { type: 'preset', preset: 'claude_code' },
       permissionMode: 'bypassPermissions',
@@ -154,61 +157,86 @@ async function runEval(
   evalCase: EvalCase,
   skillName: string,
 ): Promise<EvalResult> {
+  const worktreePath = `/tmp/eval-${skillName}-${evalCase.id}-${Date.now()}`
+
   const result: EvalResult = {
     id: evalCase.id,
     skill: skillName,
     prompt: evalCase.prompt,
     passed: [],
     failed: [],
+    assertion_count: evalCase.assertions.length,
     cost_usd: 0,
   }
 
-  // Setup
-  if (evalCase.setup && evalCase.setup !== 'none') {
+  // Create a per-eval worktree so concurrent evals don't clobber shared files
+  try {
+    execSync(`git worktree add "${worktreePath}" HEAD`, { cwd: ROOT, stdio: 'pipe' })
+  } catch (e) {
+    result.error = `Worktree creation failed: ${String(e)}`
+    return result
+  }
+
+  const cleanup = () => {
     try {
-      execSync(evalCase.setup, { cwd: ROOT, stdio: 'pipe' })
-    } catch (e) {
-      result.error = `Setup failed: ${String(e)}`
-      return result
+      execSync(`git worktree remove "${worktreePath}" --force`, { cwd: ROOT, stdio: 'pipe' })
+    } catch {
+      // best-effort — stale worktrees can be pruned with: git worktree prune
     }
   }
 
-  const teardown = () => {
-    if (evalCase.teardown) {
+  try {
+    // Setup
+    if (evalCase.setup && evalCase.setup !== 'none') {
       try {
-        execSync(evalCase.teardown, { cwd: ROOT, stdio: 'pipe' })
+        execSync(evalCase.setup, { cwd: worktreePath, stdio: 'pipe' })
+      } catch (e) {
+        result.error = `Setup failed: ${String(e)}`
+        return result
+      }
+    }
+
+    // Inject scope constraint into prompt when present
+    const effectivePrompt = evalCase.scope?.length
+      ? `${evalCase.prompt}\n\nScope: limit to these files only:\n${evalCase.scope.join('\n')}`
+      : evalCase.prompt
+
+    let output = ''
+    try {
+      const run = await runSkill(effectivePrompt, worktreePath)
+      output = run.output
+      result.cost_usd = run.cost_usd
+    } catch (e) {
+      result.error = `Skill run failed: ${String(e)}`
+      return result
+    }
+
+    // Grade assertions in parallel — files still exist on disk in the worktree
+    const grades = await Promise.all(
+      evalCase.assertions.map(assertion => gradeAssertion(output, assertion)),
+    )
+
+    evalCase.assertions.forEach((assertion, i) => {
+      const grade = grades[i]!
+      if (grade.pass) {
+        result.passed.push(assertion)
+      } else {
+        result.failed.push({ assertion, reason: grade.reason })
+      }
+    })
+
+    // Teardown (non-fatal — worktree deletion cleans up the rest)
+    if (evalCase.teardown && evalCase.teardown !== 'none') {
+      try {
+        execSync(evalCase.teardown, { cwd: worktreePath, stdio: 'pipe' })
       } catch {
         // teardown failures are non-fatal
       }
     }
+  } finally {
+    cleanup()
   }
 
-  let output = ''
-  try {
-    const run = await runSkill(evalCase.prompt)
-    output = run.output
-    result.cost_usd = run.cost_usd
-  } catch (e) {
-    result.error = `Skill run failed: ${String(e)}`
-    teardown()
-    return result
-  }
-
-  // Grade assertions in parallel — files still exist on disk
-  const grades = await Promise.all(
-    evalCase.assertions.map(assertion => gradeAssertion(output, assertion)),
-  )
-
-  evalCase.assertions.forEach((assertion, i) => {
-    const grade = grades[i]!
-    if (grade.pass) {
-      result.passed.push(assertion)
-    } else {
-      result.failed.push({ assertion, reason: grade.reason })
-    }
-  })
-
-  teardown()
   return result
 }
 
@@ -239,17 +267,20 @@ async function main() {
     const { evals } = JSON.parse(readFileSync(evalsPath, 'utf8')) as EvalsFile
     const toRun = idFilter != null ? evals.filter(e => e.id === idFilter) : evals
 
-    print(`\n${C.bold}${C.cyan}${skill}${C.reset}  ${C.dim}(${toRun.length} eval${toRun.length !== 1 ? 's' : ''})${C.reset}`)
+    print(`\n${C.bold}${C.cyan}${skill}${C.reset}  ${C.dim}(${toRun.length} eval${toRun.length !== 1 ? 's' : ''} — running in parallel)${C.reset}`)
     print('─'.repeat(64))
 
-    for (const evalCase of toRun) {
-      print(`\n${C.bold}Eval ${evalCase.id}${C.reset}  ${C.dim}${evalCase.prompt}${C.reset}`)
+    const results = await Promise.all(toRun.map(evalCase => {
+      print(`  ${C.dim}⟳ starting eval ${evalCase.id} — ${evalCase.prompt}${C.reset}`)
+      return runEval(evalCase, skill)
+    }))
 
-      const result = await runEval(evalCase, skill)
+    for (const result of results) {
+      print(`\n${C.bold}Eval ${result.id}${C.reset}  ${C.dim}${result.prompt}${C.reset}`)
 
       if (result.error) {
         print(`  ${C.red}ERROR:${C.reset} ${result.error}`)
-        totalFailed += evalCase.assertions.length
+        totalFailed += result.assertion_count
         continue
       }
 
