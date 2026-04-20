@@ -67,7 +67,7 @@ describe('components metadata', () => {
     it.each(ARIA_REQUIRED)('%s has ariaNotes', (name) => {
       const component = components.find((c) => c.name === name)
       expect(component, `${name} not found in components`).toBeDefined()
-      expect(component!.ariaNotes, `${name} is missing ariaNotes`).toBeTruthy()
+      expect(component?.ariaNotes, `${name} is missing ariaNotes`).toBeTruthy()
     })
   })
 })
