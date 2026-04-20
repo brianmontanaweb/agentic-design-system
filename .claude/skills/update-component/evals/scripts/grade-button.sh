@@ -70,8 +70,12 @@ else
   skip "tabIndex note not found — verify manually"
 fi
 
-# 8. npm run build — grader verifies from transcript
-skip "npm run build — verify exit code from transcript"
+# 8. ESLint on modified files
+if npx eslint "$SOURCE" "$STORY" > /dev/null 2>&1; then
+  pass "ESLint passes on modified source and story files"
+else
+  fail "ESLint errors in modified files — run: npx eslint $SOURCE $STORY"
+fi
 
 echo ""
 echo "Result: $FAILS check(s) failed"
