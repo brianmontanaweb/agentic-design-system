@@ -26,6 +26,7 @@ Generic design systems (Radix, Shadcn, MUI) are built for forms, dashboards, and
 | [`@agentic-ds/tokens`](packages/tokens/) | Framework-agnostic design tokens (JS constants + CSS custom properties) |
 | [`@agentic-ds/core`](packages/core/) | Chakra UI v3 theme extension, `AgenticProvider`, and base components |
 | [`@agentic-ds/agents`](packages/agents/) | Agent-specific UI primitives (streaming, tool calls, status, threads) |
+| [`@agentic-ds/mcp-builder`](packages/mcp-builder/) | MCP server exposing design tokens and component metadata to AI tools |
 
 ## Components
 
@@ -111,7 +112,7 @@ agentic-design-system/
 │   ├── tokens/          # @agentic-ds/tokens
 │   ├── core/            # @agentic-ds/core
 │   ├── agents/          # @agentic-ds/agents
-│   └── mcp-builder/     # MCP Apps bundle target (planned)
+│   └── mcp-builder/     # @agentic-ds/mcp-builder — MCP server for AI tools
 ├── apps/
 │   ├── storybook/       # Component docs and visual regression tests
 │   └── demo-web/        # Vite integration demo
@@ -121,6 +122,46 @@ agentic-design-system/
 ├── CLAUDE.md            # Agent instructions for this repo
 └── eslint.config.mjs
 ```
+
+## MCP Server (Claude Code Integration)
+
+`packages/mcp-builder` is a stdio MCP server that gives AI tools (Claude Code, Cursor, etc.) direct access to design tokens and component metadata from this library.
+
+**Tools exposed:**
+
+| Tool | Description |
+|---|---|
+| `get_token` | Look up token values by name or partial path — e.g. `"accentBlue"`, `"agent.status"`, `"duration"` |
+| `get_component` | Get props, types, and ARIA notes for any component. Pass `"*"` to list all. |
+
+### Setup
+
+**1. Build the server** (included in the root build, or standalone):
+
+```sh
+npm run build -w packages/mcp-builder
+```
+
+**2. Create `.mcp.json`** at the repo root with your local absolute path (this file is gitignored — each developer creates their own copy):
+
+```json
+{
+  "mcpServers": {
+    "agentic-ds": {
+      "command": "node",
+      "args": ["/absolute/path/to/agentic-design-system/packages/mcp-builder/dist/index.js"]
+    }
+  }
+}
+```
+
+Replace `/absolute/path/to/agentic-design-system` with the actual path on your machine. The project `.claude/settings.json` already sets `"enableAllProjectMcpServers": true` so Claude Code will pick it up without a separate approval step.
+
+**3. Start a new Claude Code session.** MCP servers are initialized at session start — existing sessions will not pick up the change.
+
+Once connected, Claude Code will have `mcp__agentic_ds__get_token` and `mcp__agentic_ds__get_component` available as tools.
+
+> **Note:** The server resolves `@agentic-ds/tokens` from the monorepo's `node_modules`. Run `npm install` from the repo root before using it, and rebuild after any token changes (`npm run build -w packages/tokens && npm run build -w packages/mcp-builder`).
 
 ## Development
 
@@ -217,7 +258,7 @@ Agent-readable spec files (`docs/components/`) only exist for `Button`. The foll
 
 ### MCP Apps Bundle
 
-`packages/mcp-builder` is scaffolded but unimplemented. An `iife` bundle is needed for embedding components in MCP App iframes via the `ui://` resource URI scheme.
+`packages/mcp-builder` implements a stdio MCP server (see [MCP Server](#mcp-server-claude-code-integration) above). An `iife` bundle for embedding components in MCP App iframes via the `ui://` resource URI scheme is not yet implemented.
 
 ### `MessageThread` Auto-Scroll Bug
 

@@ -29,3 +29,7 @@ coverage/
 # OS
 .DS_Store
 Thumbs.db
+
+# Claude Code — local overrides (machine-specific paths)
+.mcp.json
+.claude/settings.local.json

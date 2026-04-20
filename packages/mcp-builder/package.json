@@ -2,9 +2,12 @@
   "name": "@agentic-ds/mcp-builder",
   "version": "0.1.0",
   "private": true,
+  "description": "MCP server exposing Agentic Design System tokens and component metadata to AI tools",
   "type": "module",
+  "bin": {
+    "agentic-ds-mcp": "./dist/index.js"
+  },
   "main": "./dist/index.js",
-  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
@@ -16,19 +19,16 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
+    "start": "node dist/index.js",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "vite-plugin-singlefile": "^2.0.2"
-  },
-  "peerDependencies": {
-    "react": "^18 || ^19",
-    "vite": "^6.0.0"
+    "@agentic-ds/tokens": "*",
+    "@modelcontextprotocol/sdk": "^1.0.0"
   },
   "devDependencies": {
-    "@types/react": "^19.0.2",
+    "@types/node": "^22.0.0",
     "tsup": "^8.3.5",
-    "typescript": "^6.0.2",
-    "vite": "^6.0.11"
+    "typescript": "^6.0.2"
   }
 }

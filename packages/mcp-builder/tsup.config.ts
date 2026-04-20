@@ -6,5 +6,8 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   clean: true,
-  external: ['react', 'vite'],
+  platform: 'node',
+  banner: {
+    js: '#!/usr/bin/env node',
+  },
 })
