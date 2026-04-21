@@ -65,7 +65,7 @@ jobs:
         run: npm run build
 
       - name: Run unit tests
-        run: npm test --workspace=packages/mcp-builder
+        run: npm test --workspace=packages/core --workspace=packages/agents --workspace=packages/mcp-builder
 
   visual:
     name: Visual & A11y Tests
