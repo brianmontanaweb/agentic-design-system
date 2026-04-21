@@ -7,6 +7,9 @@ export type { ButtonProps, ButtonVariant, ButtonSize } from './Button'
 export { CodeBlock } from './CodeBlock'
 export type { CodeBlockProps } from './CodeBlock'
 
+export { Tooltip } from './Tooltip'
+export type { TooltipProps, TooltipPlacement } from './Tooltip'
+
 export { useReducedMotion } from './useReducedMotion'
 
 export {
