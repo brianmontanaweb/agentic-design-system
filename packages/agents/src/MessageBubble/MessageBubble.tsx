@@ -10,17 +10,17 @@ export interface MessageBubbleProps {
   timestamp?: string
 }
 
-const roleConfig: Record<MessageRole, { label: string; labelColor: string }> = {
-  user: { label: 'You', labelColor: 'text.muted' },
-  assistant: { label: 'Assistant', labelColor: 'accent.blue' },
-  tool: { label: 'Tool', labelColor: 'accent.green' },
+const roleConfig: Record<MessageRole, { label: string; labelColor: string; bg: string }> = {
+  user:      { label: 'You',       labelColor: 'text.muted',   bg: 'color.message.user.bg' },
+  assistant: { label: 'Assistant', labelColor: 'accent.blue',  bg: 'color.message.assistant.bg' },
+  tool:      { label: 'Tool',      labelColor: 'accent.green', bg: 'color.message.tool.bg' },
 }
 
 export function MessageBubble({ sender, content, label, timestamp }: MessageBubbleProps) {
   const config = roleConfig[sender]
   return (
     <Box
-      bg="bg.surface"
+      bg={config.bg}
       border="1px solid"
       borderColor="border.subtle"
       borderRadius="md"

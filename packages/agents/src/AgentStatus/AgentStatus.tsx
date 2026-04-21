@@ -1,5 +1,6 @@
 import React from 'react'
 import { Badge, Box, HStack } from '@chakra-ui/react'
+import { useReducedMotion } from '@agentic-ds/core'
 
 export type AgentStatusValue = 'idle' | 'running' | 'waiting' | 'done' | 'error' | 'cancelled'
 
@@ -18,6 +19,7 @@ const statusConfig: Record<AgentStatusValue, { color: string; label: string }> =
 }
 
 export function AgentStatus({ status, label }: AgentStatusProps) {
+  const reducedMotion = useReducedMotion()
   const config = statusConfig[status]
   const displayLabel = label ?? config.label
   return (
@@ -50,7 +52,7 @@ export function AgentStatus({ status, label }: AgentStatusProps) {
         borderRadius="full"
         bg={config.color}
         flexShrink={0}
-        animation={status === 'running' ? 'ds-pulse 1.5s ease-in-out infinite' : undefined}
+        animation={status === 'running' && !reducedMotion ? 'ds-pulse 1.5s ease-in-out infinite' : undefined}
       />
       <Badge variant="plain" fontSize="xs" fontFamily="mono" color={config.color} px={0} aria-hidden="true">
         {displayLabel}

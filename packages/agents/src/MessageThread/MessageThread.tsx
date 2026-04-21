@@ -25,6 +25,8 @@ export function MessageThread({
   return (
     <Box
       role="log"
+      aria-live="polite"
+      aria-atomic="false"
       aria-label={ariaLabel}
       overflowY="auto"
       maxH={maxHeight}

@@ -124,13 +124,12 @@ export function Button({
   return (
     <ButtonEl
       type={type}
-      aria-disabled={disabled ? true : undefined}
-      tabIndex={disabled ? 0 : undefined}
-      aria-busy={loading || undefined}
+      disabled={disabled}
+      aria-busy={loading}
       aria-label={loading && loadingText ? loadingText : ariaLabel}
       pointerEvents={loading ? 'none' : undefined}
       width={fullWidth ? '100%' : undefined}
-      onClick={!disabled && !loading ? onClick : undefined}
+      onClick={!loading ? onClick : undefined}
       {...baseStyles}
       {...variantStyles[variant]}
       {...sizeStyles[size]}

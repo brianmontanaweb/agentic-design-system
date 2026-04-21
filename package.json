@@ -13,6 +13,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
     "storybook": "npm run dev -w apps/storybook",
     "build-storybook": "npm run build -w apps/storybook",
+    "test": "npm run test --workspaces --if-present",
     "test:visual": "npm run test:visual -w apps/storybook",
     "test:visual:update": "npm run test:visual:update -w apps/storybook",
     "test:visual:docker": "docker run --rm -v $(pwd):/work -w /work mcr.microsoft.com/playwright:v1.59.0-jammy sh -c 'npm ci && npm run build && npm run build-storybook && npx http-server apps/storybook/storybook-static --port 6006 --silent & npx wait-on http://127.0.0.1:6006 --timeout 60000 && npm run test:visual -w apps/storybook'",

@@ -1,7 +1,7 @@
 import React from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
 import { ThemeProvider } from 'next-themes'
-import { system } from './theme'
+import { system } from '../theme'
 
 export interface AgenticProviderProps {
   children: React.ReactNode
@@ -32,6 +32,10 @@ const keyframes = `
     @keyframes ds-blink {
       0%, 100% { opacity: 1; }
       50%       { opacity: 1; }
+    }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
     }
   }
 }

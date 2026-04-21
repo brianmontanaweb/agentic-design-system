@@ -1,5 +1,6 @@
 import React, { useId, useState } from 'react'
 import { Box, Button, Code, Text, VStack } from '@chakra-ui/react'
+import { useReducedMotion } from '@agentic-ds/core'
 
 export type ToolCallStatus = 'pending' | 'running' | 'done' | 'error'
 
@@ -27,6 +28,7 @@ export function ToolCallCard({
 }: ToolCallCardProps) {
   const [open, setOpen] = useState(defaultOpen)
   const contentId = useId()
+  const reducedMotion = useReducedMotion()
 
   return (
     <Box
@@ -54,6 +56,7 @@ export function ToolCallCard({
         _active={{ bg: 'bg.elevated' }}
         aria-expanded={open}
         aria-controls={contentId}
+        aria-label={`${toolName} details`}
       >
         <Box
           w="6px"
@@ -61,7 +64,7 @@ export function ToolCallCard({
           borderRadius="full"
           bg={statusColors[status]}
           flexShrink={0}
-          animation={status === 'running' ? 'ds-pulse 1.5s ease-in-out infinite' : undefined}
+          animation={status === 'running' && !reducedMotion ? 'ds-pulse 1.5s ease-in-out infinite' : undefined}
         />
         <Text fontSize="sm" fontFamily="mono" color="text.primary" flex={1} textAlign="left">
           {toolName}
@@ -122,7 +125,7 @@ export function ToolCallCard({
                 whiteSpace="pre-wrap"
                 wordBreak="break-all"
                 bg="transparent"
-                color="accent.green"
+                color={status === 'error' ? 'accent.red' : 'accent.green'}
               >
                 {output}
               </Code>

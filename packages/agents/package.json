@@ -37,6 +37,8 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
@@ -49,10 +51,16 @@
   "devDependencies": {
     "@agentic-ds/core": "*",
     "@agentic-ds/tokens": "*",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "jsdom": "^29.0.2",
     "tsup": "^8.5.1",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.4"
   },
   "publishConfig": {
     "access": "public"

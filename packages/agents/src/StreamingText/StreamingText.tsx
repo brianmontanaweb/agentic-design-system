@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box, Text } from '@chakra-ui/react'
+import { useReducedMotion } from '@agentic-ds/core'
 
 export interface StreamingTextProps {
   text: string
@@ -16,6 +17,7 @@ export function StreamingText({
   color = 'text.primary',
   'aria-label': ariaLabel = 'Streaming output',
 }: StreamingTextProps) {
+  const reducedMotion = useReducedMotion()
   return (
     <Box role="log" aria-live="polite" aria-atomic="false" aria-label={ariaLabel}>
       <Text as="span" fontSize={fontSize} color={color} whiteSpace="pre-wrap">
@@ -24,13 +26,14 @@ export function StreamingText({
       {isStreaming && (
         <Box
           as="span"
+          aria-hidden="true"
           display="inline-block"
           w="2px"
           h="1em"
           bg="accent.blue"
           ml="1px"
           verticalAlign="text-bottom"
-          animation="ds-blink 1s step-end infinite"
+          animation={reducedMotion ? undefined : 'ds-blink 1s step-end infinite'}
         />
       )}
     </Box>
