@@ -1,16 +1,20 @@
 import { createSystem, defaultConfig, defineConfig, defineRecipe } from '@chakra-ui/react'
-import { fonts, colors } from '@agentic-ds/tokens'
+import { fonts, colors, lightColors, stepTints, duration } from '@agentic-ds/tokens'
 
-const buttonRecipe = defineRecipe({
+export const buttonRecipe = defineRecipe({
   base: {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'relative',
     fontFamily: 'body',
     fontWeight: 'medium',
     borderRadius: 'md',
+    border: 'none',
     cursor: 'pointer',
-    transition: 'all 100ms',
+    userSelect: 'none',
+    whiteSpace: 'nowrap',
+    transition: `all ${duration.fast.$value}`,
     _focusVisible: {
       outline: '2px solid',
       outlineColor: 'accent.blue',
@@ -53,9 +57,9 @@ const buttonRecipe = defineRecipe({
       },
     },
     size: {
-      sm: { h: '28px', px: 3, fontSize: 'xs' },
-      md: { h: '36px', px: 4, fontSize: 'sm' },
-      lg: { h: '44px', px: 5, fontSize: 'md' },
+      sm: { h: '28px', px: 3, fontSize: 'xs', gap: 1 },
+      md: { h: '36px', px: 4, fontSize: 'sm', gap: 2 },
+      lg: { h: '44px', px: 5, fontSize: 'md', gap: 2 },
     },
   },
   defaultVariants: {
@@ -84,51 +88,51 @@ const config = defineConfig({
     semanticTokens: {
       colors: {
         // ---- Base surfaces ----
-        'bg.base':      { value: { _dark: colors.bgBase.$value,       _light: '#f8f9fa' } },
-        'bg.surface':   { value: { _dark: colors.bgSurface.$value,    _light: '#ffffff' } },
-        'bg.elevated':  { value: { _dark: colors.bgElevated.$value,   _light: '#f0f0f5' } },
-        'border.subtle':{ value: { _dark: colors.borderSubtle.$value, _light: '#e2e2e8' } },
-        'text.primary': { value: { _dark: colors.textPrimary.$value,  _light: '#0a0a0f' } },
-        'text.muted':   { value: { _dark: colors.textMuted.$value,    _light: '#6666aa' } },
+        'bg.base':      { value: { _dark: colors.bgBase.$value,       _light: lightColors.bgBase.$value } },
+        'bg.surface':   { value: { _dark: colors.bgSurface.$value,    _light: lightColors.bgSurface.$value } },
+        'bg.elevated':  { value: { _dark: colors.bgElevated.$value,   _light: lightColors.bgElevated.$value } },
+        'border.subtle':{ value: { _dark: colors.borderSubtle.$value, _light: lightColors.borderSubtle.$value } },
+        'text.primary': { value: { _dark: colors.textPrimary.$value,  _light: lightColors.textPrimary.$value } },
+        'text.muted':   { value: { _dark: colors.textMuted.$value,    _light: lightColors.textMuted.$value } },
 
         // ---- Accent palette ----
-        'accent.blue':  { value: { _dark: colors.accentBlue.$value,  _light: '#2563eb' } },
-        'accent.green': { value: { _dark: colors.accentGreen.$value, _light: '#16a34a' } },
-        'accent.amber': { value: { _dark: colors.accentAmber.$value, _light: '#d97706' } },
-        'accent.red':   { value: { _dark: colors.accentRed.$value,   _light: '#dc2626' } },
+        'accent.blue':  { value: { _dark: colors.accentBlue.$value,  _light: lightColors.accentBlue.$value } },
+        'accent.green': { value: { _dark: colors.accentGreen.$value, _light: lightColors.accentGreen.$value } },
+        'accent.amber': { value: { _dark: colors.accentAmber.$value, _light: lightColors.accentAmber.$value } },
+        'accent.red':   { value: { _dark: colors.accentRed.$value,   _light: lightColors.accentRed.$value } },
 
         // ---- Contrast-safe text color for use on accent backgrounds ----
         // Dark mode accent colors are light pastels (#4d9fff, #f87171) — white
         // text fails WCAG AA (≈2.7:1). Flip to near-black so contrast exceeds 7:1.
         // Light mode accent colors are dark (#2563eb, #dc2626) — white text passes.
-        'color.on.accent': { value: { _dark: colors.bgBase.$value, _light: '#ffffff' } },
+        'color.on.accent': { value: { _dark: colors.bgBase.$value, _light: lightColors.onAccent.$value } },
 
         // ---- Step background tints (ProgressSteps) ----
         // 8-digit hex: RRGGBBAA — 0x22 ≈ 13% opacity tint over the step circle background.
-        'bg.step.active':   { value: { _dark: '#4d9fff22', _light: '#2563eb22' } },
-        'bg.step.complete': { value: { _dark: '#3dd68c22', _light: '#16a34a22' } },
-        'bg.step.waiting':  { value: { _dark: '#f59e0b22', _light: '#d9770622' } },
+        'bg.step.active':   { value: { _dark: stepTints.active.dark.$value,   _light: stepTints.active.light.$value } },
+        'bg.step.complete': { value: { _dark: stepTints.complete.dark.$value, _light: stepTints.complete.light.$value } },
+        'bg.step.waiting':  { value: { _dark: stepTints.waiting.dark.$value,  _light: stepTints.waiting.light.$value } },
 
         // ---- Semantic alias tier: MCP agent lifecycle states ----
         // Use these in agent components instead of raw accent tokens.
-        'color.agent.status.idle':      { value: { _dark: colors.textMuted.$value,    _light: '#6666aa' } },
-        'color.agent.status.running':   { value: { _dark: colors.accentBlue.$value,   _light: '#2563eb' } },
-        'color.agent.status.waiting':   { value: { _dark: colors.accentAmber.$value,  _light: '#d97706' } },
-        'color.agent.status.done':      { value: { _dark: colors.accentGreen.$value,  _light: '#16a34a' } },
-        'color.agent.status.error':     { value: { _dark: colors.accentRed.$value,    _light: '#dc2626' } },
-        'color.agent.status.cancelled': { value: { _dark: colors.textMuted.$value,    _light: '#6666aa' } },
+        'color.agent.status.idle':      { value: { _dark: colors.textMuted.$value,    _light: lightColors.textMuted.$value } },
+        'color.agent.status.running':   { value: { _dark: colors.accentBlue.$value,   _light: lightColors.accentBlue.$value } },
+        'color.agent.status.waiting':   { value: { _dark: colors.accentAmber.$value,  _light: lightColors.accentAmber.$value } },
+        'color.agent.status.done':      { value: { _dark: colors.accentGreen.$value,  _light: lightColors.accentGreen.$value } },
+        'color.agent.status.error':     { value: { _dark: colors.accentRed.$value,    _light: lightColors.accentRed.$value } },
+        'color.agent.status.cancelled': { value: { _dark: colors.textMuted.$value,    _light: lightColors.textMuted.$value } },
 
         // ---- Semantic alias tier: tool call lifecycle states ----
-        'color.tool.status.pending': { value: { _dark: colors.textMuted.$value,    _light: '#6666aa' } },
-        'color.tool.status.running': { value: { _dark: colors.accentBlue.$value,   _light: '#2563eb' } },
-        'color.tool.status.done':    { value: { _dark: colors.accentGreen.$value,  _light: '#16a34a' } },
-        'color.tool.status.error':   { value: { _dark: colors.accentRed.$value,    _light: '#dc2626' } },
+        'color.tool.status.pending': { value: { _dark: colors.textMuted.$value,    _light: lightColors.textMuted.$value } },
+        'color.tool.status.running': { value: { _dark: colors.accentBlue.$value,   _light: lightColors.accentBlue.$value } },
+        'color.tool.status.done':    { value: { _dark: colors.accentGreen.$value,  _light: lightColors.accentGreen.$value } },
+        'color.tool.status.error':   { value: { _dark: colors.accentRed.$value,    _light: lightColors.accentRed.$value } },
 
         // ---- Semantic alias tier: message role backgrounds ----
-        'color.message.user.bg':      { value: { _dark: colors.bgElevated.$value,   _light: '#f0f0f5' } },
-        'color.message.assistant.bg': { value: { _dark: colors.bgSurface.$value,    _light: '#ffffff' } },
-        'color.message.tool.bg':      { value: { _dark: colors.bgElevated.$value,   _light: '#f0f0f5' } },
-        'color.message.tool.border':  { value: { _dark: colors.borderSubtle.$value, _light: '#e2e2e8' } },
+        'color.message.user.bg':      { value: { _dark: colors.bgElevated.$value,   _light: lightColors.bgElevated.$value } },
+        'color.message.assistant.bg': { value: { _dark: colors.bgSurface.$value,    _light: lightColors.bgSurface.$value } },
+        'color.message.tool.bg':      { value: { _dark: colors.bgElevated.$value,   _light: lightColors.bgElevated.$value } },
+        'color.message.tool.border':  { value: { _dark: colors.borderSubtle.$value, _light: lightColors.borderSubtle.$value } },
       },
     },
   },

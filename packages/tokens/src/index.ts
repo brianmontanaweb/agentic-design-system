@@ -47,6 +47,41 @@ export const colors = Object.freeze({
   accentRed:    { $value: '#f87171', $type: 'color', $description: 'Error and danger state' }             satisfies ColorToken,
 })
 
+// ---- Light-mode primitive color tokens ----
+// Parallel to `colors` above; provides explicit light-mode values so theme.ts
+// can reference them by name rather than embedding raw hex literals.
+export const lightColors = Object.freeze({
+  bgBase:       { $value: '#f8f9fa', $type: 'color', $description: 'Light mode darkest background layer' }           satisfies ColorToken,
+  bgSurface:    { $value: '#ffffff', $type: 'color', $description: 'Light mode default surface' }                    satisfies ColorToken,
+  bgElevated:   { $value: '#f0f0f5', $type: 'color', $description: 'Light mode elevated surface — cards, popovers' } satisfies ColorToken,
+  borderSubtle: { $value: '#e2e2e8', $type: 'color', $description: 'Light mode low-contrast divider and border' }    satisfies ColorToken,
+  textPrimary:  { $value: '#0a0a0f', $type: 'color', $description: 'Light mode high-contrast body text' }            satisfies ColorToken,
+  textMuted:    { $value: '#6666aa', $type: 'color', $description: 'Light mode de-emphasized or secondary text' }    satisfies ColorToken,
+  accentBlue:   { $value: '#2563eb', $type: 'color', $description: 'Light mode primary interactive accent' }         satisfies ColorToken,
+  accentGreen:  { $value: '#16a34a', $type: 'color', $description: 'Light mode success and done state' }             satisfies ColorToken,
+  accentAmber:  { $value: '#d97706', $type: 'color', $description: 'Light mode warning and waiting state' }          satisfies ColorToken,
+  accentRed:    { $value: '#dc2626', $type: 'color', $description: 'Light mode error and danger state' }             satisfies ColorToken,
+  onAccent:     { $value: '#ffffff', $type: 'color', $description: 'Light mode: white text on dark accent backgrounds' } satisfies ColorToken,
+})
+
+// ---- Step background tint tokens ----
+// 8-digit hex (RRGGBBAA) — ~13 % opacity tint used for ProgressSteps circle backgrounds.
+// Dark and light values are kept together so callers can read intent from the structure.
+export const stepTints = Object.freeze({
+  active: {
+    dark:  { $value: '#4d9fff22', $type: 'color', $description: 'Dark mode active step background tint' }   satisfies ColorToken,
+    light: { $value: '#2563eb22', $type: 'color', $description: 'Light mode active step background tint' }  satisfies ColorToken,
+  },
+  complete: {
+    dark:  { $value: '#3dd68c22', $type: 'color', $description: 'Dark mode complete step background tint' } satisfies ColorToken,
+    light: { $value: '#16a34a22', $type: 'color', $description: 'Light mode complete step background tint' } satisfies ColorToken,
+  },
+  waiting: {
+    dark:  { $value: '#f59e0b22', $type: 'color', $description: 'Dark mode waiting step background tint' }  satisfies ColorToken,
+    light: { $value: '#d9770622', $type: 'color', $description: 'Light mode waiting step background tint' } satisfies ColorToken,
+  },
+})
+
 // ---- Semantic alias tier ----
 // Maps MCP lifecycle states and component-level intent to primitive references.
 // Components MUST reference these via Chakra semantic tokens (e.g. bg="color.agent.status.running").
@@ -151,5 +186,5 @@ export function getCSSVariables(): string {
   ].join('\n')
 }
 
-export const tokens = Object.freeze({ colors, semanticColors, space, fonts, fontSizes, fontWeights, duration, radius })
+export const tokens = Object.freeze({ colors, lightColors, stepTints, semanticColors, space, fonts, fontSizes, fontWeights, duration, radius })
 export default tokens

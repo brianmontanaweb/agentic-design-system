@@ -13,9 +13,12 @@ function makeMq(matches: boolean) {
     onchange: null,
     addListener: vi.fn(),
     removeListener: vi.fn(),
-    addEventListener: vi.fn((_: string, cb: ChangeHandler) => { listeners.push(cb) }),
-    removeEventListener: vi.fn((_: string, cb: ChangeHandler) => {
-      const idx = listeners.indexOf(cb)
+    addEventListener: vi.fn((_: string, cb: EventListenerOrEventListenerObject) => {
+      if (typeof cb === 'function') listeners.push(cb as ChangeHandler)
+    }),
+    removeEventListener: vi.fn((_: string, cb: EventListenerOrEventListenerObject) => {
+      const handler = cb as ChangeHandler
+      const idx = listeners.indexOf(handler)
       if (idx !== -1) listeners.splice(idx, 1)
     }),
     dispatchEvent: vi.fn(),

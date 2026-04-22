@@ -1,42 +1,39 @@
-import React from 'react'
+import type { ReactNode } from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
 import { ThemeProvider } from 'next-themes'
 import { system } from '../theme'
 
 export interface AgenticProviderProps {
-  children: React.ReactNode
+  children: ReactNode
   defaultColorScheme?: 'dark' | 'light'
 }
 
-// Keyframes are scoped to [data-agentic-ds] so they don't pollute the host
-// app's global stylesheet. The @keyframe names use a ds- prefix to further
-// reduce collision risk, but scoping to the wrapper is the primary guard.
+// Keyframe names use the ds- prefix to prevent collisions in the host app's
+// global stylesheet. Scoping @keyframes inside a selector requires CSS Nesting
+// (Level 4) which isn't universally supported — top-level declarations are
+// safer. The ds- prefix is the primary collision guard.
 const keyframes = `
-[data-agentic-ds] {
-  @keyframes ds-pulse {
-    0%, 100% { opacity: 0.3; transform: scale(0.85); }
-    50%       { opacity: 1;   transform: scale(1); }
-  }
-  @keyframes ds-blink {
-    0%, 100% { opacity: 1; }
-    50%      { opacity: 0; }
-  }
+@keyframes ds-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.85); }
+  50%       { opacity: 1;   transform: scale(1); }
+}
+@keyframes ds-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-agentic-ds] {
-    @keyframes ds-pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 1; transform: scale(1); }
-    }
-    @keyframes ds-blink {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 1; }
-    }
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      transition-duration: 0.01ms !important;
-    }
+  @keyframes ds-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 1; transform: scale(1); }
+  }
+  @keyframes ds-blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 1; }
+  }
+  [data-agentic-ds] *, [data-agentic-ds] *::before, [data-agentic-ds] *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
 `

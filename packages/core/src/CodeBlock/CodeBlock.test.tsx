@@ -31,7 +31,7 @@ describe('CodeBlock', () => {
     })
 
     it('supports any language string', () => {
-      renderWithProviders(<CodeBlock language="python">print("hi")</CodeBlock>)
+      renderWithProviders(<CodeBlock language="python">{'print("hi")'}</CodeBlock>)
       expect(screen.getByText('python')).toBeInTheDocument()
     })
   })

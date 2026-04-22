@@ -1,5 +1,6 @@
-import React from 'react'
-import { Box, chakra } from '@chakra-ui/react'
+import type { ReactElement, ReactNode, MouseEventHandler } from 'react'
+import { Box, chakra, useRecipe } from '@chakra-ui/react'
+import { buttonRecipe } from '../theme'
 
 export type ButtonVariant = 'solid' | 'outline' | 'ghost' | 'danger'
 export type ButtonSize = 'sm' | 'md' | 'lg'
@@ -10,12 +11,12 @@ export interface ButtonProps {
   disabled?: boolean
   loading?: boolean
   loadingText?: string
-  leftIcon?: React.ReactElement
-  rightIcon?: React.ReactElement
+  leftIcon?: ReactElement
+  rightIcon?: ReactElement
   fullWidth?: boolean
   type?: 'button' | 'submit' | 'reset'
-  onClick?: (event: React.MouseEvent) => void
-  children?: React.ReactNode
+  onClick?: MouseEventHandler
+  children?: ReactNode
   'aria-label'?: string
 }
 
@@ -24,67 +25,6 @@ export interface ButtonProps {
 // _focusVisible, semantic tokens, etc.). Box as="button" lacks proper typing
 // for button-specific attributes.
 const ButtonEl = chakra('button')
-
-const baseStyles = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  position: 'relative' as const,
-  fontFamily: 'body',
-  fontWeight: 'medium',
-  borderRadius: 'md',
-  border: 'none',
-  cursor: 'pointer',
-  userSelect: 'none' as const,
-  whiteSpace: 'nowrap' as const,
-  transition: 'all 100ms',
-  _focusVisible: {
-    outline: '2px solid',
-    outlineColor: 'accent.blue',
-    outlineOffset: '2px',
-  },
-  _disabled: {
-    opacity: 0.4,
-    cursor: 'not-allowed',
-    pointerEvents: 'none',
-  },
-}
-
-const variantStyles: Record<ButtonVariant, object> = {
-  solid: {
-    bg: 'accent.blue',
-    color: 'color.on.accent',
-    _hover: { opacity: 0.85 },
-    _active: { transform: 'scale(0.97)', opacity: 0.75 },
-  },
-  outline: {
-    bg: 'transparent',
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    borderColor: 'border.subtle',
-    color: 'text.primary',
-    _hover: { bg: 'bg.elevated' },
-    _active: { bg: 'bg.elevated', transform: 'scale(0.97)' },
-  },
-  ghost: {
-    bg: 'transparent',
-    color: 'text.muted',
-    _hover: { bg: 'bg.elevated', color: 'text.primary' },
-    _active: { bg: 'bg.elevated', transform: 'scale(0.97)' },
-  },
-  danger: {
-    bg: 'accent.red',
-    color: 'color.on.accent',
-    _hover: { opacity: 0.85 },
-    _active: { transform: 'scale(0.97)', opacity: 0.75 },
-  },
-}
-
-const sizeStyles: Record<ButtonSize, object> = {
-  sm: { h: '28px', px: 3, fontSize: 'xs', gap: 1 },
-  md: { h: '36px', px: 4, fontSize: 'sm', gap: 2 },
-  lg: { h: '44px', px: 5, fontSize: 'md', gap: 2 },
-}
 
 // Three-dot pulse reuses the ds-pulse keyframe injected by AgenticProvider.
 // currentColor inherits the button's text color so dots work across all variants.
@@ -121,6 +61,9 @@ export function Button({
   children,
   'aria-label': ariaLabel,
 }: ButtonProps) {
+  const recipe = useRecipe({ recipe: buttonRecipe })
+  const styles = recipe({ variant, size })
+
   return (
     <ButtonEl
       type={type}
@@ -130,9 +73,7 @@ export function Button({
       pointerEvents={loading ? 'none' : undefined}
       width={fullWidth ? '100%' : undefined}
       onClick={!loading ? onClick : undefined}
-      {...baseStyles}
-      {...variantStyles[variant]}
-      {...sizeStyles[size]}
+      {...styles}
     >
       {/* Absolutely positioned overlay preserves button width during loading */}
       {loading && (

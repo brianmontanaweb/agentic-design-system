@@ -1,8 +1,8 @@
-import React from 'react'
+import type { ReactNode } from 'react'
 import { Box, Code } from '@chakra-ui/react'
 
 export interface CodeBlockProps {
-  children: React.ReactNode
+  children: ReactNode
   language?: string
 }
 
