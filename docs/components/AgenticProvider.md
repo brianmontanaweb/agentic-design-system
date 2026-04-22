@@ -1,6 +1,6 @@
 ---
 component: AgenticProvider
-package: "@agentic-ds/core"
+package: '@agentic-ds/core'
 category: provider
 status: implemented
 tokens:
@@ -23,10 +23,10 @@ The root provider for the design system. Every application using `@agentic-ds/co
 
 ## Props
 
-| Prop                | Type                 | Default  | Description                                              |
-|---------------------|----------------------|----------|----------------------------------------------------------|
-| `children`          | `ReactNode`          | —        | Application content to render inside the provider.       |
-| `defaultColorScheme`| `"dark" \| "light"` | `"dark"` | Initial color mode when no user preference is stored.    |
+| Prop                 | Type                | Default  | Description                                           |
+| -------------------- | ------------------- | -------- | ----------------------------------------------------- |
+| `children`           | `ReactNode`         | —        | Application content to render inside the provider.    |
+| `defaultColorScheme` | `"dark" \| "light"` | `"dark"` | Initial color mode when no user preference is stored. |
 
 ---
 
@@ -56,16 +56,17 @@ For MCP App iframe embedding, the iframe document SHOULD render its own `Agentic
 
 Two keyframes are injected globally (not scoped to `[data-agentic-ds]`, since `@keyframes` inside selectors requires CSS Nesting support). The `ds-` prefix prevents collisions with host application keyframe names.
 
-| Name         | Used by                                               | Motion            |
-|--------------|-------------------------------------------------------|-------------------|
-| `ds-pulse`   | `ThinkingIndicator`, `Button` loading dots, `AgentStatus` running dot | Scale + opacity pulse |
-| `ds-blink`   | `StreamingText` cursor                                | Opacity blink     |
+| Name       | Used by                                                               | Motion                |
+| ---------- | --------------------------------------------------------------------- | --------------------- |
+| `ds-pulse` | `ThinkingIndicator`, `Button` loading dots, `AgentStatus` running dot | Scale + opacity pulse |
+| `ds-blink` | `StreamingText` cursor                                                | Opacity blink         |
 
 Components reference these by name: `animation: 'ds-pulse 1.2s ease-in-out infinite'`.
 
 ### Reduced-motion
 
 Under `prefers-reduced-motion: reduce`:
+
 - `ds-pulse` and `ds-blink` are redefined as no-ops (static values, no movement).
 - All `animation-duration` and `transition-duration` inside `[data-agentic-ds]` are set to `0.01ms !important`.
 
@@ -77,8 +78,8 @@ This satisfies WCAG 2.2 SC 2.3.3 (Animation from Interactions, AAA) and SC 2.3.1
 
 Requirements (WCAG 2.2 AA):
 
-- `AgenticProvider` MUST be present for all ARIA live regions, semantic tokens, and keyboard focus indicators to function correctly. Do not render agent components outside a provider. *(WCAG SC 1.3.1, 4.1.2)*
-- `prefers-reduced-motion` MUST be respected globally — AgenticProvider handles this automatically via the injected `<style>` block. Do not override `animation-duration` or `transition-duration` with `!important` inside components. *(WCAG SC 2.3.3)*
+- `AgenticProvider` MUST be present for all ARIA live regions, semantic tokens, and keyboard focus indicators to function correctly. Do not render agent components outside a provider. _(WCAG SC 1.3.1, 4.1.2)_
+- `prefers-reduced-motion` MUST be respected globally — AgenticProvider handles this automatically via the injected `<style>` block. Do not override `animation-duration` or `transition-duration` with `!important` inside components. _(WCAG SC 2.3.3)_
 - Color mode MUST NOT be changed without user intent. Use `defaultColorScheme` to set an initial mode; use `next-themes`' `useTheme()` hook to respond to user-initiated changes.
 
 ---
@@ -86,6 +87,7 @@ Requirements (WCAG 2.2 AA):
 ## Do / Don't
 
 **Do:**
+
 ```tsx
 // Wrap the entire application
 import { AgenticProvider } from '@agentic-ds/core'
@@ -111,6 +113,7 @@ export function McpAppRoot() {
 ```
 
 **Don't:**
+
 ```tsx
 // ❌ Using design system components without a provider
 import { Button } from '@agentic-ds/core'
@@ -120,7 +123,7 @@ function Orphan() {
 
 // ❌ Importing ChakraProvider or system directly
 import { ChakraProvider } from '@chakra-ui/react' // banned by no-restricted-imports rule
-import { system } from '@agentic-ds/core'         // banned by no-restricted-imports rule
+import { system } from '@agentic-ds/core' // banned by no-restricted-imports rule
 ```
 
 ---

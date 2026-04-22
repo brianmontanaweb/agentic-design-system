@@ -11,9 +11,9 @@ export interface MessageBubbleProps {
 }
 
 const roleConfig: Record<MessageRole, { label: string; labelColor: string; bg: string }> = {
-  user:      { label: 'You',       labelColor: 'text.muted',   bg: 'color.message.user.bg' },
-  assistant: { label: 'Assistant', labelColor: 'accent.blue',  bg: 'color.message.assistant.bg' },
-  tool:      { label: 'Tool',      labelColor: 'accent.green', bg: 'color.message.tool.bg' },
+  user: { label: 'You', labelColor: 'text.muted', bg: 'color.message.user.bg' },
+  assistant: { label: 'Assistant', labelColor: 'accent.blue', bg: 'color.message.assistant.bg' },
+  tool: { label: 'Tool', labelColor: 'accent.green', bg: 'color.message.tool.bg' },
 }
 
 export function MessageBubble({ sender, content, label, timestamp }: MessageBubbleProps) {

@@ -1,10 +1,23 @@
 ---
 component: ToolCallCard
-package: "@agentic-ds/agents"
+package: '@agentic-ds/agents'
 category: display
 status: implemented
 tokens:
-  colors: [color.tool.status.pending, color.tool.status.running, color.tool.status.done, color.tool.status.error, accent.green, accent.red, text.primary, text.muted, bg.surface, bg.elevated, border.subtle]
+  colors:
+    [
+      color.tool.status.pending,
+      color.tool.status.running,
+      color.tool.status.done,
+      color.tool.status.error,
+      accent.green,
+      accent.red,
+      text.primary,
+      text.muted,
+      bg.surface,
+      bg.elevated,
+      border.subtle,
+    ]
 wcag: AA
 aria-pattern: https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/
 ---
@@ -17,12 +30,12 @@ Collapsible card that shows a single MCP tool invocation — its name, input pay
 
 ## Statuses
 
-| Status    | Dot color token              | Output text color  |
-|-----------|-----------------------------|--------------------|
-| `pending` | `color.tool.status.pending` | `accent.green`     |
-| `running` | `color.tool.status.running` | `accent.green`     |
-| `done`    | `color.tool.status.done`    | `accent.green`     |
-| `error`   | `color.tool.status.error`   | `accent.red`       |
+| Status    | Dot color token             | Output text color |
+| --------- | --------------------------- | ----------------- |
+| `pending` | `color.tool.status.pending` | `accent.green`    |
+| `running` | `color.tool.status.running` | `accent.green`    |
+| `done`    | `color.tool.status.done`    | `accent.green`    |
+| `error`   | `color.tool.status.error`   | `accent.red`      |
 
 The `running` status dot animates with `ds-pulse`. `useReducedMotion()` disables the animation.
 
@@ -30,19 +43,19 @@ The `running` status dot animates with `ds-pulse`. `useReducedMotion()` disables
 
 ## Props
 
-| Prop          | Type             | Default  | Description                                      |
-|---------------|------------------|----------|--------------------------------------------------|
-| `toolName`    | `string`         | —        | Name of the tool as invoked (required)           |
-| `input`       | `Record<string, unknown>` | — | Input payload; rendered as formatted JSON     |
-| `output`      | `string`         | —        | Tool response string                             |
-| `status`      | `ToolCallStatus` | `"done"` | Current invocation state                         |
-| `defaultOpen` | `boolean`        | `false`  | Initial open state                               |
+| Prop          | Type                      | Default  | Description                               |
+| ------------- | ------------------------- | -------- | ----------------------------------------- |
+| `toolName`    | `string`                  | —        | Name of the tool as invoked (required)    |
+| `input`       | `Record<string, unknown>` | —        | Input payload; rendered as formatted JSON |
+| `output`      | `string`                  | —        | Tool response string                      |
+| `status`      | `ToolCallStatus`          | `"done"` | Current invocation state                  |
+| `defaultOpen` | `boolean`                 | `false`  | Initial open state                        |
 
 ---
 
 ## Accessibility
 
-- The expand/collapse trigger MUST be a `<button>` element. *(WAI-ARIA Disclosure Pattern)*
+- The expand/collapse trigger MUST be a `<button>` element. _(WAI-ARIA Disclosure Pattern)_
 - The button MUST have `aria-expanded` reflecting the current open state.
 - The button MUST have `aria-controls` pointing to the detail panel's `id`.
 - The button MUST have an `aria-label` of `"${toolName} details"` — the visible tool name alone is sufficient but the label scopes the action for screen readers.
@@ -54,6 +67,7 @@ The `running` status dot animates with `ds-pulse`. `useReducedMotion()` disables
 ## Do / Don't
 
 **Do:**
+
 ```tsx
 <ToolCallCard toolName="get_weather" status="done" input={{ city: 'NYC' }} output="72°F, Sunny" />
 <ToolCallCard toolName="run_query" status="error" output="Connection timed out" />
@@ -61,6 +75,7 @@ The `running` status dot animates with `ds-pulse`. `useReducedMotion()` disables
 ```
 
 **Don't:**
+
 ```tsx
 // ❌ Using a div for the trigger — must be a button
 <div onClick={toggle}>Tool name</div>

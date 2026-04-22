@@ -15,8 +15,8 @@ export interface ToolCallCardProps {
 const statusColors: Record<ToolCallStatus, string> = {
   pending: '#8888aa',
   running: '#4d9fff',
-  done:    '#3dd68c',
-  error:   '#f87171',
+  done: '#3dd68c',
+  error: '#f87171',
 }
 
 export function ToolCallCard({
@@ -66,7 +66,13 @@ export function ToolCallCard({
       </Box>
 
       {open && (
-        <VStack id={contentId} gap={0} align="stretch" borderTop="1px solid" borderColor="border.subtle">
+        <VStack
+          id={contentId}
+          gap={0}
+          align="stretch"
+          borderTop="1px solid"
+          borderColor="border.subtle"
+        >
           {input !== undefined && (
             <Box
               px={3}

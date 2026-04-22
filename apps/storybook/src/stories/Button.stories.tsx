@@ -40,7 +40,13 @@ export const Loading: Story = {
 
 export const FullWidth: Story = {
   args: { variant: 'solid', fullWidth: true, children: 'Submit' },
-  decorators: [(Story) => <div style={{ width: '320px' }}><Story /></div>],
+  decorators: [
+    (Story) => (
+      <div style={{ width: '320px' }}>
+        <Story />
+      </div>
+    ),
+  ],
 }
 
 // --- All variants at once ---
@@ -73,10 +79,18 @@ export const AllSizes: Story = {
 export const LoadingStates: Story = {
   render: () => (
     <HStack gap={3}>
-      <Button variant="solid" loading loadingText="Saving…">Save changes</Button>
-      <Button variant="outline" loading loadingText="Loading…">Load data</Button>
-      <Button variant="ghost" loading>Processing</Button>
-      <Button variant="danger" loading loadingText="Deleting…">Delete project</Button>
+      <Button variant="solid" loading loadingText="Saving…">
+        Save changes
+      </Button>
+      <Button variant="outline" loading loadingText="Loading…">
+        Load data
+      </Button>
+      <Button variant="ghost" loading>
+        Processing
+      </Button>
+      <Button variant="danger" loading loadingText="Deleting…">
+        Delete project
+      </Button>
     </HStack>
   ),
 }
@@ -91,7 +105,9 @@ export const LoadingWidthPreservation: Story = {
         Both buttons should be the same width:
       </Text>
       <Button variant="solid">Save changes</Button>
-      <Button variant="solid" loading loadingText="Saving…">Save changes</Button>
+      <Button variant="solid" loading loadingText="Saving…">
+        Save changes
+      </Button>
     </VStack>
   ),
 }

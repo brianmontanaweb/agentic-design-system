@@ -24,16 +24,14 @@ const config: TestRunnerConfig = {
   async postVisit(page, context) {
     // 1. Accessibility check — runs axe-core against the story root.
     //    Any WCAG 2.x violation fails the test with a descriptive message.
-    const results = await new AxeBuilder({ page })
-      .include('#storybook-root')
-      .analyze()
+    const results = await new AxeBuilder({ page }).include('#storybook-root').analyze()
 
     if (results.violations.length > 0) {
       const details = results.violations
         .map(
           (v) =>
             `  [${v.impact ?? 'unknown'}] ${v.id}: ${v.description}\n` +
-            v.nodes.map((n) => `    ${n.html}`).join('\n'),
+            v.nodes.map((n) => `    ${n.html}`).join('\n')
         )
         .join('\n\n')
       throw new Error(`Accessibility violations in "${context.id}":\n\n${details}`)

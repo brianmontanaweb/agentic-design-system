@@ -78,8 +78,7 @@ export const components: ComponentDef[] = [
   {
     name: 'AgentStatus',
     package: '@agentic-ds/agents',
-    description:
-      'Status indicator for MCP agent lifecycle states. Supports all 6 MCP task states.',
+    description: 'Status indicator for MCP agent lifecycle states. Supports all 6 MCP task states.',
     props: {
       status: {
         type: 'AgentStatusValue',
@@ -162,8 +161,7 @@ export const components: ComponentDef[] = [
     types: {
       ToolCallStatus: { values: ['pending', 'running', 'done', 'error'] },
     },
-    ariaNotes:
-      'Expand/collapse trigger must be a <button> with aria-expanded and aria-controls.',
+    ariaNotes: 'Expand/collapse trigger must be a <button> with aria-expanded and aria-controls.',
   },
   {
     name: 'StreamingText',

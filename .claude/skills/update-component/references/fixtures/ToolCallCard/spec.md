@@ -1,6 +1,6 @@
 ---
 component: ToolCallCard
-package: "@agentic-ds/agents"
+package: '@agentic-ds/agents'
 status: implemented
 tokens: []
 wcag: AA
@@ -14,11 +14,11 @@ A collapsible card that displays a single MCP tool call — its name, input, out
 
 ## Variants / States
 
-| Status  | Dot color | Description          |
-|---------|-----------|----------------------|
-| running | blue      | Tool call in progress |
+| Status  | Dot color | Description            |
+| ------- | --------- | ---------------------- |
+| running | blue      | Tool call in progress  |
 | done    | green     | Completed successfully |
-| error   | red       | Failed                |
+| error   | red       | Failed                 |
 
 <!-- SPEC DRIFT: missing 'pending' state -->
 
@@ -28,12 +28,12 @@ A collapsible card that displays a single MCP tool call — its name, input, out
 
 <!-- SPEC DRIFT: missing 'defaultOpen' prop -->
 
-| Prop       | Type                                        | Default  | Description                        |
-|------------|---------------------------------------------|----------|------------------------------------|
-| `toolName` | `string`                                    | required | Name of the tool being called      |
-| `input`    | `object`                                    | —        | Tool input arguments               |
-| `output`   | `string`                                    | —        | Tool output or result              |
-| `status`   | `"pending" \| "running" \| "done" \| "error"` | `"done"` | Current execution status         |
+| Prop       | Type                                          | Default  | Description                   |
+| ---------- | --------------------------------------------- | -------- | ----------------------------- |
+| `toolName` | `string`                                      | required | Name of the tool being called |
+| `input`    | `object`                                      | —        | Tool input arguments          |
+| `output`   | `string`                                      | —        | Tool output or result         |
+| `status`   | `"pending" \| "running" \| "done" \| "error"` | `"done"` | Current execution status      |
 
 ---
 

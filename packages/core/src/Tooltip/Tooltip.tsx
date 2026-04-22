@@ -21,18 +21,13 @@ interface PlacementStyle {
 }
 
 const placementStyles: Record<TooltipPlacement, PlacementStyle> = {
-  top:    { bottom: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)' },
-  bottom: { top:    'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)' },
-  left:   { right:  'calc(100% + 8px)', top:  '50%', transform: 'translateY(-50%)' },
-  right:  { left:   'calc(100% + 8px)', top:  '50%', transform: 'translateY(-50%)' },
+  top: { bottom: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)' },
+  bottom: { top: 'calc(100% + 8px)', left: '50%', transform: 'translateX(-50%)' },
+  left: { right: 'calc(100% + 8px)', top: '50%', transform: 'translateY(-50%)' },
+  right: { left: 'calc(100% + 8px)', top: '50%', transform: 'translateY(-50%)' },
 }
 
-export function Tooltip({
-  label,
-  placement = 'top',
-  children,
-  isDisabled = false,
-}: TooltipProps) {
+export function Tooltip({ label, placement = 'top', children, isDisabled = false }: TooltipProps) {
   const [visible, setVisible] = useState(false)
   const id = useId()
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -60,7 +55,7 @@ export function Tooltip({
   // double-cast to a known ARIA-compatible shape so cloneElement is type-safe.
   const trigger = cloneElement(
     children as unknown as ReactElement<{ 'aria-describedby'?: string }>,
-    { 'aria-describedby': !isDisabled ? id : undefined },
+    { 'aria-describedby': !isDisabled ? id : undefined }
   )
 
   return (

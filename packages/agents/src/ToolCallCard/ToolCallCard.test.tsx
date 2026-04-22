@@ -26,7 +26,9 @@ describe('ToolCallCard', () => {
     })
 
     it('starts open when defaultOpen is true', () => {
-      renderWithProviders(<ToolCallCard toolName="get_weather" input={{ city: 'NYC' }} defaultOpen />)
+      renderWithProviders(
+        <ToolCallCard toolName="get_weather" input={{ city: 'NYC' }} defaultOpen />
+      )
       expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'true')
       expect(screen.getByText('Input')).toBeInTheDocument()
     })
@@ -41,7 +43,9 @@ describe('ToolCallCard', () => {
 
     it('collapses when clicked a second time', async () => {
       const user = userEvent.setup()
-      renderWithProviders(<ToolCallCard toolName="get_weather" input={{ city: 'NYC' }} defaultOpen />)
+      renderWithProviders(
+        <ToolCallCard toolName="get_weather" input={{ city: 'NYC' }} defaultOpen />
+      )
       await user.click(screen.getByRole('button'))
       expect(screen.queryByText('Input')).not.toBeInTheDocument()
     })
@@ -59,7 +63,7 @@ describe('ToolCallCard', () => {
     it('renders input as formatted JSON', async () => {
       const user = userEvent.setup()
       const { container } = renderWithProviders(
-        <ToolCallCard toolName="get_weather" input={{ city: 'NYC' }} />,
+        <ToolCallCard toolName="get_weather" input={{ city: 'NYC' }} />
       )
       await user.click(screen.getByRole('button'))
       expect(screen.getByText('Input')).toBeInTheDocument()

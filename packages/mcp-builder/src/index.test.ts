@@ -39,14 +39,18 @@ beforeAll(async () => {
 
 describe('ListTools handler', () => {
   it('returns exactly two tools', async () => {
-    const result = (await getHandler(schemas.listTools)({ params: { name: '', arguments: {} } })) as {
+    const result = (await getHandler(schemas.listTools)({
+      params: { name: '', arguments: {} },
+    })) as {
       tools: unknown[]
     }
     expect(result.tools).toHaveLength(2)
   })
 
   it('exposes get_token and get_component by name', async () => {
-    const result = (await getHandler(schemas.listTools)({ params: { name: '', arguments: {} } })) as {
+    const result = (await getHandler(schemas.listTools)({
+      params: { name: '', arguments: {} },
+    })) as {
       tools: { name: string }[]
     }
     const names = result.tools.map((t) => t.name)
@@ -55,7 +59,9 @@ describe('ListTools handler', () => {
   })
 
   it('each tool has name, description, and inputSchema', async () => {
-    const result = (await getHandler(schemas.listTools)({ params: { name: '', arguments: {} } })) as {
+    const result = (await getHandler(schemas.listTools)({
+      params: { name: '', arguments: {} },
+    })) as {
       tools: Record<string, unknown>[]
     }
     for (const tool of result.tools) {
@@ -85,19 +91,19 @@ describe('CallTool handler', () => {
 
   it('throws for an unknown tool name', async () => {
     await expect(
-      getHandler(schemas.callTool)({ params: { name: 'not_a_tool', arguments: {} } }),
+      getHandler(schemas.callTool)({ params: { name: 'not_a_tool', arguments: {} } })
     ).rejects.toThrow('Unknown tool: not_a_tool')
   })
 
   it('throws "Missing arguments" when arguments is null', async () => {
     await expect(
-      getHandler(schemas.callTool)({ params: { name: 'get_token', arguments: null } }),
+      getHandler(schemas.callTool)({ params: { name: 'get_token', arguments: null } })
     ).rejects.toThrow('Missing arguments')
   })
 
   it('throws "Missing arguments" when arguments is a string', async () => {
     await expect(
-      getHandler(schemas.callTool)({ params: { name: 'get_token', arguments: 'oops' } }),
+      getHandler(schemas.callTool)({ params: { name: 'get_token', arguments: 'oops' } })
     ).rejects.toThrow('Missing arguments')
   })
 })

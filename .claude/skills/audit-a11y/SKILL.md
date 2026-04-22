@@ -32,35 +32,42 @@ Read `docs/best-practices.md` section 2 (Accessibility) in full before auditing 
 For each `.tsx` file in `packages/core/src/` and `packages/agents/src/`, work through every check below. Mark each item as you go.
 
 **Live regions (SC 4.1.3)**
+
 - [ ] Does the component display status that updates without a page reload?
   - `StreamingText`, `MessageThread` → require `role="log"` + `aria-live="polite"` + `aria-atomic="false"`
   - `ThinkingIndicator`, `AgentStatus` → require `role="status"` + `aria-live="polite"`
 
 **Interactive elements (SC 4.1.2)**
+
 - [ ] Does the component have a clickable non-button element (div, span, HStack with onClick)?
   - MUST be a `<button>` or have `role="button"` + `tabIndex={0}` + keyboard handler
   - `ToolCallCard` expand/collapse trigger is a known violation
 
 **List semantics**
+
 - [ ] Does the component render a list of items?
   - Container MUST have `role="list"` or use `<ul>`/`<ol>`
   - `ProgressSteps` requires `role="list"` on the container
 
 **Current step indicator**
+
 - [ ] Does the component track an active/current item in a sequence?
   - Active item MUST have `aria-current="step"` or `aria-current="true"`
 
 **Color as the only indicator (SC 1.4.1)**
+
 - [ ] Does the component use color alone to convey state (e.g., colored dot)?
   - Must also have a text label or visually-hidden text
   - `AgentStatus` dot uses color — label text must always be present
 
 **Decorative animations**
+
 - [ ] Does the component have CSS animations?
   - Animated decorative elements MUST be `aria-hidden="true"`
   - Check: is there a `prefers-reduced-motion` override at the theme level in `AgenticProvider`?
 
 **Focus management (SC 2.4.3)**
+
 - [ ] If the component expands/collapses or shows/hides content, does focus move appropriately?
 
 ## Step 3 — Output a report
@@ -90,6 +97,7 @@ X violations across Y components. Z are High severity.
 ```
 
 Severity levels:
+
 - **High** — blocks keyboard or screen reader users entirely
 - **Medium** — degrades experience for screen reader users
 - **Low** — best practice not followed but not a blocker

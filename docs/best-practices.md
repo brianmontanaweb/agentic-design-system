@@ -23,14 +23,14 @@ This document is the authoritative reference for standards that apply across all
 
 All status-bearing components (`AgentStatus`, `ProgressSteps`) MUST support all MCP task lifecycle states defined in the [MCP 2025-11-25 spec](https://modelcontextprotocol.io/specification/2025-11-25):
 
-| State | Maps To | Notes |
-|---|---|---|
-| `idle` | Not started | Default/initial state |
-| `running` | `working` | Agent actively processing |
-| `waiting` | `input_required` | Agent paused, needs user input |
-| `done` | `completed` | Successfully finished |
-| `error` | `failed` | Terminal failure |
-| `cancelled` | `cancelled` | Explicitly stopped |
+| State       | Maps To          | Notes                          |
+| ----------- | ---------------- | ------------------------------ |
+| `idle`      | Not started      | Default/initial state          |
+| `running`   | `working`        | Agent actively processing      |
+| `waiting`   | `input_required` | Agent paused, needs user input |
+| `done`      | `completed`      | Successfully finished          |
+| `error`     | `failed`         | Terminal failure               |
+| `cancelled` | `cancelled`      | Explicitly stopped             |
 
 `waiting` and `cancelled` are currently missing from `AgentStatus` and `ProgressSteps` — these MUST be added.
 
@@ -59,12 +59,7 @@ MUST use [`role="log"`](https://www.w3.org/WAI/WCAG21/Techniques/aria/ARIA23) wi
 
 ```tsx
 // CORRECT — live region must exist in DOM before content is populated
-<div
-  role="log"
-  aria-live="polite"
-  aria-atomic="false"
-  aria-label="Agent response"
->
+<div role="log" aria-live="polite" aria-atomic="false" aria-label="Agent response">
   {text}
   {streaming && <span aria-hidden="true">▋</span>}
 </div>
@@ -139,11 +134,11 @@ Current tokens use the pre-DTCG format and SHOULD be migrated.
 
 Tokens MUST follow the three-tier model:
 
-| Tier | Naming Pattern | Example | Used In |
-|---|---|---|---|
-| **Primitive** | `[category].[scale]` | `color.blue.500` | Never directly in components |
-| **Semantic** | `[category].[concept].[state]` | `color.agent.status.running` | Components and themes |
-| **Component** | `[component].[element].[property]` | `toolCallCard.statusDot.color` | Single-component scope |
+| Tier          | Naming Pattern                     | Example                        | Used In                      |
+| ------------- | ---------------------------------- | ------------------------------ | ---------------------------- |
+| **Primitive** | `[category].[scale]`               | `color.blue.500`               | Never directly in components |
+| **Semantic**  | `[category].[concept].[state]`     | `color.agent.status.running`   | Components and themes        |
+| **Component** | `[component].[element].[property]` | `toolCallCard.statusDot.color` | Single-component scope       |
 
 Current tokens are hybrid primitives. A formal semantic alias layer MUST be added before new components are built.
 
@@ -155,10 +150,10 @@ These tokens MUST be added to `packages/tokens` to replace hardcoded values in c
 // Agent lifecycle
 'color.agent.status.idle'
 'color.agent.status.running'
-'color.agent.status.waiting'     // MCP input_required
+'color.agent.status.waiting' // MCP input_required
 'color.agent.status.done'
 'color.agent.status.error'
-'color.agent.status.cancelled'   // MCP cancelled
+'color.agent.status.cancelled' // MCP cancelled
 
 // Tool call lifecycle
 'color.tool.status.pending'
@@ -216,7 +211,7 @@ Spec files MUST include:
 ```yaml
 ---
 component: ComponentName
-package: "@agentic-ds/[package]"
+package: '@agentic-ds/[package]'
 status: implemented | planned
 tokens: [list of tokens used]
 wcag: AA
@@ -235,12 +230,12 @@ Currently missing spec files: `AgentStatus`, `ThinkingIndicator`, `ProgressSteps
 
 ## 6. Build & Bundle Targets
 
-| Package | ESM | CJS | `.d.ts` | IIFE | Notes |
-|---|---|---|---|---|---|
-| `tokens` | ✓ | ✓ | ✓ | — | |
-| `core` | ✓ | ✓ | ✓ | — | |
-| `agents` | ✓ | ✓ | ✓ | planned | IIFE needed for MCP Apps |
-| `mcp-builder` | ✓ | — | ✓ | ✓ | MCP Apps bundle target |
+| Package       | ESM | CJS | `.d.ts` | IIFE    | Notes                    |
+| ------------- | --- | --- | ------- | ------- | ------------------------ |
+| `tokens`      | ✓   | ✓   | ✓       | —       |                          |
+| `core`        | ✓   | ✓   | ✓       | —       |                          |
+| `agents`      | ✓   | ✓   | ✓       | planned | IIFE needed for MCP Apps |
+| `mcp-builder` | ✓   | —   | ✓       | ✓       | MCP Apps bundle target   |
 
 The `mcp-builder` IIFE bundle MUST be self-contained — no external imports, all dependencies inlined.
 
@@ -260,9 +255,9 @@ The official [Figma MCP](https://www.figma.com/developers/mcp) is the authoritat
 
 Design files are split by package:
 
-| Package | Figma file |
-|---|---|
-| `@agentic-ds/core` | Core design file |
+| Package              | Figma file         |
+| -------------------- | ------------------ |
+| `@agentic-ds/core`   | Core design file   |
 | `@agentic-ds/agents` | Agents design file |
 
 ### Getting the component node
@@ -287,14 +282,14 @@ If the user has not provided a Figma link, ask for it before proceeding:
 
 For every component, extract all of the following from the Figma node:
 
-| Category | What to look for |
-|---|---|
-| **Colors** | Fill, stroke, and background values for every state — map to semantic tokens |
-| **Spacing & sizing** | Padding, gap, width, height, border radius, border width |
-| **Typography** | Font family, size, weight, line height, letter spacing |
-| **State variants** | Every variant defined in the component set (hover, focus, disabled, loading, error, etc.) |
-| **MCP lifecycle states** | For status-bearing components: idle, running, waiting, done, error, cancelled |
-| **Component props** | Variant property names and their values as defined in the Figma component set |
+| Category                 | What to look for                                                                          |
+| ------------------------ | ----------------------------------------------------------------------------------------- |
+| **Colors**               | Fill, stroke, and background values for every state — map to semantic tokens              |
+| **Spacing & sizing**     | Padding, gap, width, height, border radius, border width                                  |
+| **Typography**           | Font family, size, weight, line height, letter spacing                                    |
+| **State variants**       | Every variant defined in the component set (hover, focus, disabled, loading, error, etc.) |
+| **MCP lifecycle states** | For status-bearing components: idle, running, waiting, done, error, cancelled             |
+| **Component props**      | Variant property names and their values as defined in the Figma component set             |
 
 Extract values by inspecting the node properties returned by the MCP. Prefer the Figma token/variable name over the raw value when Figma variables are in use — these map directly to `@agentic-ds/tokens`.
 
@@ -304,7 +299,7 @@ Figma values MUST be mapped to semantic tokens from `packages/tokens/src/index.t
 
 ```ts
 // CORRECT — map Figma fill value to the semantic token it represents
-color: tokens['color.agent.status.running']   // Figma: #6ee7b7
+color: tokens['color.agent.status.running'] // Figma: #6ee7b7
 
 // WRONG — copy the raw value from Figma into the component
 color: '#6ee7b7'
@@ -318,11 +313,12 @@ If a value in Figma conflicts with the current implementation or an existing tok
 
 > **Figma conflict — \<ComponentName\>**
 >
-> | Property | Figma value | Current code value |
-> |---|---|---|
-> | `color.agent.status.waiting` | `#fbbf24` | `#f59e0b` |
+> | Property                     | Figma value | Current code value |
+> | ---------------------------- | ----------- | ------------------ |
+> | `color.agent.status.waiting` | `#fbbf24`   | `#f59e0b`          |
 >
 > Which value should be treated as correct? Options:
+>
 > - **Figma is correct** — update the token and any components that use it
 > - **Code is correct** — the Figma file needs updating (flag this to the design team)
 > - **Neither** — provide the correct value

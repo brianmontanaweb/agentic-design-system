@@ -13,7 +13,11 @@ type Story = StoryObj<typeof MessageThread>
 export const Default: Story = {
   render: (args) => (
     <MessageThread {...args}>
-      <MessageBubble sender="user" content="What are the latest trends in AI?" timestamp="2:30 PM" />
+      <MessageBubble
+        sender="user"
+        content="What are the latest trends in AI?"
+        timestamp="2:30 PM"
+      />
       <MessageBubble
         sender="assistant"
         content={<StreamingText text="Here are the key trends in AI for 2024..." />}

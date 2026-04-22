@@ -3,6 +3,7 @@
 Use this file to score the quality of a `/update-component` run against a known fixture state.
 
 ## Contents
+
 - [Scoring Dimensions](#scoring-dimensions)
 - [How to Run an Eval](#how-to-run-an-eval)
 - [Test Case 1 — ToolCallCard](#test-case-1--toolcallcard)
@@ -14,13 +15,13 @@ Use this file to score the quality of a `/update-component` run against a known 
 
 ## Scoring Dimensions
 
-| # | Dimension | Max pts | Description |
-|---|-----------|---------|-------------|
-| 1 | **Recall** | 30 | Found all expected violations — no misses |
-| 2 | **Precision** | 15 | Did not flag false positives |
-| 3 | **Plan specificity** | 15 | Changes described as `old value → new value`, not vague intentions |
-| 4 | **Fix correctness** | 25 | Applied fixes actually resolve the violations |
-| 5 | **No regressions** | 15 | `npm run build` + `npm run lint` pass after changes |
+| #   | Dimension            | Max pts | Description                                                        |
+| --- | -------------------- | ------- | ------------------------------------------------------------------ |
+| 1   | **Recall**           | 30      | Found all expected violations — no misses                          |
+| 2   | **Precision**        | 15      | Did not flag false positives                                       |
+| 3   | **Plan specificity** | 15      | Changes described as `old value → new value`, not vague intentions |
+| 4   | **Fix correctness**  | 25      | Applied fixes actually resolve the violations                      |
+| 5   | **No regressions**   | 15      | `npm run build` + `npm run lint` pass after changes                |
 
 **Total: 100 pts.** Grade: ≥90 excellent · 75–89 good · 60–74 needs work · <60 failing.
 
@@ -99,17 +100,17 @@ git restore packages/agents/src/ToolCallCard.tsx \
 
 ### Expected violations
 
-| Category | Violation | File |
-|----------|-----------|------|
-| Tokens | `statusColors` uses hardcoded hex (`#8888aa`, `#4d9fff`, `#3dd68c`, `#f87171`) — replace with semantic tokens (`color.tool.status.*`) | source |
-| ARIA | Expand/collapse trigger is a `<Box>` (div) with `onClick` — must be `<button>` with `aria-expanded` and `aria-controls` | source |
-| Code quality | `import React, { useId, useState }` — default `React` import unused with jsx-runtime; should be `import { useId, useState }` | source |
-| Story gap | No `Pending` story — `pending` is a valid `ToolCallStatus` value with no story coverage | story |
-| Spec drift | `defaultOpen` prop missing from props table | spec |
-| Spec drift | `input` prop type is `object` — should be `Record<string, unknown>` | spec |
-| Spec drift | `pending` state missing from states table | spec |
-| Spec drift | No ARIA section documenting the WAI-ARIA Disclosure pattern requirement | spec |
-| Spec drift | Frontmatter `tokens` list is empty — should list semantic tokens used | spec |
+| Category     | Violation                                                                                                                             | File   |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| Tokens       | `statusColors` uses hardcoded hex (`#8888aa`, `#4d9fff`, `#3dd68c`, `#f87171`) — replace with semantic tokens (`color.tool.status.*`) | source |
+| ARIA         | Expand/collapse trigger is a `<Box>` (div) with `onClick` — must be `<button>` with `aria-expanded` and `aria-controls`               | source |
+| Code quality | `import React, { useId, useState }` — default `React` import unused with jsx-runtime; should be `import { useId, useState }`          | source |
+| Story gap    | No `Pending` story — `pending` is a valid `ToolCallStatus` value with no story coverage                                               | story  |
+| Spec drift   | `defaultOpen` prop missing from props table                                                                                           | spec   |
+| Spec drift   | `input` prop type is `object` — should be `Record<string, unknown>`                                                                   | spec   |
+| Spec drift   | `pending` state missing from states table                                                                                             | spec   |
+| Spec drift   | No ARIA section documenting the WAI-ARIA Disclosure pattern requirement                                                               | spec   |
+| Spec drift   | Frontmatter `tokens` list is empty — should list semantic tokens used                                                                 | spec   |
 
 **Recall target:** plan must surface all 9 violations.
 
@@ -144,19 +145,19 @@ git restore packages/agents/src/AgentStatus.tsx \
 
 ### Expected violations
 
-| Category | Violation | File |
-|----------|-----------|------|
-| Tokens | `statusConfig` uses hardcoded hex — replace with `color.agent.status.*` semantic tokens | source |
-| MCP states | `waiting` and `cancelled` missing from `AgentStatusValue` type and `statusConfig` | source |
-| ARIA | Missing `role="status"` + `aria-live="polite"` on the container | source |
-| ARIA | No visually-hidden text — color is the only state indicator (WCAG SC 1.4.1) | source |
-| Story gap | No `Waiting` story | story |
-| Story gap | No `Cancelled` story | story |
-| Story gap | `argTypes.status.options` lists only 4 values — should include `waiting` and `cancelled` | story |
-| Spec drift | `mcp-states` frontmatter only lists 4 states — should be all 6 | spec |
-| Spec drift | States table missing `waiting` and `cancelled` rows | spec |
-| Spec drift | `status` prop type is missing `waiting` and `cancelled` union members | spec |
-| Spec drift | No ARIA section documenting `role="status"`, `aria-live="polite"`, visually-hidden text | spec |
+| Category   | Violation                                                                                | File   |
+| ---------- | ---------------------------------------------------------------------------------------- | ------ |
+| Tokens     | `statusConfig` uses hardcoded hex — replace with `color.agent.status.*` semantic tokens  | source |
+| MCP states | `waiting` and `cancelled` missing from `AgentStatusValue` type and `statusConfig`        | source |
+| ARIA       | Missing `role="status"` + `aria-live="polite"` on the container                          | source |
+| ARIA       | No visually-hidden text — color is the only state indicator (WCAG SC 1.4.1)              | source |
+| Story gap  | No `Waiting` story                                                                       | story  |
+| Story gap  | No `Cancelled` story                                                                     | story  |
+| Story gap  | `argTypes.status.options` lists only 4 values — should include `waiting` and `cancelled` | story  |
+| Spec drift | `mcp-states` frontmatter only lists 4 states — should be all 6                           | spec   |
+| Spec drift | States table missing `waiting` and `cancelled` rows                                      | spec   |
+| Spec drift | `status` prop type is missing `waiting` and `cancelled` union members                    | spec   |
+| Spec drift | No ARIA section documenting `role="status"`, `aria-live="polite"`, visually-hidden text  | spec   |
 
 **Recall target:** plan must surface all 11 violations.
 
@@ -191,17 +192,18 @@ git restore packages/core/src/Button.tsx \
 
 ### Expected violations
 
-| Category | Violation | File |
-|----------|-----------|------|
-| Tokens | `transition: 'all 100ms'` in `baseStyles` — hardcoded timing value; should reference `var(--ds-duration-fast)` | source |
-| Code quality | `import React from 'react'` in story — unused default import with jsx-runtime transform | story |
-| Spec drift | `aria-label` prop missing from props table | spec |
-| Spec drift | `color.on.accent` missing from frontmatter `tokens.colors` list | spec |
-| Spec drift | Accessibility note contradicts implementation: says `tabIndex={-1}` but source correctly uses `tabIndex={0}` to keep disabled button in tab order | spec |
+| Category     | Violation                                                                                                                                         | File   |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| Tokens       | `transition: 'all 100ms'` in `baseStyles` — hardcoded timing value; should reference `var(--ds-duration-fast)`                                    | source |
+| Code quality | `import React from 'react'` in story — unused default import with jsx-runtime transform                                                           | story  |
+| Spec drift   | `aria-label` prop missing from props table                                                                                                        | spec   |
+| Spec drift   | `color.on.accent` missing from frontmatter `tokens.colors` list                                                                                   | spec   |
+| Spec drift   | Accessibility note contradicts implementation: says `tabIndex={-1}` but source correctly uses `tabIndex={0}` to keep disabled button in tab order | spec   |
 
 **Recall target:** plan must surface all 5 violations.
 
 **Precision check:** should NOT flag:
+
 - The `import React from 'react'` in **source** (used for `React.ReactElement`, `React.MouseEvent`, `React.ReactNode` type annotations)
 - The `LoadingDots` animation (motion is suppressed at theme level — not a per-component violation)
 
@@ -212,5 +214,5 @@ git restore packages/core/src/Button.tsx \
 Record misses and false positives after each eval run to guide skill improvements.
 
 | Date | Test case | Miss or FP | Description | Action taken |
-|------|-----------|------------|-------------|--------------|
-| — | — | — | — | — |
+| ---- | --------- | ---------- | ----------- | ------------ |
+| —    | —         | —          | —           | —            |

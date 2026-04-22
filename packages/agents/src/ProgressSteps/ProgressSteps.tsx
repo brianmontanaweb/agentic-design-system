@@ -24,10 +24,14 @@ const stepColors: Record<StepStatus, { dot: string; label: string }> = {
 
 function stepBg(status: StepStatus): string {
   switch (status) {
-    case 'complete': return 'bg.step.complete'
-    case 'active': return 'bg.step.active'
-    case 'waiting': return 'bg.step.waiting'
-    default: return 'bg.elevated'
+    case 'complete':
+      return 'bg.step.complete'
+    case 'active':
+      return 'bg.step.active'
+    case 'waiting':
+      return 'bg.step.waiting'
+    default:
+      return 'bg.elevated'
   }
 }
 
@@ -81,7 +85,9 @@ export function ProgressSteps({ steps }: ProgressStepsProps) {
               <Text
                 fontSize="sm"
                 color={colors.label}
-                fontWeight={step.status === 'active' || step.status === 'waiting' ? 'medium' : 'normal'}
+                fontWeight={
+                  step.status === 'active' || step.status === 'waiting' ? 'medium' : 'normal'
+                }
                 lineHeight="24px"
               >
                 {step.label}

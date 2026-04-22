@@ -4,14 +4,14 @@ This is a monorepo for a React design system purpose-built for agentic/MCP appli
 
 ## Packages
 
-| Package | Purpose |
-|---|---|
-| `packages/tokens` | Design tokens — source of truth for all values |
-| `packages/core` | Base components (Button, CodeBlock, AgenticProvider, theme) |
-| `packages/agents` | Agent-specific components (streaming, tool calls, status) |
-| `packages/mcp-builder` | MCP Apps bundle target — currently unimplemented |
-| `apps/storybook` | Visual regression tests and component stories |
-| `apps/demo-web` | Integration demo |
+| Package                | Purpose                                                     |
+| ---------------------- | ----------------------------------------------------------- |
+| `packages/tokens`      | Design tokens — source of truth for all values              |
+| `packages/core`        | Base components (Button, CodeBlock, AgenticProvider, theme) |
+| `packages/agents`      | Agent-specific components (streaming, tool calls, status)   |
+| `packages/mcp-builder` | MCP Apps bundle target — currently unimplemented            |
+| `apps/storybook`       | Visual regression tests and component stories               |
+| `apps/demo-web`        | Integration demo                                            |
 
 Build order is enforced: `tokens → core → agents`. Always run `npm run build` from the root.
 
@@ -90,6 +90,7 @@ Path-scoped rules only load when editing matching files, keeping context tight. 
 Run `npm run lint` from the root. It runs ESLint (flat config in `eslint.config.mjs`) then each package's `tsc --noEmit`.
 
 **Rules enforced:**
+
 - `typescript-eslint` strict + stylistic — no `any`, consistent type imports, unused vars
 - `eslint-plugin-jsx-a11y` strict — WCAG 2.x coverage; catches missing keyboard handlers, invalid ARIA, non-interactive elements with click handlers
 - `eslint-plugin-react` + `react-hooks` — hooks rules, exhaustive-deps as error
@@ -98,6 +99,7 @@ Run `npm run lint` from the root. It runs ESLint (flat config in `eslint.config.
 - `no-restricted-imports` — bans importing `system` from `@agentic-ds/core` or `ChakraProvider` from `@chakra-ui/react` directly; use `<AgenticProvider>`
 
 **Current known violations (28 errors — pre-existing, to be fixed):**
+
 - `packages/agents/src/AgentStatus.tsx`, `MessageBubble.tsx`, `ProgressSteps.tsx`, `ToolCallCard.tsx` — hardcoded hex colors; replace with semantic tokens
 - `apps/demo-web/src/App.tsx`, `apps/storybook/src/stories/MessageThread.stories.tsx` — invalid ARIA role values
 - `apps/demo-web/src/main.tsx` — non-null assertion

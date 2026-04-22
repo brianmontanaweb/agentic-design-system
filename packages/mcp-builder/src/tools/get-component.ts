@@ -2,9 +2,7 @@ import { components } from '../metadata/components.js'
 
 export function handleGetComponent(args: { name: string }) {
   if (args.name === '*') {
-    const list = components
-      .map((c) => `${c.name} (${c.package}) — ${c.description}`)
-      .join('\n')
+    const list = components.map((c) => `${c.name} (${c.package}) — ${c.description}`).join('\n')
     return {
       content: [
         {

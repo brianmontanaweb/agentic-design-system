@@ -64,7 +64,11 @@ export function ToolCallCard({
           borderRadius="full"
           bg={statusColors[status]}
           flexShrink={0}
-          animation={status === 'running' && !reducedMotion ? 'ds-pulse 1.5s ease-in-out infinite' : undefined}
+          animation={
+            status === 'running' && !reducedMotion
+              ? 'ds-pulse 1.5s ease-in-out infinite'
+              : undefined
+          }
         />
         <Text fontSize="sm" fontFamily="mono" color="text.primary" flex={1} textAlign="left">
           {toolName}
@@ -75,7 +79,13 @@ export function ToolCallCard({
       </Button>
 
       {open && (
-        <VStack id={contentId} gap={0} align="stretch" borderTop="1px solid" borderColor="border.subtle">
+        <VStack
+          id={contentId}
+          gap={0}
+          align="stretch"
+          borderTop="1px solid"
+          borderColor="border.subtle"
+        >
           {input !== undefined && (
             <Box
               px={3}

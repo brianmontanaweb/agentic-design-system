@@ -29,8 +29,8 @@ interface EvalCase {
   expected_output: string
   setup: string
   teardown: string
-  grade?: string    // path to shell grader script — run manually, not by this runner
-  scope?: string[]  // if present, injected as a Scope: constraint into the prompt
+  grade?: string // path to shell grader script — run manually, not by this runner
+  scope?: string[] // if present, injected as a Scope: constraint into the prompt
   assertions: string[]
 }
 
@@ -72,8 +72,8 @@ const failLine = (msg: string, reason: string) =>
 function findEvalsFiles(filter?: string): Array<{ skill: string; evalsPath: string }> {
   if (!existsSync(SKILLS_DIR)) return []
   return readdirSync(SKILLS_DIR)
-    .filter(name => !filter || name === filter)
-    .map(name => ({ skill: name, evalsPath: join(SKILLS_DIR, name, 'evals', 'evals.json') }))
+    .filter((name) => !filter || name === filter)
+    .map((name) => ({ skill: name, evalsPath: join(SKILLS_DIR, name, 'evals', 'evals.json') }))
     .filter(({ evalsPath }) => existsSync(evalsPath))
 }
 
@@ -81,7 +81,7 @@ function findEvalsFiles(filter?: string): Array<{ skill: string; evalsPath: stri
 
 async function gradeAssertion(
   output: string,
-  assertion: string,
+  assertion: string
 ): Promise<{ pass: boolean; reason: string }> {
   const gradePrompt = `Grade whether an AI agent's output satisfies the assertion below.
 
@@ -124,7 +124,10 @@ Reply with JSON only, no markdown fences: {"pass": true or false, "reason": "one
 
 // ── Skill invocation ───────────────────────────────────────────────────────
 
-async function runSkill(prompt: string, cwd: string): Promise<{ output: string; cost_usd: number }> {
+async function runSkill(
+  prompt: string,
+  cwd: string
+): Promise<{ output: string; cost_usd: number }> {
   let output = ''
   let cost_usd = 0
 
@@ -153,10 +156,7 @@ async function runSkill(prompt: string, cwd: string): Promise<{ output: string; 
 
 // ── Eval execution ─────────────────────────────────────────────────────────
 
-async function runEval(
-  evalCase: EvalCase,
-  skillName: string,
-): Promise<EvalResult> {
+async function runEval(evalCase: EvalCase, skillName: string): Promise<EvalResult> {
   const worktreePath = `/tmp/eval-${skillName}-${evalCase.id}-${Date.now()}`
 
   const result: EvalResult = {
@@ -213,7 +213,7 @@ async function runEval(
 
     // Grade assertions in parallel — files still exist on disk in the worktree
     const grades = await Promise.all(
-      evalCase.assertions.map(assertion => gradeAssertion(output, assertion)),
+      evalCase.assertions.map((assertion) => gradeAssertion(output, assertion))
     )
 
     evalCase.assertions.forEach((assertion, i) => {
@@ -244,7 +244,7 @@ async function runEval(
 
 async function main() {
   const args = process.argv.slice(2)
-  const skillFilter = args.find(a => !a.startsWith('-'))
+  const skillFilter = args.find((a) => !a.startsWith('-'))
   const idFlag = args.indexOf('--id')
   const idFilter = idFlag !== -1 ? parseInt(args[idFlag + 1] ?? '') : undefined
 
@@ -254,7 +254,7 @@ async function main() {
     print(
       skillFilter
         ? `No evals.json found for skill "${skillFilter}". Check .claude/skills/${skillFilter}/evals/evals.json`
-        : `No skills with evals.json found in ${SKILLS_DIR}`,
+        : `No skills with evals.json found in ${SKILLS_DIR}`
     )
     process.exit(1)
   }
@@ -265,15 +265,19 @@ async function main() {
 
   for (const { skill, evalsPath } of files) {
     const { evals } = JSON.parse(readFileSync(evalsPath, 'utf8')) as EvalsFile
-    const toRun = idFilter != null ? evals.filter(e => e.id === idFilter) : evals
+    const toRun = idFilter != null ? evals.filter((e) => e.id === idFilter) : evals
 
-    print(`\n${C.bold}${C.cyan}${skill}${C.reset}  ${C.dim}(${toRun.length} eval${toRun.length !== 1 ? 's' : ''} — running in parallel)${C.reset}`)
+    print(
+      `\n${C.bold}${C.cyan}${skill}${C.reset}  ${C.dim}(${toRun.length} eval${toRun.length !== 1 ? 's' : ''} — running in parallel)${C.reset}`
+    )
     print('─'.repeat(64))
 
-    const results = await Promise.all(toRun.map(evalCase => {
-      print(`  ${C.dim}⟳ starting eval ${evalCase.id} — ${evalCase.prompt}${C.reset}`)
-      return runEval(evalCase, skill)
-    }))
+    const results = await Promise.all(
+      toRun.map((evalCase) => {
+        print(`  ${C.dim}⟳ starting eval ${evalCase.id} — ${evalCase.prompt}${C.reset}`)
+        return runEval(evalCase, skill)
+      })
+    )
 
     for (const result of results) {
       print(`\n${C.bold}Eval ${result.id}${C.reset}  ${C.dim}${result.prompt}${C.reset}`)
@@ -314,7 +318,7 @@ async function main() {
   if (totalFailed > 0) process.exit(1)
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error(err)
   process.exit(1)
 })

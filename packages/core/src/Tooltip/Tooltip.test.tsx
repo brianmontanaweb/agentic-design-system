@@ -16,21 +16,27 @@ describe('Tooltip', () => {
   describe('structure', () => {
     it('renders trigger children', () => {
       renderWithProviders(
-        <Tooltip label="Save file"><button>Save</button></Tooltip>,
+        <Tooltip label="Save file">
+          <button>Save</button>
+        </Tooltip>
       )
       expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument()
     })
 
     it('renders tooltip element with role="tooltip" when enabled', () => {
       renderWithProviders(
-        <Tooltip label="Save file"><button>Save</button></Tooltip>,
+        <Tooltip label="Save file">
+          <button>Save</button>
+        </Tooltip>
       )
       expect(screen.getByRole('tooltip', { hidden: true })).toBeInTheDocument()
     })
 
     it('tooltip contains the label text', () => {
       renderWithProviders(
-        <Tooltip label="Save file"><button>Save</button></Tooltip>,
+        <Tooltip label="Save file">
+          <button>Save</button>
+        </Tooltip>
       )
       expect(screen.getByRole('tooltip', { hidden: true })).toHaveTextContent('Save file')
     })
@@ -39,7 +45,9 @@ describe('Tooltip', () => {
   describe('ARIA', () => {
     it('sets aria-describedby on trigger pointing to the tooltip id', () => {
       renderWithProviders(
-        <Tooltip label="Save file"><button>Save</button></Tooltip>,
+        <Tooltip label="Save file">
+          <button>Save</button>
+        </Tooltip>
       )
       const trigger = screen.getByRole('button')
       const tooltip = screen.getByRole('tooltip', { hidden: true })
@@ -48,7 +56,9 @@ describe('Tooltip', () => {
 
     it('does not set aria-describedby on trigger when isDisabled', () => {
       renderWithProviders(
-        <Tooltip label="Save file" isDisabled><button>Save</button></Tooltip>,
+        <Tooltip label="Save file" isDisabled>
+          <button>Save</button>
+        </Tooltip>
       )
       expect(screen.getByRole('button')).not.toHaveAttribute('aria-describedby')
     })
@@ -57,14 +67,18 @@ describe('Tooltip', () => {
   describe('disabled state', () => {
     it('does not render the tooltip element when isDisabled', () => {
       renderWithProviders(
-        <Tooltip label="Save file" isDisabled><button>Save</button></Tooltip>,
+        <Tooltip label="Save file" isDisabled>
+          <button>Save</button>
+        </Tooltip>
       )
       expect(screen.queryByRole('tooltip', { hidden: true })).not.toBeInTheDocument()
     })
 
     it('still renders children when isDisabled', () => {
       renderWithProviders(
-        <Tooltip label="Save file" isDisabled><button>Save</button></Tooltip>,
+        <Tooltip label="Save file" isDisabled>
+          <button>Save</button>
+        </Tooltip>
       )
       expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument()
     })
@@ -73,7 +87,9 @@ describe('Tooltip', () => {
   describe('hover interaction', () => {
     it('tooltip is initially not visible', () => {
       renderWithProviders(
-        <Tooltip label="Save file"><button>Save</button></Tooltip>,
+        <Tooltip label="Save file">
+          <button>Save</button>
+        </Tooltip>
       )
       expect(screen.getByRole('tooltip', { hidden: true })).not.toBeVisible()
     })
@@ -81,7 +97,9 @@ describe('Tooltip', () => {
     it('tooltip becomes visible on mouseenter', async () => {
       const user = userEvent.setup()
       renderWithProviders(
-        <Tooltip label="Save file"><button>Save</button></Tooltip>,
+        <Tooltip label="Save file">
+          <button>Save</button>
+        </Tooltip>
       )
       await user.hover(screen.getByRole('button'))
       expect(screen.getByRole('tooltip', { hidden: true })).toBeVisible()
@@ -90,13 +108,13 @@ describe('Tooltip', () => {
     it('tooltip hides after mouseleave once the hide delay elapses', async () => {
       const user = userEvent.setup()
       renderWithProviders(
-        <Tooltip label="Save file"><button>Save</button></Tooltip>,
+        <Tooltip label="Save file">
+          <button>Save</button>
+        </Tooltip>
       )
       await user.hover(screen.getByRole('button'))
       await user.unhover(screen.getByRole('button'))
-      await waitFor(() =>
-        expect(screen.getByRole('tooltip', { hidden: true })).not.toBeVisible(),
-      )
+      await waitFor(() => expect(screen.getByRole('tooltip', { hidden: true })).not.toBeVisible())
     })
   })
 
@@ -104,7 +122,9 @@ describe('Tooltip', () => {
     it('tooltip becomes visible on focus', async () => {
       const user = userEvent.setup()
       renderWithProviders(
-        <Tooltip label="Save file"><button>Save</button></Tooltip>,
+        <Tooltip label="Save file">
+          <button>Save</button>
+        </Tooltip>
       )
       await user.tab()
       expect(screen.getByRole('tooltip', { hidden: true })).toBeVisible()
@@ -113,13 +133,15 @@ describe('Tooltip', () => {
     it('tooltip hides on blur once the hide delay elapses', async () => {
       const user = userEvent.setup()
       renderWithProviders(
-        <Tooltip label="Save file"><button>Save</button></Tooltip>,
+        <Tooltip label="Save file">
+          <button>Save</button>
+        </Tooltip>
       )
       await user.tab()
-      act(() => { screen.getByRole('button').blur() })
-      await waitFor(() =>
-        expect(screen.getByRole('tooltip', { hidden: true })).not.toBeVisible(),
-      )
+      act(() => {
+        screen.getByRole('button').blur()
+      })
+      await waitFor(() => expect(screen.getByRole('tooltip', { hidden: true })).not.toBeVisible())
     })
   })
 
@@ -127,14 +149,14 @@ describe('Tooltip', () => {
     it('Escape dismisses the tooltip while it is visible', async () => {
       const user = userEvent.setup()
       renderWithProviders(
-        <Tooltip label="Save file"><button>Save</button></Tooltip>,
+        <Tooltip label="Save file">
+          <button>Save</button>
+        </Tooltip>
       )
       await user.tab()
       expect(screen.getByRole('tooltip', { hidden: true })).toBeVisible()
       await user.keyboard('{Escape}')
-      await waitFor(() =>
-        expect(screen.getByRole('tooltip', { hidden: true })).not.toBeVisible(),
-      )
+      await waitFor(() => expect(screen.getByRole('tooltip', { hidden: true })).not.toBeVisible())
     })
   })
 
@@ -142,7 +164,9 @@ describe('Tooltip', () => {
     const placements: TooltipPlacement[] = ['top', 'right', 'bottom', 'left']
     it.each(placements)('renders placement "%s" without crashing', (placement) => {
       renderWithProviders(
-        <Tooltip label="Info" placement={placement}><button>Trigger</button></Tooltip>,
+        <Tooltip label="Info" placement={placement}>
+          <button>Trigger</button>
+        </Tooltip>
       )
       expect(screen.getByRole('tooltip', { hidden: true })).toBeInTheDocument()
     })

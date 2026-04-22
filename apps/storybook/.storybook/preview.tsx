@@ -7,9 +7,9 @@ const preview: Preview = {
     backgrounds: {
       default: 'dark',
       values: [
-        { name: 'dark',    value: '#0a0a0f' },
+        { name: 'dark', value: '#0a0a0f' },
         { name: 'surface', value: '#13131a' },
-        { name: 'light',   value: '#f8f9fa' },
+        { name: 'light', value: '#f8f9fa' },
       ],
     },
     layout: 'centered',
@@ -22,7 +22,7 @@ const preview: Preview = {
         title: 'Color scheme',
         icon: 'circlehollow',
         items: [
-          { value: 'dark',  title: 'Dark',  icon: 'moon' },
+          { value: 'dark', title: 'Dark', icon: 'moon' },
           { value: 'light', title: 'Light', icon: 'sun' },
         ],
         dynamicTitle: true,

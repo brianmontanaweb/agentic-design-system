@@ -1,6 +1,6 @@
 ---
 component: useReducedMotion
-package: "@agentic-ds/core"
+package: '@agentic-ds/core'
 category: hook
 status: implemented
 tokens: n/a
@@ -31,14 +31,14 @@ Returns `true` if `prefers-reduced-motion: reduce` is active, `false` otherwise.
 
 Use `useReducedMotion()` only when you need to make a **JS-level branching decision** based on the motion preference:
 
-| Scenario | Solution |
-|---|---|
-| CSS animation on a Chakra `Box` (`animation="ds-pulse..."`) | AgenticProvider handles it — no hook needed |
-| CSS `transition` on a Chakra style prop | AgenticProvider handles it — no hook needed |
-| Conditionally rendering a component only when motion is allowed | `useReducedMotion()` |
-| Passing a reduced-motion-safe value to a JS animation library (e.g., Framer Motion, react-spring) | `useReducedMotion()` |
-| Adjusting the number of animation frames or steps in a canvas/WebGL animation | `useReducedMotion()` |
-| Skipping a particle effect or parallax effect entirely | `useReducedMotion()` |
+| Scenario                                                                                          | Solution                                    |
+| ------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| CSS animation on a Chakra `Box` (`animation="ds-pulse..."`)                                       | AgenticProvider handles it — no hook needed |
+| CSS `transition` on a Chakra style prop                                                           | AgenticProvider handles it — no hook needed |
+| Conditionally rendering a component only when motion is allowed                                   | `useReducedMotion()`                        |
+| Passing a reduced-motion-safe value to a JS animation library (e.g., Framer Motion, react-spring) | `useReducedMotion()`                        |
+| Adjusting the number of animation frames or steps in a canvas/WebGL animation                     | `useReducedMotion()`                        |
+| Skipping a particle effect or parallax effect entirely                                            | `useReducedMotion()`                        |
 
 ---
 
@@ -82,7 +82,7 @@ function SlideIn({ children }: { children: ReactNode }) {
 
 Requirements (WCAG 2.2 AA):
 
-- When `useReducedMotion()` returns `true`, components MUST NOT play animations that involve motion (translation, scale, rotation). Fades are generally acceptable but SHOULD also be suppressed or shortened. *(WCAG SC 2.3.3)*
+- When `useReducedMotion()` returns `true`, components MUST NOT play animations that involve motion (translation, scale, rotation). Fades are generally acceptable but SHOULD also be suppressed or shortened. _(WCAG SC 2.3.3)_
 - Do NOT use this hook as a substitute for the AgenticProvider CSS rule. Always let the CSS rule suppress CSS animations; reserve this hook for JS-driven motion.
 - This hook returns `false` during SSR. If rendering server-side with animations, ensure hydration does not cause a flash of animated content — prefer CSS-based suppression for SSR scenarios.
 
@@ -91,6 +91,7 @@ Requirements (WCAG 2.2 AA):
 ## Do / Don't
 
 **Do:**
+
 ```tsx
 // Disable a JS-driven animation library
 const reduced = useReducedMotion()
@@ -102,6 +103,7 @@ return <WaveAnimation />
 ```
 
 **Don't:**
+
 ```tsx
 // ❌ Using the hook to disable a CSS animation — AgenticProvider already does this
 const reduced = useReducedMotion()

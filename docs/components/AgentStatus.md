@@ -1,10 +1,18 @@
 ---
 component: AgentStatus
-package: "@agentic-ds/agents"
+package: '@agentic-ds/agents'
 category: feedback
 status: implemented
 tokens:
-  colors: [color.agent.status.idle, color.agent.status.running, color.agent.status.waiting, color.agent.status.done, color.agent.status.error, color.agent.status.cancelled]
+  colors:
+    [
+      color.agent.status.idle,
+      color.agent.status.running,
+      color.agent.status.waiting,
+      color.agent.status.done,
+      color.agent.status.error,
+      color.agent.status.cancelled,
+    ]
 wcag: AA
 aria-pattern: https://www.w3.org/TR/wai-aria-1.2/#status
 ---
@@ -19,14 +27,14 @@ Displays the current lifecycle state of an MCP agent as a colored dot paired wit
 
 All 6 MCP task lifecycle states must be supported. Do not add states outside this set.
 
-| Status      | Token                              | Meaning                        |
-|-------------|-----------------------------------|--------------------------------|
-| `idle`      | `color.agent.status.idle`         | Agent not running              |
-| `running`   | `color.agent.status.running`      | Agent actively processing      |
-| `waiting`   | `color.agent.status.waiting`      | Awaiting input from the user   |
-| `done`      | `color.agent.status.done`         | Task completed successfully    |
-| `error`     | `color.agent.status.error`        | Task failed                    |
-| `cancelled` | `color.agent.status.cancelled`    | Task stopped by user action    |
+| Status      | Token                          | Meaning                      |
+| ----------- | ------------------------------ | ---------------------------- |
+| `idle`      | `color.agent.status.idle`      | Agent not running            |
+| `running`   | `color.agent.status.running`   | Agent actively processing    |
+| `waiting`   | `color.agent.status.waiting`   | Awaiting input from the user |
+| `done`      | `color.agent.status.done`      | Task completed successfully  |
+| `error`     | `color.agent.status.error`     | Task failed                  |
+| `cancelled` | `color.agent.status.cancelled` | Task stopped by user action  |
 
 The `running` dot animates with `ds-pulse`. All other states are static. `useReducedMotion()` disables the animation.
 
@@ -34,8 +42,8 @@ The `running` dot animates with `ds-pulse`. All other states are static. `useRed
 
 ## Props
 
-| Prop     | Type               | Default | Description                                     |
-|----------|--------------------|---------|--------------------------------------------------|
+| Prop     | Type               | Default | Description                                      |
+| -------- | ------------------ | ------- | ------------------------------------------------ |
 | `status` | `AgentStatusValue` | —       | Current MCP lifecycle state (required)           |
 | `label`  | `string`           | —       | Override display text; falls back to status name |
 
@@ -43,10 +51,10 @@ The `running` dot animates with `ds-pulse`. All other states are static. `useRed
 
 ## Accessibility
 
-- MUST have `role="status"` + `aria-live="polite"` so transitions are announced without interrupting the user. *(WCAG SC 4.1.3)*
+- MUST have `role="status"` + `aria-live="polite"` so transitions are announced without interrupting the user. _(WCAG SC 4.1.3)_
 - A visually-hidden span MUST contain the full phrase `"Agent status: {label}"` — this is what screen readers announce.
 - The visible badge MUST have `aria-hidden="true"`. The visually-hidden text is the sole SR announcement.
-- Color MUST NOT be the only differentiator between states. *(WCAG SC 1.4.1)* — the visually-hidden text fulfills this requirement for non-visual users; sighted users get the dot + badge label together.
+- Color MUST NOT be the only differentiator between states. _(WCAG SC 1.4.1)_ — the visually-hidden text fulfills this requirement for non-visual users; sighted users get the dot + badge label together.
 - The `running` animation MUST respect `prefers-reduced-motion`.
 
 ---
@@ -54,6 +62,7 @@ The `running` dot animates with `ds-pulse`. All other states are static. `useRed
 ## Do / Don't
 
 **Do:**
+
 ```tsx
 <AgentStatus status="running" />
 <AgentStatus status="error" label="Tool call failed" />
@@ -61,6 +70,7 @@ The `running` dot animates with `ds-pulse`. All other states are static. `useRed
 ```
 
 **Don't:**
+
 ```tsx
 // ❌ Inventing statuses outside the MCP lifecycle
 <AgentStatus status="paused" />

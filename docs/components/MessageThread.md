@@ -1,6 +1,6 @@
 ---
 component: MessageThread
-package: "@agentic-ds/agents"
+package: '@agentic-ds/agents'
 category: layout
 status: implemented
 tokens:
@@ -17,18 +17,18 @@ A scrollable container for a conversation between a user and an agent. New messa
 
 ## Props
 
-| Prop         | Type           | Default              | Description                                           |
-|--------------|----------------|----------------------|-------------------------------------------------------|
-| `children`   | `React.ReactNode` | —                 | Sequence of `<MessageBubble>` components (required)   |
-| `maxHeight`  | `string`       | `"600px"`            | CSS max-height of the scroll container                |
-| `autoScroll` | `boolean`      | `true`               | Scrolls to bottom whenever `children` changes         |
-| `aria-label` | `string`       | `"Message thread"`   | Label for the `role="log"` region                     |
+| Prop         | Type              | Default            | Description                                         |
+| ------------ | ----------------- | ------------------ | --------------------------------------------------- |
+| `children`   | `React.ReactNode` | —                  | Sequence of `<MessageBubble>` components (required) |
+| `maxHeight`  | `string`          | `"600px"`          | CSS max-height of the scroll container              |
+| `autoScroll` | `boolean`         | `true`             | Scrolls to bottom whenever `children` changes       |
+| `aria-label` | `string`          | `"Message thread"` | Label for the `role="log"` region                   |
 
 ---
 
 ## Accessibility
 
-- MUST have `role="log"` + `aria-live="polite"` + `aria-atomic="false"` so new messages are announced incrementally. *(WCAG SC 4.1.3)*
+- MUST have `role="log"` + `aria-live="polite"` + `aria-atomic="false"` so new messages are announced incrementally. _(WCAG SC 4.1.3)_
 - `aria-label` MUST be set to a meaningful phrase. Override the default `"Message thread"` when the context is more specific (e.g., `"Agent conversation"`, `"Support chat"`).
 - `aria-atomic="false"` ensures screen readers announce only the newly added message rather than reading the entire thread.
 - The scrollable container is the live region; do not wrap children in an additional live region.
@@ -44,6 +44,7 @@ A scrollable container for a conversation between a user and an agent. New messa
 ## Do / Don't
 
 **Do:**
+
 ```tsx
 <MessageThread aria-label="Agent conversation">
   <MessageBubble sender="user" content="Hello" />
@@ -52,6 +53,7 @@ A scrollable container for a conversation between a user and an agent. New messa
 ```
 
 **Don't:**
+
 ```tsx
 // ❌ Wrapping children in another live region
 <MessageThread>

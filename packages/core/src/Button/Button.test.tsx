@@ -73,7 +73,7 @@ describe('Button', () => {
       renderWithProviders(
         <Button leftIcon={<svg data-testid="left" />} rightIcon={<svg data-testid="right" />}>
           Save
-        </Button>,
+        </Button>
       )
       expect(screen.getByTestId('left')).toBeInTheDocument()
       expect(screen.getByTestId('right')).toBeInTheDocument()
@@ -89,7 +89,11 @@ describe('Button', () => {
     it('does not call onClick when disabled', async () => {
       const user = userEvent.setup({ pointerEventsCheck: 0 })
       const onClick = vi.fn()
-      renderWithProviders(<Button disabled onClick={onClick}>Save</Button>)
+      renderWithProviders(
+        <Button disabled onClick={onClick}>
+          Save
+        </Button>
+      )
       await user.click(screen.getByRole('button'))
       expect(onClick).not.toHaveBeenCalled()
     })
@@ -102,14 +106,22 @@ describe('Button', () => {
     })
 
     it('swaps aria-label for loadingText when loading', () => {
-      renderWithProviders(<Button loading loadingText="Saving…">Save</Button>)
+      renderWithProviders(
+        <Button loading loadingText="Saving…">
+          Save
+        </Button>
+      )
       expect(screen.getByRole('button')).toHaveAttribute('aria-label', 'Saving…')
     })
 
     it('does not call onClick when loading', async () => {
       const user = userEvent.setup({ pointerEventsCheck: 0 })
       const onClick = vi.fn()
-      renderWithProviders(<Button loading onClick={onClick}>Save</Button>)
+      renderWithProviders(
+        <Button loading onClick={onClick}>
+          Save
+        </Button>
+      )
       await user.click(screen.getByRole('button'))
       expect(onClick).not.toHaveBeenCalled()
     })

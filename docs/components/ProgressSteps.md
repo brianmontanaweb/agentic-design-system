@@ -1,10 +1,21 @@
 ---
 component: ProgressSteps
-package: "@agentic-ds/agents"
+package: '@agentic-ds/agents'
 category: navigation
 status: implemented
 tokens:
-  colors: [accent.blue, accent.green, accent.amber, text.muted, text.primary, border.subtle, bg.step.active, bg.step.complete, bg.step.waiting]
+  colors:
+    [
+      accent.blue,
+      accent.green,
+      accent.amber,
+      text.muted,
+      text.primary,
+      border.subtle,
+      bg.step.active,
+      bg.step.complete,
+      bg.step.waiting,
+    ]
 wcag: AA
 aria-pattern: https://www.w3.org/WAI/ARIA/apg/patterns/listbox/
 ---
@@ -17,13 +28,13 @@ A vertical ordered list of steps showing the progress of a multi-stage agent tas
 
 ## Step statuses
 
-| Status      | Dot border token   | Step background token  | Indicator     | Label weight |
-|-------------|-------------------|------------------------|---------------|--------------|
-| `pending`   | `border.subtle`   | `bg.elevated`          | Step number   | normal       |
-| `active`    | `accent.blue`     | `bg.step.active`       | Step number   | medium       |
-| `complete`  | `accent.green`    | `bg.step.complete`     | ✓ checkmark   | normal       |
-| `waiting`   | `accent.amber`    | `bg.step.waiting`      | Step number   | medium       |
-| `cancelled` | `text.muted`      | `bg.elevated`          | — em-dash     | normal       |
+| Status      | Dot border token | Step background token | Indicator   | Label weight |
+| ----------- | ---------------- | --------------------- | ----------- | ------------ |
+| `pending`   | `border.subtle`  | `bg.elevated`         | Step number | normal       |
+| `active`    | `accent.blue`    | `bg.step.active`      | Step number | medium       |
+| `complete`  | `accent.green`   | `bg.step.complete`    | ✓ checkmark | normal       |
+| `waiting`   | `accent.amber`   | `bg.step.waiting`     | Step number | medium       |
+| `cancelled` | `text.muted`     | `bg.elevated`         | — em-dash   | normal       |
 
 ---
 
@@ -31,26 +42,26 @@ A vertical ordered list of steps showing the progress of a multi-stage agent tas
 
 ### `ProgressStepsProps`
 
-| Prop    | Type     | Default | Description              |
-|---------|----------|---------|--------------------------|
-| `steps` | `Step[]` | —       | Ordered list of steps    |
+| Prop    | Type     | Default | Description           |
+| ------- | -------- | ------- | --------------------- |
+| `steps` | `Step[]` | —       | Ordered list of steps |
 
 ### `Step`
 
-| Field         | Type         | Default | Description                            |
-|---------------|--------------|---------|----------------------------------------|
-| `id`          | `string`     | —       | Unique identifier (used as React key)  |
-| `label`       | `string`     | —       | Step title                             |
-| `status`      | `StepStatus` | —       | Current state of this step             |
-| `description` | `string`     | —       | Optional sub-text shown below label    |
+| Field         | Type         | Default | Description                           |
+| ------------- | ------------ | ------- | ------------------------------------- |
+| `id`          | `string`     | —       | Unique identifier (used as React key) |
+| `label`       | `string`     | —       | Step title                            |
+| `status`      | `StepStatus` | —       | Current state of this step            |
+| `description` | `string`     | —       | Optional sub-text shown below label   |
 
 ---
 
 ## Accessibility
 
-- The outer `VStack` MUST have `role="list"` and each step `role="listitem"`. *(WAI-ARIA list pattern)*
-- The active step MUST have `aria-current="step"`. *(WCAG SC 1.3.1)*
-- Color MUST NOT be the only differentiator between states. *(WCAG SC 1.4.1)* — the step indicator (number, ✓, —) provides a secondary visual signal.
+- The outer `VStack` MUST have `role="list"` and each step `role="listitem"`. _(WAI-ARIA list pattern)_
+- The active step MUST have `aria-current="step"`. _(WCAG SC 1.3.1)_
+- Color MUST NOT be the only differentiator between states. _(WCAG SC 1.4.1)_ — the step indicator (number, ✓, —) provides a secondary visual signal.
 - Step numbers and symbols are rendered inside the dot container; they MUST have sufficient contrast against `bg.step.*` tint backgrounds.
 
 ---
@@ -58,15 +69,24 @@ A vertical ordered list of steps showing the progress of a multi-stage agent tas
 ## Do / Don't
 
 **Do:**
+
 ```tsx
-<ProgressSteps steps={[
-  { id: '1', label: 'Parse request', status: 'complete' },
-  { id: '2', label: 'Generate response', status: 'active', description: 'Using claude-sonnet-4-6...' },
-  { id: '3', label: 'Post-process', status: 'pending' },
-]} />
+<ProgressSteps
+  steps={[
+    { id: '1', label: 'Parse request', status: 'complete' },
+    {
+      id: '2',
+      label: 'Generate response',
+      status: 'active',
+      description: 'Using claude-sonnet-4-6...',
+    },
+    { id: '3', label: 'Post-process', status: 'pending' },
+  ]}
+/>
 ```
 
 **Don't:**
+
 ```tsx
 // ❌ Non-unique ids — breaks React reconciliation
 { id: 'step', label: 'A', status: 'active' }

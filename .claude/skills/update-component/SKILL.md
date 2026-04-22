@@ -31,11 +31,11 @@ These defuse the most common mistakes before you encounter them:
 
 Locate the following files for the named component. Infer the package (`core` or `agents`) from the file location.
 
-| File | Path |
-|------|------|
-| Source | `packages/<package>/src/<ComponentName>.tsx` |
-| Story | `apps/storybook/src/stories/<ComponentName>.stories.tsx` |
-| Spec doc | `docs/components/<ComponentName>.md` |
+| File     | Path                                                     |
+| -------- | -------------------------------------------------------- |
+| Source   | `packages/<package>/src/<ComponentName>.tsx`             |
+| Story    | `apps/storybook/src/stories/<ComponentName>.stories.tsx` |
+| Spec doc | `docs/components/<ComponentName>.md`                     |
 
 **If the spec doc does not exist**, stop immediately and output:
 

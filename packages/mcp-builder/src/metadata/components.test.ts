@@ -4,13 +4,25 @@ import { components } from './components.js'
 const VALID_PACKAGES = ['@agentic-ds/core', '@agentic-ds/agents']
 
 const EXPECTED_NAMES = [
-  'Button', 'CodeBlock', 'AgentStatus', 'ThinkingIndicator',
-  'ProgressSteps', 'ToolCallCard', 'StreamingText', 'MessageThread', 'MessageBubble',
+  'Button',
+  'CodeBlock',
+  'AgentStatus',
+  'ThinkingIndicator',
+  'ProgressSteps',
+  'ToolCallCard',
+  'StreamingText',
+  'MessageThread',
+  'MessageBubble',
 ]
 
 // These agent components are accessibility-critical and must have ariaNotes
 const ARIA_REQUIRED = [
-  'AgentStatus', 'ThinkingIndicator', 'ProgressSteps', 'ToolCallCard', 'StreamingText', 'MessageThread',
+  'AgentStatus',
+  'ThinkingIndicator',
+  'ProgressSteps',
+  'ToolCallCard',
+  'StreamingText',
+  'MessageThread',
 ]
 
 describe('components metadata', () => {
@@ -45,10 +57,9 @@ describe('components metadata', () => {
       for (const [propName, def] of Object.entries(component.props)) {
         expect(propName, 'prop name must be non-empty').toBeTruthy()
         expect(def.type, `${component.name}.${propName} missing type`).toBeTruthy()
-        expect(
-          typeof def.required,
-          `${component.name}.${propName} required must be boolean`,
-        ).toBe('boolean')
+        expect(typeof def.required, `${component.name}.${propName} required must be boolean`).toBe(
+          'boolean'
+        )
       }
     })
 
@@ -57,7 +68,7 @@ describe('components metadata', () => {
       for (const [typeName, def] of Object.entries(component.types)) {
         expect(
           def.values.length,
-          `${component.name}.${typeName} must have at least one value`,
+          `${component.name}.${typeName} must have at least one value`
         ).toBeGreaterThan(0)
       }
     })

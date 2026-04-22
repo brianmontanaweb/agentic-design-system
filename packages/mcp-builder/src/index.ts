@@ -1,16 +1,10 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js'
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js'
 import { handleGetToken } from './tools/get-token.js'
 import { handleGetComponent } from './tools/get-component.js'
 
-const server = new Server(
-  { name: 'agentic-ds', version: '0.1.0' },
-  { capabilities: { tools: {} } },
-)
+const server = new Server({ name: 'agentic-ds', version: '0.1.0' }, { capabilities: { tools: {} } })
 
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: [

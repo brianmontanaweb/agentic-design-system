@@ -11,44 +11,44 @@ A React component library and design token system built for agentic AI applicati
 
 Generic design systems (Radix, Shadcn, MUI) are built for forms, dashboards, and navigation. Agentic UIs have a different set of primitives — streaming text, tool call visualization, multi-step progress, and lifecycle state that changes asynchronously. This library is built around those patterns.
 
-| Problem | How this library solves it |
-|---|---|
-| Streaming text needs live region ARIA to be accessible | `StreamingText` uses `role="log"` + `aria-live` by design |
-| Agent status changes must be announced to screen readers | `AgentStatus` uses `role="status"` + `aria-live="polite"` |
-| MCP lifecycle has 6 states generic libs don't model | Components are built around `idle`, `running`, `waiting`, `done`, `error`, `cancelled` |
-| Component styles leak when embedded in MCP App iframes | All CSS is scoped to `[data-agentic-ds]`, never `:root` |
-| Dark-first is an afterthought in most systems | Dark is the default; light mode is a first-class override |
+| Problem                                                  | How this library solves it                                                             |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Streaming text needs live region ARIA to be accessible   | `StreamingText` uses `role="log"` + `aria-live` by design                              |
+| Agent status changes must be announced to screen readers | `AgentStatus` uses `role="status"` + `aria-live="polite"`                              |
+| MCP lifecycle has 6 states generic libs don't model      | Components are built around `idle`, `running`, `waiting`, `done`, `error`, `cancelled` |
+| Component styles leak when embedded in MCP App iframes   | All CSS is scoped to `[data-agentic-ds]`, never `:root`                                |
+| Dark-first is an afterthought in most systems            | Dark is the default; light mode is a first-class override                              |
 
 ## Packages
 
-| Package | Description |
-|---|---|
-| [`@agentic-ds/tokens`](packages/tokens/) | Framework-agnostic design tokens (JS constants + CSS custom properties) |
-| [`@agentic-ds/core`](packages/core/) | Chakra UI v3 theme extension, `AgenticProvider`, and base components |
-| [`@agentic-ds/agents`](packages/agents/) | Agent-specific UI primitives (streaming, tool calls, status, threads) |
-| [`@agentic-ds/mcp-builder`](packages/mcp-builder/) | MCP server exposing design tokens and component metadata to AI tools |
+| Package                                            | Description                                                             |
+| -------------------------------------------------- | ----------------------------------------------------------------------- |
+| [`@agentic-ds/tokens`](packages/tokens/)           | Framework-agnostic design tokens (JS constants + CSS custom properties) |
+| [`@agentic-ds/core`](packages/core/)               | Chakra UI v3 theme extension, `AgenticProvider`, and base components    |
+| [`@agentic-ds/agents`](packages/agents/)           | Agent-specific UI primitives (streaming, tool calls, status, threads)   |
+| [`@agentic-ds/mcp-builder`](packages/mcp-builder/) | MCP server exposing design tokens and component metadata to AI tools    |
 
 ## Components
 
 ### `@agentic-ds/agents`
 
-| Component | Description |
-|---|---|
-| `AgentStatus` | Lifecycle badge — `idle`, `running`, `done`, `error` with animated dot |
-| `ThinkingIndicator` | 3-dot pulse animation for model inference state |
-| `ProgressSteps` | Numbered step list with `pending`, `active`, `complete` states |
-| `ToolCallCard` | Collapsible card showing tool name, JSON input, and output |
-| `StreamingText` | Incrementally renders text with a blinking cursor |
-| `MessageThread` | Scrollable message history container with auto-scroll |
-| `MessageBubble` | Single message bubble — `user`, `assistant`, `tool` variants |
+| Component           | Description                                                            |
+| ------------------- | ---------------------------------------------------------------------- |
+| `AgentStatus`       | Lifecycle badge — `idle`, `running`, `done`, `error` with animated dot |
+| `ThinkingIndicator` | 3-dot pulse animation for model inference state                        |
+| `ProgressSteps`     | Numbered step list with `pending`, `active`, `complete` states         |
+| `ToolCallCard`      | Collapsible card showing tool name, JSON input, and output             |
+| `StreamingText`     | Incrementally renders text with a blinking cursor                      |
+| `MessageThread`     | Scrollable message history container with auto-scroll                  |
+| `MessageBubble`     | Single message bubble — `user`, `assistant`, `tool` variants           |
 
 ### `@agentic-ds/core`
 
-| Component | Description |
-|---|---|
+| Component         | Description                                         |
+| ----------------- | --------------------------------------------------- |
 | `AgenticProvider` | Required root wrapper — scopes theme and CSS tokens |
-| `Button` | 4 variants, 3 sizes, loading state, full WCAG AA |
-| `CodeBlock` | Themed code display primitive |
+| `Button`          | 4 variants, 3 sizes, loading state, full WCAG AA    |
+| `CodeBlock`       | Themed code display primitive                       |
 
 ## Quickstart
 
@@ -88,9 +88,9 @@ Tokens are available as typed JS constants and as CSS custom properties via `get
 ```ts
 import { colors, space, duration, radius } from '@agentic-ds/tokens'
 
-colors.accentBlue   // '#4d9fff'
-duration.normal     // '200ms'
-radius.md           // '8px'
+colors.accentBlue // '#4d9fff'
+duration.normal // '200ms'
+radius.md // '8px'
 ```
 
 ```ts
@@ -129,10 +129,10 @@ agentic-design-system/
 
 **Tools exposed:**
 
-| Tool | Description |
-|---|---|
-| `get_token` | Look up token values by name or partial path — e.g. `"accentBlue"`, `"agent.status"`, `"duration"` |
-| `get_component` | Get props, types, and ARIA notes for any component. Pass `"*"` to list all. |
+| Tool            | Description                                                                                        |
+| --------------- | -------------------------------------------------------------------------------------------------- |
+| `get_token`     | Look up token values by name or partial path — e.g. `"accentBlue"`, `"agent.status"`, `"duration"` |
+| `get_component` | Get props, types, and ARIA notes for any component. Pass `"*"` to list all.                        |
 
 ### Setup
 
@@ -314,11 +314,11 @@ This repo ships Claude Code skills for component authoring, alongside an eval ha
 
 Three skills are available via `/skill-name` in Claude Code:
 
-| Skill | What it does |
-|---|---|
-| `/add-component <Name> [core\|agents]` | Scaffolds source, story, spec doc, and index export |
-| `/update-component <Name>` | Audits source, story, and spec doc; plans fixes and waits for approval |
-| `/audit-a11y` | Audits all components against WCAG 2.2 AA; reports violations with file + line refs |
+| Skill                                  | What it does                                                                        |
+| -------------------------------------- | ----------------------------------------------------------------------------------- |
+| `/add-component <Name> [core\|agents]` | Scaffolds source, story, spec doc, and index export                                 |
+| `/update-component <Name>`             | Audits source, story, and spec doc; plans fixes and waits for approval              |
+| `/audit-a11y`                          | Audits all components against WCAG 2.2 AA; reports violations with file + line refs |
 
 ### Evals
 

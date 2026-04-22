@@ -23,12 +23,7 @@ interface TokenLike {
 }
 
 function isTokenLike(obj: unknown): obj is TokenLike {
-  return (
-    typeof obj === 'object' &&
-    obj !== null &&
-    '$value' in obj &&
-    '$type' in obj
-  )
+  return typeof obj === 'object' && obj !== null && '$value' in obj && '$type' in obj
 }
 
 function flattenTokens(obj: Record<string, unknown>, prefix: string): TokenEntry[] {

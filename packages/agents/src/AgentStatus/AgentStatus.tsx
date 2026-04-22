@@ -52,9 +52,18 @@ export function AgentStatus({ status, label }: AgentStatusProps) {
         borderRadius="full"
         bg={config.color}
         flexShrink={0}
-        animation={status === 'running' && !reducedMotion ? 'ds-pulse 1.5s ease-in-out infinite' : undefined}
+        animation={
+          status === 'running' && !reducedMotion ? 'ds-pulse 1.5s ease-in-out infinite' : undefined
+        }
       />
-      <Badge variant="plain" fontSize="xs" fontFamily="mono" color={config.color} px={0} aria-hidden="true">
+      <Badge
+        variant="plain"
+        fontSize="xs"
+        fontFamily="mono"
+        color={config.color}
+        px={0}
+        aria-hidden="true"
+      >
         {displayLabel}
       </Badge>
     </HStack>

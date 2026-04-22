@@ -39,7 +39,7 @@ describe('MessageThread', () => {
       renderWithProviders(
         <MessageThread>
           <div>Hello from user</div>
-        </MessageThread>,
+        </MessageThread>
       )
       expect(screen.getByText('Hello from user')).toBeInTheDocument()
     })
@@ -52,7 +52,9 @@ describe('MessageThread', () => {
 
     it('calls scrollIntoView on mount when autoScroll is true (default)', () => {
       renderWithProviders(<MessageThread>content</MessageThread>)
-      expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' })
+      expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalledWith({
+        behavior: 'smooth',
+      })
     })
 
     it('does not call scrollIntoView when autoScroll is false', () => {

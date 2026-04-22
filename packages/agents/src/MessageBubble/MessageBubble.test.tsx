@@ -50,7 +50,7 @@ describe('MessageBubble', () => {
 
     it('renders JSX content', () => {
       renderWithProviders(
-        <MessageBubble sender="assistant" content={<strong>Bold response</strong>} />,
+        <MessageBubble sender="assistant" content={<strong>Bold response</strong>} />
       )
       expect(screen.getByText('Bold response')).toBeInTheDocument()
     })

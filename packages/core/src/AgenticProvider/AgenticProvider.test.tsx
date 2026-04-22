@@ -9,7 +9,7 @@ describe('AgenticProvider', () => {
       render(
         <AgenticProvider>
           <span>hello world</span>
-        </AgenticProvider>,
+        </AgenticProvider>
       )
       expect(screen.getByText('hello world')).toBeInTheDocument()
     })
@@ -18,7 +18,7 @@ describe('AgenticProvider', () => {
       const { container } = render(
         <AgenticProvider>
           <span>child</span>
-        </AgenticProvider>,
+        </AgenticProvider>
       )
       expect(container.querySelector('[data-agentic-ds]')).toBeInTheDocument()
     })
@@ -29,7 +29,7 @@ describe('AgenticProvider', () => {
       const { container } = render(
         <AgenticProvider>
           <span>child</span>
-        </AgenticProvider>,
+        </AgenticProvider>
       )
       const styleTag = container.querySelector('[data-agentic-ds] style')
       expect(styleTag).toBeInTheDocument()
@@ -39,7 +39,7 @@ describe('AgenticProvider', () => {
       const { container } = render(
         <AgenticProvider>
           <span>child</span>
-        </AgenticProvider>,
+        </AgenticProvider>
       )
       const styleTag = container.querySelector('[data-agentic-ds] style')
       expect(styleTag?.textContent).toContain('ds-pulse')
@@ -49,7 +49,7 @@ describe('AgenticProvider', () => {
       const { container } = render(
         <AgenticProvider>
           <span>child</span>
-        </AgenticProvider>,
+        </AgenticProvider>
       )
       const styleTag = container.querySelector('[data-agentic-ds] style')
       expect(styleTag?.textContent).toContain('ds-blink')

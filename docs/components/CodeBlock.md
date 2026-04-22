@@ -1,6 +1,6 @@
 ---
 component: CodeBlock
-package: "@agentic-ds/core"
+package: '@agentic-ds/core'
 category: content
 status: implemented
 tokens:
@@ -20,9 +20,9 @@ A styled container for displaying pre-formatted code. Renders an optional langua
 
 ## Props
 
-| Prop       | Type        | Default | Description                                                         |
-|------------|-------------|---------|---------------------------------------------------------------------|
-| `children` | `ReactNode` | —       | The code content. Preserves whitespace via `white-space: pre`.      |
+| Prop       | Type        | Default | Description                                                                                                   |
+| ---------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------- |
+| `children` | `ReactNode` | —       | The code content. Preserves whitespace via `white-space: pre`.                                                |
 | `language` | `string`    | —       | Optional language label rendered above the code block (e.g. `"typescript"`). Not syntax-aware — display only. |
 
 ---
@@ -31,16 +31,17 @@ A styled container for displaying pre-formatted code. Renders an optional langua
 
 Requirements (WCAG 2.2 AA):
 
-- Code content is rendered inside a `<code>` element, which carries the implicit ARIA `code` role. This is the correct semantic element for code samples. *(HTML spec)*
+- Code content is rendered inside a `<code>` element, which carries the implicit ARIA `code` role. This is the correct semantic element for code samples. _(HTML spec)_
 - The language label is rendered as plain text above the code and is readable by assistive technology. It MUST NOT be `aria-hidden` — it provides useful context.
-- If CodeBlock is used to display output that updates dynamically (e.g., streaming tool output), the parent component MUST wrap it in a live region (`role="log"` for sequential content). CodeBlock itself does not provide a live region. *(WCAG SC 4.1.3)*
-- Color contrast of code text (`text.primary`) against background (`bg.elevated`) MUST meet ≥ 4.5:1. *(WCAG SC 1.4.3)*
+- If CodeBlock is used to display output that updates dynamically (e.g., streaming tool output), the parent component MUST wrap it in a live region (`role="log"` for sequential content). CodeBlock itself does not provide a live region. _(WCAG SC 4.1.3)_
+- Color contrast of code text (`text.primary`) against background (`bg.elevated`) MUST meet ≥ 4.5:1. _(WCAG SC 1.4.3)_
 
 ---
 
 ## Do / Don't
 
 **Do:**
+
 ```tsx
 // Static code sample with language label
 <CodeBlock language="typescript">
@@ -60,6 +61,7 @@ Requirements (WCAG 2.2 AA):
 ```
 
 **Don't:**
+
 ```tsx
 // ❌ Passing structured content as children — use plain text or a string
 <CodeBlock>

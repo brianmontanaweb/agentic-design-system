@@ -1,11 +1,13 @@
 ## Source Violations
 
 ### Tokens
+
 - Hardcoded hex color literals (any `#rrggbb`, `#rgb`, `#rrggbbaa`) — replace with semantic tokens from `@agentic-ds/tokens`
-- Hardcoded timing values — any literal `ms` or `s` value in a `transition`, `animation`, or `animationDuration` prop (e.g., `transition: 'all 100ms'`, `animation: \`ds-pulse 1.2s ease\``) — replace with `duration.*` tokens. Scan every `transition` and `animation` prop in the source to find these; they will not contain `#`.
+- Hardcoded timing values — any literal `ms` or `s` value in a `transition`, `animation`, or `animationDuration` prop (e.g., `transition: 'all 100ms'`, `animation: \`ds-pulse 1.2s ease\``) — replace with `duration.\*`tokens. Scan every`transition`and`animation`prop in the source to find these; they will not contain`#`.
 - Raw CSS color keywords (`red`, `blue`, etc.) not routed through a token
 
 ### ARIA / Accessibility
+
 - `StreamingText` — must have `role="log"` + `aria-live="polite"` + `aria-atomic="false"`
 - `ThinkingIndicator` — must have `role="status"` + `aria-live="polite"`
 - `AgentStatus` — must have `role="status"` + `aria-live="polite"` + visually-hidden status text; if color is the only visual state indicator and visually-hidden text is absent, this is also a **WCAG SC 1.4.1** (Use of Color) violation — surface it in both the source changes and the A11y report
@@ -15,16 +17,20 @@
 - Animated decorative elements — must be `aria-hidden="true"`
 
 ### Motion
+
 - Components with CSS animations (`ThinkingIndicator` pulse, `ToolCallCard` running pulse, `StreamingText` cursor blink, `AgentStatus` running dot) — animations MUST be suppressed via the `prefers-reduced-motion: reduce` override in `AgenticProvider`/`theme.ts`, NOT inline per-component
 - If adding a new animation, verify the animation is included in the freeze list in `apps/storybook/.storybook/test-runner.ts` (prevents flaky visual regression snapshots)
 
 ### MCP Lifecycle States (`AgentStatus` and `ProgressSteps` only)
+
 All 6 states must be supported: `idle`, `running`, `waiting`, `done`, `error`, `cancelled`
 
 ### CSS Scoping
+
 All styles scoped to `[data-agentic-ds]` — not `:root`
 
 ### Code Quality
+
 - No `any` types
 - No unused vars or imports
   - **Story files:** flag `import React from 'react'` if no `React.*` type annotations appear anywhere in the file — jsx-runtime makes the default import unnecessary

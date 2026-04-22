@@ -8,6 +8,7 @@ description: Scaffolds a new component in @agentic-ds/core or @agentic-ds/agents
 Scaffold a new component given `$ARGUMENTS` in the format `<ComponentName> [core|agents]`.
 
 If the package is not specified, infer it:
+
 - Agent-lifecycle, streaming, messaging, tool-call, or status components → `agents`
 - General-purpose UI primitives → `core`
 
@@ -57,6 +58,7 @@ Do not read, write, or modify any files. Do not proceed to Step 1.
 ## Step 1 — Read existing conventions
 
 Before writing any code:
+
 - Read `docs/best-practices.md` sections 1–7 (MCP lifecycle, accessibility, tokens, naming, docs, build targets, CSS scoping). Read section 8 (Figma MCP Usage) only if the user provided a Figma link.
 - Read `packages/<package>/src/index.ts` to understand the current export pattern
 - Read one existing component source file in the target package to understand the code style
@@ -74,6 +76,7 @@ If no Figma link was provided, note **Figma: skipped** and proceed immediately. 
 File: `packages/<package>/src/<ComponentName>/<ComponentName>.tsx`
 
 Requirements (all MUST):
+
 - Functional component, named export (no default export)
 - Do NOT add `import React from 'react'`. For React type annotations in the props interface, use named type imports: `import type { ReactElement, ReactNode, MouseEventHandler } from 'react'`. Write `leftIcon?: ReactElement`, not `leftIcon?: React.ReactElement`.
 - Export the props interface: `export interface <ComponentName>Props { ... }`
@@ -89,11 +92,15 @@ Requirements (all MUST):
 ## Step 4 — Add export to package index
 
 Files:
+
 1. Create `packages/<package>/src/<ComponentName>/index.ts`:
+
 ```ts
 export * from './<ComponentName>'
 ```
+
 2. Update `packages/<package>/src/index.ts`:
+
 ```ts
 export { <ComponentName> } from './<ComponentName>'
 export type { <ComponentName>Props } from './<ComponentName>'
@@ -104,6 +111,7 @@ export type { <ComponentName>Props } from './<ComponentName>'
 File: `apps/storybook/src/stories/<ComponentName>.stories.tsx`
 
 Requirements:
+
 - Use `type { Meta, StoryObj }` from `@storybook/react`
 - Title format: `'Core/<ComponentName>'` or `'Agents/<ComponentName>'`
 - Include a story for every meaningful prop variant and state
@@ -115,6 +123,7 @@ Requirements:
 File: `packages/<package>/src/<ComponentName>/<ComponentName>.test.tsx`
 
 Requirements:
+
 - Import `React from 'react'` (existing test convention)
 - Import `{ describe, expect, it, vi, beforeEach, afterEach }` from `'vitest'`
 - Import `{ screen, act }` from `'@testing-library/react'`
@@ -127,22 +136,27 @@ Requirements:
 Every component test file MUST include these groups:
 
 **`structure`** — basic render and DOM shape:
+
 - Renders without crashing
 - Key child elements exist in the DOM
 - Any significant DOM roles are present
 
 **`ARIA`** — one test per ARIA attribute the component sets:
+
 - `role`, `aria-live`, `aria-atomic`, `aria-describedby`, `aria-expanded`, `aria-controls`, `aria-label`, `aria-current`, `aria-hidden` — test whichever apply
 - Each test asserts the attribute is set AND that its value is correct (id reference, string value, boolean)
 
 **`props`** — one test per meaningful prop:
+
 - Use `it.each` for enum props (`variant`, `size`, `placement`, `status`)
 - Each variant/size/status MUST have at least a smoke-test asserting it renders without crashing
 
 **`disabled / isDisabled`** — if applicable:
+
 - Confirms blocked behavior (events not fired, element not rendered, attribute absent)
 
 **`interaction`** — for every user-facing behavior:
+
 - Use `userEvent.setup()` for all events — never `fireEvent`
 - Hover: `user.hover()` / `user.unhover()`
 - Keyboard: `user.tab()`, `user.keyboard('{Escape}')`, `user.keyboard('{Enter}')`, `user.keyboard(' ')`
@@ -160,10 +174,11 @@ Every component test file MUST include these groups:
 File: `docs/components/<ComponentName>.md`
 
 Use the YAML frontmatter format from `docs/components/Button.md`:
+
 ```yaml
 ---
 component: <ComponentName>
-package: "@agentic-ds/<package>"
+package: '@agentic-ds/<package>'
 category: <category>
 status: implemented
 tokens:
@@ -182,6 +197,7 @@ Body MUST include: description, variants table (if applicable), props table, acc
 ## Step 8 — Build, lint, and test
 
 Run in order:
+
 ```sh
 npm run build
 eslint packages/<package>/src/<ComponentName>/<ComponentName>.tsx apps/storybook/src/stories/<ComponentName>.stories.tsx

@@ -1,6 +1,6 @@
 ---
 component: Tooltip
-package: "@agentic-ds/core"
+package: '@agentic-ds/core'
 category: overlay
 status: implemented
 tokens:
@@ -22,23 +22,23 @@ A non-interactive overlay that surfaces a short text label when the user hovers 
 
 Tooltip has no visual variants. Placement controls where the overlay appears relative to the trigger.
 
-| Placement | Position            | Use when                                             |
-|-----------|---------------------|------------------------------------------------------|
-| `top`     | Above the trigger   | Default; use unless space is constrained above       |
-| `bottom`  | Below the trigger   | When content above the trigger would be obscured     |
-| `left`    | Left of the trigger | Right-aligned triggers near the viewport right edge  |
-| `right`   | Right of the trigger| Left-aligned triggers near the viewport left edge    |
+| Placement | Position             | Use when                                            |
+| --------- | -------------------- | --------------------------------------------------- |
+| `top`     | Above the trigger    | Default; use unless space is constrained above      |
+| `bottom`  | Below the trigger    | When content above the trigger would be obscured    |
+| `left`    | Left of the trigger  | Right-aligned triggers near the viewport right edge |
+| `right`   | Right of the trigger | Left-aligned triggers near the viewport left edge   |
 
 ---
 
 ## Props
 
-| Prop         | Type                                        | Default | Description                                              |
-|--------------|---------------------------------------------|---------|----------------------------------------------------------|
-| `label`      | `string`                                    | —       | Text content of the tooltip. MUST be a plain string.     |
-| `placement`  | `"top" \| "right" \| "bottom" \| "left"`   | `"top"` | Position of the tooltip relative to the trigger.         |
-| `children`   | `ReactElement`                              | —       | The single interactive trigger element.                  |
-| `isDisabled` | `boolean`                                   | `false` | When true, suppresses tooltip entirely.                  |
+| Prop         | Type                                     | Default | Description                                          |
+| ------------ | ---------------------------------------- | ------- | ---------------------------------------------------- |
+| `label`      | `string`                                 | —       | Text content of the tooltip. MUST be a plain string. |
+| `placement`  | `"top" \| "right" \| "bottom" \| "left"` | `"top"` | Position of the tooltip relative to the trigger.     |
+| `children`   | `ReactElement`                           | —       | The single interactive trigger element.              |
+| `isDisabled` | `boolean`                                | `false` | When true, suppresses tooltip entirely.              |
 
 ---
 
@@ -46,21 +46,22 @@ Tooltip has no visual variants. Placement controls where the overlay appears rel
 
 Requirements (WCAG 2.2 AA):
 
-- The tooltip element MUST carry `role="tooltip"`. *(WAI-ARIA 1.2 Tooltip Pattern)*
-- The trigger MUST have `aria-describedby` referencing the tooltip's `id` when the tooltip is enabled. *(WCAG SC 1.3.1)*
-- The tooltip MUST be dismissible via the `Escape` key without moving pointer or keyboard focus. *(WCAG 2.2 SC 1.4.13)*
-- The tooltip MUST remain visible when the pointer moves from the trigger into the tooltip area (hoverable). *(WCAG 2.2 SC 1.4.13)*
-- The tooltip MUST NOT disappear until pointer leaves the trigger+tooltip area or focus leaves. *(WCAG 2.2 SC 1.4.13)*
-- Color MUST NOT be the only means of conveying information within the tooltip. *(WCAG SC 1.4.1)*
-- Text contrast in the tooltip MUST be ≥ 4.5:1 (`text.primary` on `bg.elevated`). *(WCAG SC 1.4.3)*
+- The tooltip element MUST carry `role="tooltip"`. _(WAI-ARIA 1.2 Tooltip Pattern)_
+- The trigger MUST have `aria-describedby` referencing the tooltip's `id` when the tooltip is enabled. _(WCAG SC 1.3.1)_
+- The tooltip MUST be dismissible via the `Escape` key without moving pointer or keyboard focus. _(WCAG 2.2 SC 1.4.13)_
+- The tooltip MUST remain visible when the pointer moves from the trigger into the tooltip area (hoverable). _(WCAG 2.2 SC 1.4.13)_
+- The tooltip MUST NOT disappear until pointer leaves the trigger+tooltip area or focus leaves. _(WCAG 2.2 SC 1.4.13)_
+- Color MUST NOT be the only means of conveying information within the tooltip. _(WCAG SC 1.4.1)_
+- Text contrast in the tooltip MUST be ≥ 4.5:1 (`text.primary` on `bg.elevated`). _(WCAG SC 1.4.3)_
 - The tooltip MUST NOT contain interactive elements (links, buttons, form controls). Use a Popover for interactive overlays.
-- Transition duration is suppressed to 0.01ms under `prefers-reduced-motion: reduce` via the global rule in `AgenticProvider`. *(WCAG SC 2.3.3)*
+- Transition duration is suppressed to 0.01ms under `prefers-reduced-motion: reduce` via the global rule in `AgenticProvider`. _(WCAG SC 2.3.3)_
 
 ---
 
 ## Do / Don't
 
 **Do:**
+
 ```tsx
 // Supplement icon-only buttons
 <Tooltip label="Close panel">
@@ -79,6 +80,7 @@ Requirements (WCAG 2.2 AA):
 ```
 
 **Don't:**
+
 ```tsx
 // ❌ Interactive content inside tooltip — use Popover instead
 <Tooltip label={<a href="/docs">Learn more</a>}>

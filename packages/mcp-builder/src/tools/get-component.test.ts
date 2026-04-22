@@ -2,8 +2,15 @@ import { describe, expect, it } from 'vitest'
 import { handleGetComponent } from './get-component.js'
 
 const ALL_COMPONENT_NAMES = [
-  'Button', 'CodeBlock', 'AgentStatus', 'ThinkingIndicator',
-  'ProgressSteps', 'ToolCallCard', 'StreamingText', 'MessageThread', 'MessageBubble',
+  'Button',
+  'CodeBlock',
+  'AgentStatus',
+  'ThinkingIndicator',
+  'ProgressSteps',
+  'ToolCallCard',
+  'StreamingText',
+  'MessageThread',
+  'MessageBubble',
 ]
 
 describe('handleGetComponent', () => {

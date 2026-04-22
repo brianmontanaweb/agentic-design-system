@@ -6,7 +6,9 @@ const meta: Meta<typeof Tooltip> = {
   component: Tooltip,
   decorators: [
     (Story) => (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '80px' }}>
+      <div
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '80px' }}
+      >
         <Story />
       </div>
     ),
@@ -110,7 +112,9 @@ export const WithLongLabel: Story = {
 export const IconOnlyButton: Story = {
   render: () => (
     <Tooltip label="Close panel">
-      <Button variant="ghost" aria-label="Close panel">✕</Button>
+      <Button variant="ghost" aria-label="Close panel">
+        ✕
+      </Button>
     </Tooltip>
   ),
 }

@@ -55,9 +55,7 @@ describe('ProgressSteps', () => {
     it('does not set aria-current on non-active statuses', () => {
       const statuses = ['pending', 'complete', 'waiting', 'cancelled'] as const
       statuses.forEach((status) => {
-        const { unmount } = renderWithProviders(
-          <ProgressSteps steps={[makeStep({ status })]} />,
-        )
+        const { unmount } = renderWithProviders(<ProgressSteps steps={[makeStep({ status })]} />)
         expect(screen.getByRole('listitem')).not.toHaveAttribute('aria-current')
         unmount()
       })
@@ -104,7 +102,7 @@ describe('ProgressSteps', () => {
 
     it('renders the step description when provided', () => {
       renderWithProviders(
-        <ProgressSteps steps={[makeStep({ description: 'Calling external API' })]} />,
+        <ProgressSteps steps={[makeStep({ description: 'Calling external API' })]} />
       )
       expect(screen.getByText('Calling external API')).toBeInTheDocument()
     })

@@ -1,6 +1,6 @@
 ---
 component: AgentStatus
-package: "@agentic-ds/agents"
+package: '@agentic-ds/agents'
 status: implemented
 tokens: []
 wcag: AA
@@ -17,21 +17,21 @@ Displays the current lifecycle state of an agent — an indicator dot paired wit
 
 <!-- SPEC DRIFT: missing 'waiting' and 'cancelled' MCP states -->
 
-| State     | Color  | Description                   |
-|-----------|--------|-------------------------------|
-| `idle`    | muted  | Not yet started               |
-| `running` | blue   | Actively processing           |
-| `done`    | green  | Completed successfully        |
-| `error`   | red    | Terminated with failure       |
+| State     | Color | Description             |
+| --------- | ----- | ----------------------- |
+| `idle`    | muted | Not yet started         |
+| `running` | blue  | Actively processing     |
+| `done`    | green | Completed successfully  |
+| `error`   | red   | Terminated with failure |
 
 ---
 
 ## Props
 
-| Prop     | Type                                          | Default  | Description                        |
-|----------|-----------------------------------------------|----------|------------------------------------|
-| `status` | `"idle" \| "running" \| "done" \| "error"`    | required | Current agent lifecycle state      |
-| `label`  | `string`                                      | —        | Override the default state label   |
+| Prop     | Type                                       | Default  | Description                      |
+| -------- | ------------------------------------------ | -------- | -------------------------------- |
+| `status` | `"idle" \| "running" \| "done" \| "error"` | required | Current agent lifecycle state    |
+| `label`  | `string`                                   | —        | Override the default state label |
 
 ---
 

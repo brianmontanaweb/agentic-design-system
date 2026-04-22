@@ -34,13 +34,13 @@ Framework-agnostic design tokens exported as CSS custom properties and JS/TS con
 
 **Token categories:**
 
-| Category | Tokens |
-|---|---|
+| Category            | Tokens                                                                                                                                             |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Colors (dark-first) | `bg.base`, `bg.surface`, `bg.elevated`, `border.subtle`, `text.primary`, `text.muted`, `accent.blue`, `accent.green`, `accent.amber`, `accent.red` |
-| Spacing | 4pt base grid — `space.1` (4px) … `space.16` (64px) |
-| Typography | `font.mono`, `font.sans`, size scale, weight scale |
-| Motion | `duration.fast` (100ms), `duration.normal` (200ms), `duration.slow` (400ms) |
-| Radius | `radius.sm`, `radius.md`, `radius.lg` |
+| Spacing             | 4pt base grid — `space.1` (4px) … `space.16` (64px)                                                                                                |
+| Typography          | `font.mono`, `font.sans`, size scale, weight scale                                                                                                 |
+| Motion              | `duration.fast` (100ms), `duration.normal` (200ms), `duration.slow` (400ms)                                                                        |
+| Radius              | `radius.sm`, `radius.md`, `radius.lg`                                                                                                              |
 
 **Build:** `tsup` → ESM + CJS + `.d.ts`
 
@@ -51,6 +51,7 @@ Framework-agnostic design tokens exported as CSS custom properties and JS/TS con
 Chakra UI v3 theme extension + base component wrappers.
 
 **Theme:**
+
 - Extends Chakra's `createSystem()` with token values
 - Dark mode as default semantic layer
 - `cssVarsRoot: '[data-agentic-ds]'` — all CSS custom properties scoped to the provider wrapper, not `:root`, so the library does not leak styles into the host application's global scope
@@ -58,6 +59,7 @@ Chakra UI v3 theme extension + base component wrappers.
 - Custom component recipes: Button ✓, Card (planned), Badge (planned)
 
 **Exports:**
+
 - `AgenticProvider` — wraps `ChakraProvider` with the custom theme; renders `<div data-agentic-ds="">` as the CSS vars scope boundary
 - `Button` ✓ — 4 variants (solid, outline, ghost, danger), 3 sizes, loading state with width preservation, full WCAG AA accessibility
 - `CodeBlock` ✓ — themed code display primitive
@@ -71,15 +73,15 @@ Chakra UI v3 theme extension + base component wrappers.
 
 Agent-specific UI primitives. Depends on `@agentic-ds/core`.
 
-| Component | Status | Description |
-|---|---|---|
-| `AgentStatus` | ✓ | Lifecycle badge: `idle` / `running` / `done` / `error` with color-coded dot |
-| `ThinkingIndicator` | ✓ | Animated 3-dot pulse for "model is thinking" state |
-| `ProgressSteps` | ✓ | Numbered step list with `pending` / `active` / `complete` states |
-| `ToolCallCard` | ✓ | Collapsible card: tool name, input params (JSON), output section |
-| `StreamingText` | ✓ | Renders tokens incrementally; blinking cursor |
-| `MessageThread` | ✓ | Scrollable message history container with auto-scroll |
-| `MessageBubble` | ✓ | Single message: `user` / `assistant` / `tool` role variants |
+| Component           | Status | Description                                                                 |
+| ------------------- | ------ | --------------------------------------------------------------------------- |
+| `AgentStatus`       | ✓      | Lifecycle badge: `idle` / `running` / `done` / `error` with color-coded dot |
+| `ThinkingIndicator` | ✓      | Animated 3-dot pulse for "model is thinking" state                          |
+| `ProgressSteps`     | ✓      | Numbered step list with `pending` / `active` / `complete` states            |
+| `ToolCallCard`      | ✓      | Collapsible card: tool name, input params (JSON), output section            |
+| `StreamingText`     | ✓      | Renders tokens incrementally; blinking cursor                               |
+| `MessageThread`     | ✓      | Scrollable message history container with auto-scroll                       |
+| `MessageBubble`     | ✓      | Single message: `user` / `assistant` / `tool` role variants                 |
 
 **Build:** `tsup` → ESM + CJS + `.d.ts`
 
@@ -90,12 +92,14 @@ Agent-specific UI primitives. Depends on `@agentic-ds/core`.
 ### `apps/demo-web` ✓
 
 Vite + React companion web UI:
+
 - Full `MessageThread` + `ToolCallCard` dashboard layout
 - Uses `AgenticProvider` directly
 
 ### `apps/storybook` ✓
 
 Storybook 10 with `@storybook/react-vite`:
+
 - Stories for all components in `@agentic-ds/agents` and `@agentic-ds/core`
 - Dark background by default
 - Interactive controls for all props
@@ -111,6 +115,7 @@ Storybook 10 with `@storybook/react-vite`:
 ### `docs/components/` ✓ (partial)
 
 Agent-readable component specs — Markdown files structured so an LLM can implement a component correctly without follow-up questions. Each file includes:
+
 - YAML frontmatter (component name, package, tokens used, ARIA pattern URL, WCAG level)
 - Variants, sizes, and states as tables with explicit requirements (MUST / SHOULD)
 - Full prop table with types and defaults
@@ -118,23 +123,23 @@ Agent-readable component specs — Markdown files structured so an LLM can imple
 - Do / Don't code examples
 - Implementation notes scoped to this codebase
 
-| Spec | Status |
-|---|---|
-| `Button.md` | ✓ |
+| Spec        | Status |
+| ----------- | ------ |
+| `Button.md` | ✓      |
 
 ---
 
 ## Toolchain
 
-| Tool | Version | Role |
-|---|---|---|
-| npm workspaces | — | Package manager + monorepo linking |
-| Vite | 8.x | App builds |
-| tsup | 8.x | Library builds (ESM + CJS + declarations) |
-| TypeScript | 6.x | All packages and apps |
-| Storybook | 10.x | Component documentation |
-| jest-image-snapshot | 6.x | Visual regression baselines |
-| Prettier + ESLint | 3.x / 10.x | Formatting and linting |
+| Tool                | Version    | Role                                      |
+| ------------------- | ---------- | ----------------------------------------- |
+| npm workspaces      | —          | Package manager + monorepo linking        |
+| Vite                | 8.x        | App builds                                |
+| tsup                | 8.x        | Library builds (ESM + CJS + declarations) |
+| TypeScript          | 6.x        | All packages and apps                     |
+| Storybook           | 10.x       | Component documentation                   |
+| jest-image-snapshot | 6.x        | Visual regression baselines               |
+| Prettier + ESLint   | 3.x / 10.x | Formatting and linting                    |
 
 ---
 
@@ -161,23 +166,23 @@ Agent-readable component specs — Markdown files structured so an LLM can imple
 
 ### MCP Lifecycle
 
-| Item | Component(s) | Priority |
-|---|---|---|
-| Implement `packages/mcp-builder` — IIFE bundle for MCP App iframe embedding | `mcp-builder` | Medium |
+| Item                                                                        | Component(s)  | Priority |
+| --------------------------------------------------------------------------- | ------------- | -------- |
+| Implement `packages/mcp-builder` — IIFE bundle for MCP App iframe embedding | `mcp-builder` | Medium   |
 
 ### Components
 
-| Item | Priority |
-|---|---|
-| Implement `Card` and `Badge` in `@agentic-ds/core` | Medium |
-| Add `ErrorBoundary` component for agentic error states | Medium |
-| Add `Skeleton` / loading placeholder primitives | Medium |
+| Item                                                   | Priority |
+| ------------------------------------------------------ | -------- |
+| Implement `Card` and `Badge` in `@agentic-ds/core`     | Medium   |
+| Add `ErrorBoundary` component for agentic error states | Medium   |
+| Add `Skeleton` / loading placeholder primitives        | Medium   |
 
 ### Infrastructure
 
-| Item | Priority |
-|---|---|
-| Add versioning strategy — see discussion below | Medium |
+| Item                                           | Priority |
+| ---------------------------------------------- | -------- |
+| Add versioning strategy — see discussion below | Medium   |
 
 ---
 
@@ -191,30 +196,30 @@ The three packages (`@agentic-ds/tokens`, `@agentic-ds/core`, `@agentic-ds/agent
 
 [Changesets](https://github.com/changesets/changesets) is a monorepo-first tool. Contributors add a `.changeset/*.md` file describing what changed and at what semver level. On release, Changesets consumes them to bump versions and generate `CHANGELOG.md`.
 
-| | |
-|---|---|
-| **Pro** | Built for monorepos — understands inter-package dependencies |
-| **Pro** | Humans explicitly declare the impact of each PR (patch/minor/major) |
-| **Pro** | Generates per-package `CHANGELOG.md` automatically |
+|         |                                                                               |
+| ------- | ----------------------------------------------------------------------------- |
+| **Pro** | Built for monorepos — understands inter-package dependencies                  |
+| **Pro** | Humans explicitly declare the impact of each PR (patch/minor/major)           |
+| **Pro** | Generates per-package `CHANGELOG.md` automatically                            |
 | **Pro** | Supports linked packages (bumping `tokens` can auto-bump `core` and `agents`) |
-| **Pro** | GitHub Action available (`changesets/action`) for automated publish on merge |
-| **Con** | Requires contributors to add a changeset file in every PR — easy to forget |
-| **Con** | One more file to review in PRs |
-| **Con** | Setup has more moving parts than semantic-release |
+| **Pro** | GitHub Action available (`changesets/action`) for automated publish on merge  |
+| **Con** | Requires contributors to add a changeset file in every PR — easy to forget    |
+| **Con** | One more file to review in PRs                                                |
+| **Con** | Setup has more moving parts than semantic-release                             |
 
 ### Option B — semantic-release
 
 [semantic-release](https://semantic-release.gitbook.io) infers version bumps automatically from [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:` prefixes). No manual changeset files — the commit message is the release note.
 
-| | |
-|---|---|
-| **Pro** | Zero manual steps — fully automated on push to `main` |
-| **Pro** | Enforces Conventional Commits discipline (readable git log) |
-| **Pro** | No extra PR artifacts |
-| **Con** | Monorepo support requires `semantic-release-monorepo` plugin — less mature |
-| **Con** | All contributors must follow Conventional Commits strictly; one bad commit message breaks automation |
+|         |                                                                                                           |
+| ------- | --------------------------------------------------------------------------------------------------------- |
+| **Pro** | Zero manual steps — fully automated on push to `main`                                                     |
+| **Pro** | Enforces Conventional Commits discipline (readable git log)                                               |
+| **Pro** | No extra PR artifacts                                                                                     |
+| **Con** | Monorepo support requires `semantic-release-monorepo` plugin — less mature                                |
+| **Con** | All contributors must follow Conventional Commits strictly; one bad commit message breaks automation      |
 | **Con** | Inter-package dependency bumps (e.g. bumping `tokens` version in `core`'s peer deps) require extra config |
-| **Con** | Less explicit — a commit message typo can result in a wrong semver bump |
+| **Con** | Less explicit — a commit message typo can result in a wrong semver bump                                   |
 
 ### Recommendation
 
@@ -241,12 +246,12 @@ The three packages (`@agentic-ds/tokens`, `@agentic-ds/core`, `@agentic-ds/agent
 
 ```json
 {
-  "build":              "npm run build -w packages/tokens && npm run build -w packages/core && npm run build -w packages/agents",
-  "dev":                "npm run dev --workspaces --if-present",
-  "lint":               "npm run lint --workspaces --if-present",
-  "storybook":          "npm run dev -w apps/storybook",
-  "build-storybook":    "npm run build -w apps/storybook",
-  "test:visual":        "npm run test:visual -w apps/storybook",
+  "build": "npm run build -w packages/tokens && npm run build -w packages/core && npm run build -w packages/agents",
+  "dev": "npm run dev --workspaces --if-present",
+  "lint": "npm run lint --workspaces --if-present",
+  "storybook": "npm run dev -w apps/storybook",
+  "build-storybook": "npm run build -w apps/storybook",
+  "test:visual": "npm run test:visual -w apps/storybook",
   "test:visual:update": "npm run test:visual:update -w apps/storybook"
 }
 ```
@@ -257,10 +262,10 @@ Build order is explicit (tokens → core → agents) to respect inter-package de
 
 ## Verification
 
-| Check | Command |
-|---|---|
-| Zero TS errors across all packages | `npm run build` |
-| Companion web UI hot-reload | `npm run dev -w apps/demo-web` |
-| Storybook in dark theme | `npm run storybook` |
-| Visual regression baseline | `npm run test:visual:update` (Storybook must be running) |
-| Visual regression check | `npm run test:visual` (Storybook must be running) |
+| Check                              | Command                                                  |
+| ---------------------------------- | -------------------------------------------------------- |
+| Zero TS errors across all packages | `npm run build`                                          |
+| Companion web UI hot-reload        | `npm run dev -w apps/demo-web`                           |
+| Storybook in dark theme            | `npm run storybook`                                      |
+| Visual regression baseline         | `npm run test:visual:update` (Storybook must be running) |
+| Visual regression check            | `npm run test:visual` (Storybook must be running)        |

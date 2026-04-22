@@ -1,6 +1,6 @@
 ---
 component: StreamingText
-package: "@agentic-ds/agents"
+package: '@agentic-ds/agents'
 category: display
 status: implemented
 tokens:
@@ -18,20 +18,20 @@ Renders a growing block of text that is being streamed token-by-token from an ag
 
 ## Props
 
-| Prop         | Type      | Default             | Description                                          |
-|--------------|-----------|---------------------|------------------------------------------------------|
-| `text`       | `string`  | —                   | The full text accumulated so far (required)          |
-| `isStreaming` | `boolean` | `false`            | Shows blinking cursor when `true`                    |
-| `fontSize`   | `string`  | `"sm"`              | Chakra font size token                               |
-| `color`      | `string`  | `"text.primary"`    | Chakra color token for the text                      |
-| `aria-label` | `string`  | `"Streaming output"`| Label for the live region                            |
+| Prop          | Type      | Default              | Description                                 |
+| ------------- | --------- | -------------------- | ------------------------------------------- |
+| `text`        | `string`  | —                    | The full text accumulated so far (required) |
+| `isStreaming` | `boolean` | `false`              | Shows blinking cursor when `true`           |
+| `fontSize`    | `string`  | `"sm"`               | Chakra font size token                      |
+| `color`       | `string`  | `"text.primary"`     | Chakra color token for the text             |
+| `aria-label`  | `string`  | `"Streaming output"` | Label for the live region                   |
 
 ---
 
 ## Accessibility
 
-- MUST have `role="log"` + `aria-live="polite"` + `aria-atomic="false"` so screen readers announce only newly appended text, not the full buffer each time. *(WCAG SC 4.1.3)*
-- The blinking cursor MUST have `aria-hidden="true"` — it is decorative and must not be read aloud. *(WCAG SC 1.3.3)*
+- MUST have `role="log"` + `aria-live="polite"` + `aria-atomic="false"` so screen readers announce only newly appended text, not the full buffer each time. _(WCAG SC 4.1.3)_
+- The blinking cursor MUST have `aria-hidden="true"` — it is decorative and must not be read aloud. _(WCAG SC 1.3.3)_
 - Cursor animation MUST respect `prefers-reduced-motion`. When active, `animation` is set to `undefined` (cursor remains visible but static).
 - `aria-label` MUST describe the region purpose — consumers should override `"Streaming output"` if the context is more specific (e.g., `"Agent reasoning"`).
 
@@ -46,12 +46,14 @@ Renders a growing block of text that is being streamed token-by-token from an ag
 ## Do / Don't
 
 **Do:**
+
 ```tsx
 <StreamingText text={buffer} isStreaming={true} aria-label="Agent reasoning" />
 <StreamingText text={finalOutput} isStreaming={false} />
 ```
 
 **Don't:**
+
 ```tsx
 // ❌ Wrapping in another live region — nested live regions behave unpredictably
 <div aria-live="polite">

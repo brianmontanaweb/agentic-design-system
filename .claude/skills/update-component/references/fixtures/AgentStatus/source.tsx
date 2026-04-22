@@ -10,10 +10,10 @@ export interface AgentStatusProps {
 
 // VIOLATION: hardcoded hex — should use semantic tokens from @agentic-ds/tokens
 const statusConfig: Record<AgentStatusValue, { color: string; label: string }> = {
-  idle:    { color: '#8888aa', label: 'Idle' },
+  idle: { color: '#8888aa', label: 'Idle' },
   running: { color: '#4d9fff', label: 'Running' },
-  done:    { color: '#3dd68c', label: 'Done' },
-  error:   { color: '#f87171', label: 'Error' },
+  done: { color: '#3dd68c', label: 'Done' },
+  error: { color: '#f87171', label: 'Error' },
 }
 
 export function AgentStatus({ status, label }: AgentStatusProps) {
@@ -21,11 +21,7 @@ export function AgentStatus({ status, label }: AgentStatusProps) {
   const displayLabel = label ?? config.label
   return (
     // VIOLATION: missing ARIA live region (role + aria-live) and visually-hidden text (SC 1.4.1)
-    <HStack
-      gap={2}
-      display="inline-flex"
-      alignItems="center"
-    >
+    <HStack gap={2} display="inline-flex" alignItems="center">
       <Box
         w="8px"
         h="8px"

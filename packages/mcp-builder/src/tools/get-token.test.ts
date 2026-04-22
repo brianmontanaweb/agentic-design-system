@@ -38,12 +38,20 @@ describe('handleGetToken', () => {
 
     it('matches tokens across all 8 categories', () => {
       const categories = [
-        'colors', 'semanticColors', 'space', 'fonts',
-        'fontSizes', 'fontWeights', 'duration', 'radius',
+        'colors',
+        'semanticColors',
+        'space',
+        'fonts',
+        'fontSizes',
+        'fontWeights',
+        'duration',
+        'radius',
       ]
       for (const category of categories) {
         const result = handleGetToken({ name: category })
-        expect(result.content[0].text, `no tokens found for category "${category}"`).toMatch(/^Found/)
+        expect(result.content[0].text, `no tokens found for category "${category}"`).toMatch(
+          /^Found/
+        )
       }
     })
 
@@ -80,8 +88,14 @@ describe('handleGetToken', () => {
       const result = handleGetToken({ name: 'xyznotarealtoken' })
       const text = result.content[0].text
       const expected = [
-        'colors', 'semanticColors', 'space', 'fonts',
-        'fontSizes', 'fontWeights', 'duration', 'radius',
+        'colors',
+        'semanticColors',
+        'space',
+        'fonts',
+        'fontSizes',
+        'fontWeights',
+        'duration',
+        'radius',
       ]
       for (const cat of expected) {
         expect(text, `"${cat}" missing from no-match message`).toContain(cat)
