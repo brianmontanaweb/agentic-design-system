@@ -24,12 +24,12 @@ const steps = [
 
 export default function App() {
   return (
-    <Box minH="100vh" bg="bg.base">
+    <Box minH="100vh" bg="color.surface.base">
       <Box maxW="1200px" mx="auto" p={6}>
-        <Heading fontSize="xl" color="text.primary" mb={1} fontFamily="mono">
+        <Heading fontSize="xl" color="color.text.primary" mb={1} fontFamily="mono">
           Agentic Design System
         </Heading>
-        <Text fontSize="sm" color="text.muted" mb={8}>
+        <Text fontSize="sm" color="color.text.muted" mb={8}>
           Component showcase — demo-web
         </Text>
 
@@ -37,14 +37,14 @@ export default function App() {
           {/* Left: Message Thread */}
           <Box
             flex={2}
-            bg="bg.surface"
+            bg="color.surface.default"
             border="1px solid"
-            borderColor="border.subtle"
+            borderColor="color.border.subtle"
             borderRadius="lg"
           >
-            <Box px={4} py={3} borderBottom="1px solid" borderColor="border.subtle">
+            <Box px={4} py={3} borderBottom="1px solid" borderColor="color.border.subtle">
               <Flex gap={2} alignItems="center" justifyContent="space-between">
-                <Text fontSize="sm" color="text.muted" fontFamily="mono">
+                <Text fontSize="sm" color="color.text.muted" fontFamily="mono">
                   conversation
                 </Text>
                 <AgentStatus status="running" />
@@ -81,7 +81,7 @@ export default function App() {
               />
             </MessageThread>
 
-            <Box px={4} py={3} borderTop="1px solid" borderColor="border.subtle">
+            <Box px={4} py={3} borderTop="1px solid" borderColor="color.border.subtle">
               <ThinkingIndicator label="Generating response" />
             </Box>
           </Box>
@@ -89,15 +89,15 @@ export default function App() {
           {/* Right: Progress + Tool calls */}
           <VStack flex={1} gap={4} align="stretch">
             <Box
-              bg="bg.surface"
+              bg="color.surface.default"
               border="1px solid"
-              borderColor="border.subtle"
+              borderColor="color.border.subtle"
               borderRadius="lg"
               p={4}
             >
               <Text
                 fontSize="xs"
-                color="text.muted"
+                color="color.text.muted"
                 fontFamily="mono"
                 textTransform="uppercase"
                 letterSpacing="wider"
@@ -109,15 +109,15 @@ export default function App() {
             </Box>
 
             <Box
-              bg="bg.surface"
+              bg="color.surface.default"
               border="1px solid"
-              borderColor="border.subtle"
+              borderColor="color.border.subtle"
               borderRadius="lg"
               p={4}
             >
               <Text
                 fontSize="xs"
-                color="text.muted"
+                color="color.text.muted"
                 fontFamily="mono"
                 textTransform="uppercase"
                 letterSpacing="wider"

@@ -10,12 +10,12 @@ export interface AgentStatusProps {
 }
 
 const statusConfig: Record<AgentStatusValue, { color: string; label: string }> = {
-  idle: { color: 'text.muted', label: 'Idle' },
-  running: { color: 'accent.blue', label: 'Running' },
-  waiting: { color: 'accent.amber', label: 'Waiting' },
-  done: { color: 'accent.green', label: 'Done' },
-  error: { color: 'accent.red', label: 'Error' },
-  cancelled: { color: 'text.muted', label: 'Cancelled' },
+  idle: { color: 'color.agent.status.idle', label: 'Idle' },
+  running: { color: 'color.agent.status.running', label: 'Running' },
+  waiting: { color: 'color.agent.status.waiting', label: 'Waiting' },
+  done: { color: 'color.agent.status.done', label: 'Done' },
+  error: { color: 'color.agent.status.error', label: 'Error' },
+  cancelled: { color: 'color.agent.status.cancelled', label: 'Cancelled' },
 }
 
 export function AgentStatus({ status, label }: AgentStatusProps) {

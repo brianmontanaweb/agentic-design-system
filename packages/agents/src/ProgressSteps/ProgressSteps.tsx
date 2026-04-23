@@ -15,23 +15,23 @@ export interface ProgressStepsProps {
 }
 
 const stepColors: Record<StepStatus, { dot: string; label: string }> = {
-  pending: { dot: 'border.subtle', label: 'text.muted' },
-  active: { dot: 'accent.blue', label: 'text.primary' },
-  complete: { dot: 'accent.green', label: 'text.muted' },
-  waiting: { dot: 'accent.amber', label: 'text.primary' },
-  cancelled: { dot: 'text.muted', label: 'text.muted' },
+  pending: { dot: 'color.border.subtle', label: 'color.text.muted' },
+  active: { dot: 'color.accent.interactive', label: 'color.text.primary' },
+  complete: { dot: 'color.accent.success', label: 'color.text.muted' },
+  waiting: { dot: 'color.accent.warning', label: 'color.text.primary' },
+  cancelled: { dot: 'color.text.muted', label: 'color.text.muted' },
 }
 
 function stepBg(status: StepStatus): string {
   switch (status) {
     case 'complete':
-      return 'bg.step.complete'
+      return 'color.surface.step.complete'
     case 'active':
-      return 'bg.step.active'
+      return 'color.surface.step.active'
     case 'waiting':
-      return 'bg.step.waiting'
+      return 'color.surface.step.waiting'
     default:
-      return 'bg.elevated'
+      return 'color.surface.elevated'
   }
 }
 
@@ -62,11 +62,11 @@ export function ProgressSteps({ steps }: ProgressStepsProps) {
               mt="1px"
             >
               {step.status === 'complete' ? (
-                <Text fontSize="xs" color="accent.green" fontWeight="bold" lineHeight={1}>
+                <Text fontSize="xs" color="color.accent.success" fontWeight="bold" lineHeight={1}>
                   ✓
                 </Text>
               ) : step.status === 'cancelled' ? (
-                <Text fontSize="xs" color="text.muted" fontWeight="bold" lineHeight={1}>
+                <Text fontSize="xs" color="color.text.muted" fontWeight="bold" lineHeight={1}>
                   —
                 </Text>
               ) : (
@@ -93,7 +93,7 @@ export function ProgressSteps({ steps }: ProgressStepsProps) {
                 {step.label}
               </Text>
               {step.description && (
-                <Text fontSize="xs" color="text.muted">
+                <Text fontSize="xs" color="color.text.muted">
                   {step.description}
                 </Text>
               )}

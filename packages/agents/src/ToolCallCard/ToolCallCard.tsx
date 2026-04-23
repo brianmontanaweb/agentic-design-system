@@ -13,10 +13,10 @@ export interface ToolCallCardProps {
 }
 
 const statusColors: Record<ToolCallStatus, string> = {
-  pending: 'text.muted',
-  running: 'accent.blue',
-  done: 'accent.green',
-  error: 'accent.red',
+  pending: 'color.tool.status.pending',
+  running: 'color.tool.status.running',
+  done: 'color.tool.status.done',
+  error: 'color.tool.status.error',
 }
 
 export function ToolCallCard({
@@ -32,9 +32,9 @@ export function ToolCallCard({
 
   return (
     <Box
-      bg="bg.surface"
+      bg="color.surface.default"
       border="1px solid"
-      borderColor="border.subtle"
+      borderColor="color.border.subtle"
       borderRadius="md"
       overflow="hidden"
     >
@@ -52,8 +52,8 @@ export function ToolCallCard({
         fontWeight="normal"
         transition="background 100ms"
         onClick={() => setOpen((v) => !v)}
-        _hover={{ bg: 'bg.elevated' }}
-        _active={{ bg: 'bg.elevated' }}
+        _hover={{ bg: 'color.surface.elevated' }}
+        _active={{ bg: 'color.surface.elevated' }}
         aria-expanded={open}
         aria-controls={contentId}
         aria-label={`${toolName} details`}
@@ -70,10 +70,10 @@ export function ToolCallCard({
               : undefined
           }
         />
-        <Text fontSize="sm" fontFamily="mono" color="text.primary" flex={1} textAlign="left">
+        <Text fontSize="sm" fontFamily="mono" color="color.text.primary" flex={1} textAlign="left">
           {toolName}
         </Text>
-        <Text fontSize="xs" color="text.muted" userSelect="none" aria-hidden="true">
+        <Text fontSize="xs" color="color.text.muted" userSelect="none" aria-hidden="true">
           {open ? '▾' : '▸'}
         </Text>
       </Button>
@@ -84,18 +84,18 @@ export function ToolCallCard({
           gap={0}
           align="stretch"
           borderTop="1px solid"
-          borderColor="border.subtle"
+          borderColor="color.border.subtle"
         >
           {input !== undefined && (
             <Box
               px={3}
               py={2}
               borderBottom={output !== undefined ? '1px solid' : undefined}
-              borderColor="border.subtle"
+              borderColor="color.border.subtle"
             >
               <Text
                 fontSize="xs"
-                color="text.muted"
+                color="color.text.muted"
                 mb={1}
                 fontFamily="mono"
                 textTransform="uppercase"
@@ -110,7 +110,7 @@ export function ToolCallCard({
                 whiteSpace="pre-wrap"
                 wordBreak="break-all"
                 bg="transparent"
-                color="text.primary"
+                color="color.text.primary"
               >
                 {JSON.stringify(input, null, 2)}
               </Code>
@@ -120,7 +120,7 @@ export function ToolCallCard({
             <Box px={3} py={2}>
               <Text
                 fontSize="xs"
-                color="text.muted"
+                color="color.text.muted"
                 mb={1}
                 fontFamily="mono"
                 textTransform="uppercase"
@@ -135,7 +135,7 @@ export function ToolCallCard({
                 whiteSpace="pre-wrap"
                 wordBreak="break-all"
                 bg="transparent"
-                color={status === 'error' ? 'accent.red' : 'accent.green'}
+                color={status === 'error' ? 'color.accent.danger' : 'color.accent.success'}
               >
                 {output}
               </Code>

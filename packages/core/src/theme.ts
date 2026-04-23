@@ -1,5 +1,15 @@
 import { createSystem, defaultConfig, defineConfig, defineRecipe } from '@chakra-ui/react'
-import { fonts, colors, lightColors, stepTints, duration } from '@agentic-ds/tokens'
+import {
+  fonts,
+  colors,
+  lightColors,
+  stepTints,
+  duration,
+  lineHeights,
+  radius,
+  shadows,
+  zIndex,
+} from '@agentic-ds/tokens'
 
 export const buttonRecipe = defineRecipe({
   base: {
@@ -17,7 +27,7 @@ export const buttonRecipe = defineRecipe({
     transition: `all ${duration.fast.$value}`,
     _focusVisible: {
       outline: '2px solid',
-      outlineColor: 'accent.blue',
+      outlineColor: 'color.accent.interactive',
       outlineOffset: '2px',
     },
     _disabled: {
@@ -29,8 +39,8 @@ export const buttonRecipe = defineRecipe({
   variants: {
     variant: {
       solid: {
-        bg: 'accent.blue',
-        color: 'color.on.accent',
+        bg: 'color.accent.interactive',
+        color: 'color.text.on.accent',
         _hover: { opacity: 0.85 },
         _active: { transform: 'scale(0.97)', opacity: 0.75 },
       },
@@ -38,20 +48,20 @@ export const buttonRecipe = defineRecipe({
         bg: 'transparent',
         borderWidth: '1px',
         borderStyle: 'solid',
-        borderColor: 'border.subtle',
-        color: 'text.primary',
-        _hover: { bg: 'bg.elevated' },
-        _active: { bg: 'bg.elevated', transform: 'scale(0.97)' },
+        borderColor: 'color.border.subtle',
+        color: 'color.text.primary',
+        _hover: { bg: 'color.surface.elevated' },
+        _active: { bg: 'color.surface.elevated', transform: 'scale(0.97)' },
       },
       ghost: {
         bg: 'transparent',
-        color: 'text.muted',
-        _hover: { bg: 'bg.elevated', color: 'text.primary' },
-        _active: { bg: 'bg.elevated', transform: 'scale(0.97)' },
+        color: 'color.text.muted',
+        _hover: { bg: 'color.surface.elevated', color: 'color.text.primary' },
+        _active: { bg: 'color.surface.elevated', transform: 'scale(0.97)' },
       },
       danger: {
-        bg: 'accent.red',
-        color: 'color.on.accent',
+        bg: 'color.accent.danger',
+        color: 'color.text.on.accent',
         _hover: { opacity: 0.85 },
         _active: { transform: 'scale(0.97)', opacity: 0.75 },
       },
@@ -84,38 +94,60 @@ const config = defineConfig({
         heading: { value: fonts.sans.$value },
         body: { value: fonts.sans.$value },
       },
+      lineHeights: {
+        tight: { value: lineHeights.tight.$value },
+        base: { value: lineHeights.base.$value },
+        relaxed: { value: lineHeights.relaxed.$value },
+      },
+      radii: {
+        full: { value: radius.full.$value },
+      },
+      shadows: {
+        sm: { value: shadows.sm.$value },
+        md: { value: shadows.md.$value },
+        lg: { value: shadows.lg.$value },
+      },
+      zIndex: {
+        dropdown: { value: String(zIndex.dropdown.$value) },
+        sticky: { value: String(zIndex.sticky.$value) },
+        overlay: { value: String(zIndex.overlay.$value) },
+        modal: { value: String(zIndex.modal.$value) },
+        tooltip: { value: String(zIndex.tooltip.$value) },
+      },
     },
     semanticTokens: {
       colors: {
-        // ---- Base surfaces ----
-        'bg.base': { value: { _dark: colors.bgBase.$value, _light: lightColors.bgBase.$value } },
-        'bg.surface': {
+        // ---- Base surfaces (three-tier naming: color.[concept].[property]) ----
+        'color.surface.base': {
+          value: { _dark: colors.bgBase.$value, _light: lightColors.bgBase.$value },
+        },
+        'color.surface.default': {
           value: { _dark: colors.bgSurface.$value, _light: lightColors.bgSurface.$value },
         },
-        'bg.elevated': {
+        'color.surface.elevated': {
           value: { _dark: colors.bgElevated.$value, _light: lightColors.bgElevated.$value },
         },
-        'border.subtle': {
+        'color.border.subtle': {
           value: { _dark: colors.borderSubtle.$value, _light: lightColors.borderSubtle.$value },
         },
-        'text.primary': {
+        'color.text.primary': {
           value: { _dark: colors.textPrimary.$value, _light: lightColors.textPrimary.$value },
         },
-        'text.muted': {
+        'color.text.muted': {
           value: { _dark: colors.textMuted.$value, _light: lightColors.textMuted.$value },
         },
 
-        // ---- Accent palette ----
-        'accent.blue': {
+        // ---- Accent palette (intent-named, not color-named) ----
+        'color.accent.interactive': {
           value: { _dark: colors.accentBlue.$value, _light: lightColors.accentBlue.$value },
         },
-        'accent.green': {
+        'color.accent.success': {
           value: { _dark: colors.accentGreen.$value, _light: lightColors.accentGreen.$value },
         },
-        'accent.amber': {
+        'color.accent.warning': {
           value: { _dark: colors.accentAmber.$value, _light: lightColors.accentAmber.$value },
         },
-        'accent.red': {
+        'color.accent.danger': {
           value: { _dark: colors.accentRed.$value, _light: lightColors.accentRed.$value },
         },
 
@@ -123,24 +155,23 @@ const config = defineConfig({
         // Dark mode accent colors are light pastels (#4d9fff, #f87171) — white
         // text fails WCAG AA (≈2.7:1). Flip to near-black so contrast exceeds 7:1.
         // Light mode accent colors are dark (#2563eb, #dc2626) — white text passes.
-        'color.on.accent': {
+        'color.text.on.accent': {
           value: { _dark: colors.bgBase.$value, _light: lightColors.onAccent.$value },
         },
 
         // ---- Step background tints (ProgressSteps) ----
         // 8-digit hex: RRGGBBAA — 0x22 ≈ 13% opacity tint over the step circle background.
-        'bg.step.active': {
+        'color.surface.step.active': {
           value: { _dark: stepTints.active.dark.$value, _light: stepTints.active.light.$value },
         },
-        'bg.step.complete': {
+        'color.surface.step.complete': {
           value: { _dark: stepTints.complete.dark.$value, _light: stepTints.complete.light.$value },
         },
-        'bg.step.waiting': {
+        'color.surface.step.waiting': {
           value: { _dark: stepTints.waiting.dark.$value, _light: stepTints.waiting.light.$value },
         },
 
         // ---- Semantic alias tier: MCP agent lifecycle states ----
-        // Use these in agent components instead of raw accent tokens.
         'color.agent.status.idle': {
           value: { _dark: colors.textMuted.$value, _light: lightColors.textMuted.$value },
         },

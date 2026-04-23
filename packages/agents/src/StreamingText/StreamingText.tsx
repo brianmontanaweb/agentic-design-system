@@ -15,7 +15,7 @@ export function StreamingText({
   text,
   isStreaming = false,
   fontSize = 'sm',
-  color = 'text.primary',
+  color = 'color.text.primary',
   'aria-label': ariaLabel = 'Streaming output',
 }: StreamingTextProps) {
   const reducedMotion = useReducedMotion()

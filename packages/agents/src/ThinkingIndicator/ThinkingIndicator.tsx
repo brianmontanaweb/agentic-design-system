@@ -18,13 +18,13 @@ export function ThinkingIndicator({ label = 'Thinking' }: ThinkingIndicatorProps
             w="6px"
             h="6px"
             borderRadius="full"
-            bg="accent.blue"
+            bg="color.accent.interactive"
             animation={reducedMotion ? undefined : `ds-pulse ${duration.stream.thinking.$value} ease-in-out ${i * 0.2}s infinite`}
           />
         ))}
       </HStack>
       {label && (
-        <Text fontSize="sm" color="text.muted" fontFamily="mono">
+        <Text fontSize="sm" color="color.text.muted" fontFamily="mono">
           {label}
         </Text>
       )}

@@ -101,7 +101,7 @@ export const LoadingStates: Story = {
 export const LoadingWidthPreservation: Story = {
   render: () => (
     <VStack gap={3} align="flex-start">
-      <Text fontSize="xs" color="text.muted" fontFamily="mono">
+      <Text fontSize="xs" color="color.text.muted" fontFamily="mono">
         Both buttons should be the same width:
       </Text>
       <Button variant="solid">Save changes</Button>

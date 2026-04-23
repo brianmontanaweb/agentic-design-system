@@ -30,6 +30,16 @@ interface DurationToken {
   readonly $type: 'duration'
   readonly $description?: string
 }
+interface ShadowToken {
+  readonly $value: string
+  readonly $type: 'shadow'
+  readonly $description?: string
+}
+interface NumberToken {
+  readonly $value: number
+  readonly $type: 'number'
+  readonly $description?: string
+}
 
 // ---- Primitive color tokens ----
 // Source of truth for all raw color values.
@@ -362,44 +372,120 @@ export const duration = Object.freeze({
   },
 })
 
+export const lineHeights = Object.freeze({
+  tight: {
+    $value: '1.25',
+    $type: 'dimension',
+    $description: 'Compact line spacing for headings',
+  } satisfies DimensionToken,
+  base: {
+    $value: '1.5',
+    $type: 'dimension',
+    $description: 'Body text line spacing',
+  } satisfies DimensionToken,
+  relaxed: {
+    $value: '1.75',
+    $type: 'dimension',
+    $description: 'Loose spacing for readability-heavy content',
+  } satisfies DimensionToken,
+})
+
 export const radius = Object.freeze({
   sm: { $value: '4px', $type: 'dimension' } satisfies DimensionToken,
   md: { $value: '8px', $type: 'dimension' } satisfies DimensionToken,
   lg: { $value: '12px', $type: 'dimension' } satisfies DimensionToken,
+  full: {
+    $value: '9999px',
+    $type: 'dimension',
+    $description: 'Pill / fully-rounded shape — badges, chips',
+  } satisfies DimensionToken,
+})
+
+export const shadows = Object.freeze({
+  sm: {
+    $value: '0 1px 3px rgba(0, 0, 0, 0.4)',
+    $type: 'shadow',
+    $description: 'Subtle elevation — tooltips, chips',
+  } satisfies ShadowToken,
+  md: {
+    $value: '0 4px 12px rgba(0, 0, 0, 0.5)',
+    $type: 'shadow',
+    $description: 'Standard elevation — cards, dropdowns',
+  } satisfies ShadowToken,
+  lg: {
+    $value: '0 8px 24px rgba(0, 0, 0, 0.6)',
+    $type: 'shadow',
+    $description: 'High elevation — modals, drawers',
+  } satisfies ShadowToken,
+})
+
+export const zIndex = Object.freeze({
+  dropdown: {
+    $value: 1000,
+    $type: 'number',
+    $description: 'Dropdown menus',
+  } satisfies NumberToken,
+  sticky: {
+    $value: 1100,
+    $type: 'number',
+    $description: 'Sticky headers and position:sticky elements',
+  } satisfies NumberToken,
+  overlay: {
+    $value: 1200,
+    $type: 'number',
+    $description: 'Overlay backdrops',
+  } satisfies NumberToken,
+  modal: {
+    $value: 1300,
+    $type: 'number',
+    $description: 'Modal dialogs',
+  } satisfies NumberToken,
+  tooltip: {
+    $value: 1400,
+    $type: 'number',
+    $description: 'Tooltips — must appear above modals',
+  } satisfies NumberToken,
 })
 
 export function getCSSVariables(): string {
   return [
     '[data-agentic-ds] {',
-    `  --ds-bg-base: ${colors.bgBase.$value};`,
-    `  --ds-bg-surface: ${colors.bgSurface.$value};`,
-    `  --ds-bg-elevated: ${colors.bgElevated.$value};`,
-    `  --ds-border-subtle: ${colors.borderSubtle.$value};`,
-    `  --ds-text-primary: ${colors.textPrimary.$value};`,
-    `  --ds-text-muted: ${colors.textMuted.$value};`,
-    `  --ds-accent-blue: ${colors.accentBlue.$value};`,
-    `  --ds-accent-green: ${colors.accentGreen.$value};`,
-    `  --ds-accent-amber: ${colors.accentAmber.$value};`,
-    `  --ds-accent-red: ${colors.accentRed.$value};`,
-    `  --ds-color-on-accent: ${colors.bgBase.$value};`,
+    // ---- Surfaces (renamed from --ds-bg-* / --ds-accent-* / --ds-text-* / --ds-border-*) ----
+    `  --ds-color-surface-base: ${colors.bgBase.$value};`,
+    `  --ds-color-surface-default: ${colors.bgSurface.$value};`,
+    `  --ds-color-surface-elevated: ${colors.bgElevated.$value};`,
+    `  --ds-color-border-subtle: ${colors.borderSubtle.$value};`,
+    `  --ds-color-text-primary: ${colors.textPrimary.$value};`,
+    `  --ds-color-text-muted: ${colors.textMuted.$value};`,
+    `  --ds-color-accent-interactive: ${colors.accentBlue.$value};`,
+    `  --ds-color-accent-success: ${colors.accentGreen.$value};`,
+    `  --ds-color-accent-warning: ${colors.accentAmber.$value};`,
+    `  --ds-color-accent-danger: ${colors.accentRed.$value};`,
+    `  --ds-color-text-on-accent: ${colors.bgBase.$value};`,
+    // ---- Semantic: MCP agent lifecycle ----
     `  --ds-color-agent-status-idle: ${colors.textMuted.$value};`,
     `  --ds-color-agent-status-running: ${colors.accentBlue.$value};`,
     `  --ds-color-agent-status-waiting: ${colors.accentAmber.$value};`,
     `  --ds-color-agent-status-done: ${colors.accentGreen.$value};`,
     `  --ds-color-agent-status-error: ${colors.accentRed.$value};`,
     `  --ds-color-agent-status-cancelled: ${colors.textMuted.$value};`,
+    // ---- Semantic: tool call lifecycle ----
     `  --ds-color-tool-status-pending: ${colors.textMuted.$value};`,
     `  --ds-color-tool-status-running: ${colors.accentBlue.$value};`,
     `  --ds-color-tool-status-done: ${colors.accentGreen.$value};`,
     `  --ds-color-tool-status-error: ${colors.accentRed.$value};`,
+    // ---- Semantic: streaming ----
     `  --ds-color-stream-cursor: ${colors.accentBlue.$value};`,
+    // ---- Semantic: message roles ----
     `  --ds-color-message-user-bg: ${colors.bgElevated.$value};`,
     `  --ds-color-message-assistant-bg: ${colors.bgSurface.$value};`,
     `  --ds-color-message-tool-bg: ${colors.bgElevated.$value};`,
     `  --ds-color-message-tool-border: ${colors.borderSubtle.$value};`,
-    `  --ds-bg-step-active: ${stepTints.active.dark.$value};`,
-    `  --ds-bg-step-complete: ${stepTints.complete.dark.$value};`,
-    `  --ds-bg-step-waiting: ${stepTints.waiting.dark.$value};`,
+    // ---- Semantic: step tints (renamed from --ds-bg-step-*) ----
+    `  --ds-color-surface-step-active: ${stepTints.active.dark.$value};`,
+    `  --ds-color-surface-step-complete: ${stepTints.complete.dark.$value};`,
+    `  --ds-color-surface-step-waiting: ${stepTints.waiting.dark.$value};`,
+    // ---- Space ----
     `  --ds-space-1: ${space[1].$value};`,
     `  --ds-space-2: ${space[2].$value};`,
     `  --ds-space-3: ${space[3].$value};`,
@@ -410,6 +496,7 @@ export function getCSSVariables(): string {
     `  --ds-space-10: ${space[10].$value};`,
     `  --ds-space-12: ${space[12].$value};`,
     `  --ds-space-16: ${space[16].$value};`,
+    // ---- Typography ----
     `  --ds-font-mono: ${fonts.mono.$value};`,
     `  --ds-font-sans: ${fonts.sans.$value};`,
     `  --ds-font-size-xs: ${fontSizes.xs.$value};`,
@@ -422,29 +509,45 @@ export function getCSSVariables(): string {
     `  --ds-font-weight-medium: ${fontWeights.medium.$value};`,
     `  --ds-font-weight-semibold: ${fontWeights.semibold.$value};`,
     `  --ds-font-weight-bold: ${fontWeights.bold.$value};`,
+    `  --ds-line-height-tight: ${lineHeights.tight.$value};`,
+    `  --ds-line-height-base: ${lineHeights.base.$value};`,
+    `  --ds-line-height-relaxed: ${lineHeights.relaxed.$value};`,
+    // ---- Motion ----
     `  --ds-duration-fast: ${duration.fast.$value};`,
     `  --ds-duration-normal: ${duration.normal.$value};`,
     `  --ds-duration-slow: ${duration.slow.$value};`,
     `  --ds-duration-stream-blink: ${duration.stream.blink.$value};`,
     `  --ds-duration-stream-thinking: ${duration.stream.thinking.$value};`,
+    // ---- Radius ----
     `  --ds-radius-sm: ${radius.sm.$value};`,
     `  --ds-radius-md: ${radius.md.$value};`,
     `  --ds-radius-lg: ${radius.lg.$value};`,
+    `  --ds-radius-full: ${radius.full.$value};`,
+    // ---- Shadows ----
+    `  --ds-shadow-sm: ${shadows.sm.$value};`,
+    `  --ds-shadow-md: ${shadows.md.$value};`,
+    `  --ds-shadow-lg: ${shadows.lg.$value};`,
+    // ---- Z-index ----
+    `  --ds-z-index-dropdown: ${zIndex.dropdown.$value};`,
+    `  --ds-z-index-sticky: ${zIndex.sticky.$value};`,
+    `  --ds-z-index-overlay: ${zIndex.overlay.$value};`,
+    `  --ds-z-index-modal: ${zIndex.modal.$value};`,
+    `  --ds-z-index-tooltip: ${zIndex.tooltip.$value};`,
     '}',
     '',
     '@media (prefers-color-scheme: light) {',
     '  [data-agentic-ds] {',
-    `    --ds-bg-base: ${lightColors.bgBase.$value};`,
-    `    --ds-bg-surface: ${lightColors.bgSurface.$value};`,
-    `    --ds-bg-elevated: ${lightColors.bgElevated.$value};`,
-    `    --ds-border-subtle: ${lightColors.borderSubtle.$value};`,
-    `    --ds-text-primary: ${lightColors.textPrimary.$value};`,
-    `    --ds-text-muted: ${lightColors.textMuted.$value};`,
-    `    --ds-accent-blue: ${lightColors.accentBlue.$value};`,
-    `    --ds-accent-green: ${lightColors.accentGreen.$value};`,
-    `    --ds-accent-amber: ${lightColors.accentAmber.$value};`,
-    `    --ds-accent-red: ${lightColors.accentRed.$value};`,
-    `    --ds-color-on-accent: ${lightColors.onAccent.$value};`,
+    `    --ds-color-surface-base: ${lightColors.bgBase.$value};`,
+    `    --ds-color-surface-default: ${lightColors.bgSurface.$value};`,
+    `    --ds-color-surface-elevated: ${lightColors.bgElevated.$value};`,
+    `    --ds-color-border-subtle: ${lightColors.borderSubtle.$value};`,
+    `    --ds-color-text-primary: ${lightColors.textPrimary.$value};`,
+    `    --ds-color-text-muted: ${lightColors.textMuted.$value};`,
+    `    --ds-color-accent-interactive: ${lightColors.accentBlue.$value};`,
+    `    --ds-color-accent-success: ${lightColors.accentGreen.$value};`,
+    `    --ds-color-accent-warning: ${lightColors.accentAmber.$value};`,
+    `    --ds-color-accent-danger: ${lightColors.accentRed.$value};`,
+    `    --ds-color-text-on-accent: ${lightColors.onAccent.$value};`,
     `    --ds-color-agent-status-idle: ${lightColors.textMuted.$value};`,
     `    --ds-color-agent-status-running: ${lightColors.accentBlue.$value};`,
     `    --ds-color-agent-status-waiting: ${lightColors.accentAmber.$value};`,
@@ -460,9 +563,9 @@ export function getCSSVariables(): string {
     `    --ds-color-message-assistant-bg: ${lightColors.bgSurface.$value};`,
     `    --ds-color-message-tool-bg: ${lightColors.bgElevated.$value};`,
     `    --ds-color-message-tool-border: ${lightColors.borderSubtle.$value};`,
-    `    --ds-bg-step-active: ${stepTints.active.light.$value};`,
-    `    --ds-bg-step-complete: ${stepTints.complete.light.$value};`,
-    `    --ds-bg-step-waiting: ${stepTints.waiting.light.$value};`,
+    `    --ds-color-surface-step-active: ${stepTints.active.light.$value};`,
+    `    --ds-color-surface-step-complete: ${stepTints.complete.light.$value};`,
+    `    --ds-color-surface-step-waiting: ${stepTints.waiting.light.$value};`,
     '  }',
     '}',
   ].join('\n')
@@ -477,7 +580,10 @@ export const tokens = Object.freeze({
   fonts,
   fontSizes,
   fontWeights,
+  lineHeights,
   duration,
   radius,
+  shadows,
+  zIndex,
 })
 export default tokens

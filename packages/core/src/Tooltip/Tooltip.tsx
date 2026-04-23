@@ -79,17 +79,17 @@ export function Tooltip({ label, placement = 'top', children, isDisabled = false
           visibility={visible ? 'visible' : 'hidden'}
           opacity={visible ? 1 : 0}
           transition={`opacity ${duration.fast.$value}, visibility ${duration.fast.$value}`}
-          bg="bg.elevated"
-          color="text.primary"
+          bg="color.surface.elevated"
+          color="color.text.primary"
           border="1px solid"
-          borderColor="border.subtle"
+          borderColor="color.border.subtle"
           borderRadius="md"
           px={2}
           py={1}
           fontSize="xs"
           fontFamily="body"
           whiteSpace="nowrap"
-          zIndex={1000}
+          zIndex="tooltip"
           pointerEvents="none"
         >
           {label}

@@ -11,9 +11,13 @@ export interface MessageBubbleProps {
 }
 
 const roleConfig: Record<MessageRole, { label: string; labelColor: string; bg: string }> = {
-  user: { label: 'You', labelColor: 'text.muted', bg: 'color.message.user.bg' },
-  assistant: { label: 'Assistant', labelColor: 'accent.blue', bg: 'color.message.assistant.bg' },
-  tool: { label: 'Tool', labelColor: 'accent.green', bg: 'color.message.tool.bg' },
+  user: { label: 'You', labelColor: 'color.text.muted', bg: 'color.message.user.bg' },
+  assistant: {
+    label: 'Assistant',
+    labelColor: 'color.accent.interactive',
+    bg: 'color.message.assistant.bg',
+  },
+  tool: { label: 'Tool', labelColor: 'color.accent.success', bg: 'color.message.tool.bg' },
 }
 
 export function MessageBubble({ sender, content, label, timestamp }: MessageBubbleProps) {
@@ -22,7 +26,7 @@ export function MessageBubble({ sender, content, label, timestamp }: MessageBubb
     <Box
       bg={config.bg}
       border="1px solid"
-      borderColor="border.subtle"
+      borderColor="color.border.subtle"
       borderRadius="md"
       px={3}
       py={2}
@@ -32,12 +36,12 @@ export function MessageBubble({ sender, content, label, timestamp }: MessageBubb
           {label ?? config.label}
         </Text>
         {timestamp && (
-          <Text fontSize="xs" color="text.muted">
+          <Text fontSize="xs" color="color.text.muted">
             {timestamp}
           </Text>
         )}
       </HStack>
-      <Box fontSize="sm" color="text.primary">
+      <Box fontSize="sm" color="color.text.primary">
         {content}
       </Box>
     </Box>

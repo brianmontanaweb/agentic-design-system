@@ -35,7 +35,7 @@ export function MessageThread({
       css={{
         '&::-webkit-scrollbar': { width: '4px' },
         '&::-webkit-scrollbar-track': { background: 'transparent' },
-        '&::-webkit-scrollbar-thumb': { background: 'var(--ds-border-subtle, #2a2a38)' },
+        '&::-webkit-scrollbar-thumb': { background: 'var(--ds-color-border-subtle, #2a2a38)' },
       }}
     >
       <VStack gap={3} align="stretch">
