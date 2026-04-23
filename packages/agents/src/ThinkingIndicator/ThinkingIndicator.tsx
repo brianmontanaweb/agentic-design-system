@@ -1,6 +1,7 @@
 import React from 'react'
 import { Box, HStack, Text } from '@chakra-ui/react'
 import { useReducedMotion } from '@agentic-ds/core'
+import { duration } from '@agentic-ds/tokens'
 
 export interface ThinkingIndicatorProps {
   label?: string
@@ -18,7 +19,7 @@ export function ThinkingIndicator({ label = 'Thinking' }: ThinkingIndicatorProps
             h="6px"
             borderRadius="full"
             bg="accent.blue"
-            animation={reducedMotion ? undefined : `ds-pulse 1.2s ease-in-out ${i * 0.2}s infinite`}
+            animation={reducedMotion ? undefined : `ds-pulse ${duration.stream.thinking.$value} ease-in-out ${i * 0.2}s infinite`}
           />
         ))}
       </HStack>

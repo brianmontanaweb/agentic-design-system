@@ -162,6 +162,24 @@ Agent-readable component specs — Markdown files structured so an LLM can imple
 
 ---
 
+## Theme Improvements
+
+Two prioritized improvements to the token system and core theme.
+
+### Option 3 — Expand the type/spacing primitives
+
+Tokens currently missing that will block future components:
+- `lineHeight` scale — required before text-heavy components (tooltips, modals) can be fully specified
+- `radius.full` — pill shapes needed for badges and chips
+- `shadow` / elevation tokens — box-shadow values for depth layering
+- `zIndex` tokens — required for overlaid components (Tooltip, Modal, Drawer)
+
+### Option 4 — Rename surface tokens to three-tier naming
+
+`bg.base`, `accent.blue`, `border.subtle` do not follow the `[category].[concept].[property]` formula in `docs/best-practices.md`. The correct names per the spec would be `color.surface.base`, `color.accent.interactive`, `color.border.subtle`. This is a breaking rename that requires updating all component token references — treat as a v2 token release, not an incremental fix.
+
+---
+
 ## Known Gaps / Roadmap
 
 ### MCP Lifecycle

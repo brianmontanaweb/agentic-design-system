@@ -174,6 +174,11 @@ const config = defineConfig({
           value: { _dark: colors.accentRed.$value, _light: lightColors.accentRed.$value },
         },
 
+        // ---- Semantic alias tier: streaming / generative content ----
+        'color.stream.cursor': {
+          value: { _dark: colors.accentBlue.$value, _light: lightColors.accentBlue.$value },
+        },
+
         // ---- Semantic alias tier: message role backgrounds ----
         'color.message.user.bg': {
           value: { _dark: colors.bgElevated.$value, _light: lightColors.bgElevated.$value },
@@ -190,7 +195,17 @@ const config = defineConfig({
       },
     },
   },
-  // No globalCss — libraries must not set styles on body or any global selector.
+  // Scoped to [data-agentic-ds] — does not touch :root or body.
+  globalCss: {
+    '[data-agentic-ds]': {
+      '@media (prefers-reduced-motion: reduce)': {
+        '& *, & *::before, & *::after': {
+          animationDuration: '0.01ms !important',
+          transitionDuration: '0.01ms !important',
+        },
+      },
+    },
+  },
 })
 
 export const system = createSystem(defaultConfig, config)
