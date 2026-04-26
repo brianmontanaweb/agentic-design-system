@@ -59,3 +59,8 @@ jobs:
           git diff --staged --quiet && echo "No snapshot changes." || \
             git commit -m "chore: regenerate visual baselines on ubuntu-latest" && \
             git push
+
+  ci:
+    name: Run CI
+    needs: regenerate
+    uses: ./.github/workflows/ci.yml
