@@ -120,4 +120,45 @@ describe('ProgressSteps', () => {
       expect(screen.getByRole('list')).toBeInTheDocument()
     })
   })
+
+  describe('aria-current updates on rerender', () => {
+    it('moves aria-current to the newly active step', () => {
+      const steps = [
+        makeStep({ id: 'a', label: 'First', status: 'active' }),
+        makeStep({ id: 'b', label: 'Second', status: 'pending' }),
+      ]
+      const { rerender } = renderWithProviders(<ProgressSteps steps={steps} />)
+      expect(screen.getAllByRole('listitem')[0]).toHaveAttribute('aria-current', 'step')
+      expect(screen.getAllByRole('listitem')[1]).not.toHaveAttribute('aria-current')
+
+      rerender(
+        <ProgressSteps
+          steps={[
+            { ...steps[0], status: 'complete' },
+            { ...steps[1], status: 'active' },
+          ]}
+        />
+      )
+      expect(screen.getAllByRole('listitem')[0]).not.toHaveAttribute('aria-current')
+      expect(screen.getAllByRole('listitem')[1]).toHaveAttribute('aria-current', 'step')
+    })
+
+    it('clears aria-current when the active step transitions to waiting', () => {
+      const step = makeStep({ id: 'a', label: 'In progress', status: 'active' })
+      const { rerender } = renderWithProviders(<ProgressSteps steps={[step]} />)
+      expect(screen.getByRole('listitem')).toHaveAttribute('aria-current', 'step')
+
+      rerender(<ProgressSteps steps={[{ ...step, status: 'waiting' }]} />)
+      expect(screen.getByRole('listitem')).not.toHaveAttribute('aria-current')
+    })
+
+    it('clears aria-current when the active step is cancelled', () => {
+      const step = makeStep({ id: 'a', label: 'In progress', status: 'active' })
+      const { rerender } = renderWithProviders(<ProgressSteps steps={[step]} />)
+      expect(screen.getByRole('listitem')).toHaveAttribute('aria-current', 'step')
+
+      rerender(<ProgressSteps steps={[{ ...step, status: 'cancelled' }]} />)
+      expect(screen.getByRole('listitem')).not.toHaveAttribute('aria-current')
+    })
+  })
 })

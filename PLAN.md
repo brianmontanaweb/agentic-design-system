@@ -112,7 +112,7 @@ Storybook 10 with `@storybook/react-vite`:
 
 ## Docs
 
-### `docs/components/` ✓
+### `docs/components/`
 
 Agent-readable component specs — Markdown files structured so an LLM can implement a component correctly without follow-up questions. Each file includes:
 
@@ -122,17 +122,6 @@ Agent-readable component specs — Markdown files structured so an LLM can imple
 - Accessibility requirements referencing WCAG 2.2 AA and WAI-ARIA APG
 - Do / Don't code examples
 - Implementation notes scoped to this codebase
-
-| Spec                   | Status |
-| ---------------------- | ------ |
-| `Button.md`            | ✓      |
-| `AgentStatus.md`       | ✓      |
-| `ThinkingIndicator.md` | ✓      |
-| `ProgressSteps.md`     | ✓      |
-| `ToolCallCard.md`      | ✓      |
-| `StreamingText.md`     | ✓      |
-| `MessageBubble.md`     | ✓      |
-| `MessageThread.md`     | ✓      |
 
 ---
 
@@ -150,24 +139,6 @@ Agent-readable component specs — Markdown files structured so an LLM can imple
 
 ---
 
-## Setup Order
-
-1. ✓ Init workspace — root `package.json`, `tsconfig.base.json`, `.prettierrc`
-2. ✓ Scaffold packages — `package.json`, `tsconfig.json`, `tsup.config.ts` per package
-3. ✓ Scaffold apps — Vite for `demo-web`, Storybook for `apps/storybook`
-4. ✓ Implement tokens — `packages/tokens/src/index.ts`
-5. ✓ Implement core theme — `createSystem()` extension, `AgenticProvider`, CSS scoping
-6. ✓ Implement agent components — all 7 V1 components in `packages/agents`
-7. ✓ Implement `Button` in `@agentic-ds/core` with spec doc
-8. ✓ Wire `demo-web` — compose full dashboard
-9. ✓ Write Storybook stories — one file per component
-10. ✓ Add visual regression testing
-11. ✓ Make packages independently publishable — peer deps, externals, publishConfig, LICENSE
-12. ✓ Strict ESLint — typescript-eslint strict, jsx-a11y strict, no-hardcoded-hex, no-restricted-imports
-13. ✓ Write spec docs for all remaining components (AgentStatus, ThinkingIndicator, ProgressSteps, ToolCallCard, StreamingText, MessageBubble, MessageThread)
-
----
-
 ## Known Gaps / Roadmap
 
 ### Components
@@ -176,6 +147,19 @@ Agent-readable component specs — Markdown files structured so an LLM can imple
 | ------------------------------------------------------ | -------- |
 | Add `ErrorBoundary` component for agentic error states | Medium   |
 | Add `Skeleton` / loading placeholder primitives        | Medium   |
+
+### Testing
+
+| Item                                                                                                                                                                  | Priority |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| Add unit tests for `waiting` + `cancelled` MCP states in `AgentStatus` and `ProgressSteps`                                                                            | High     |
+| Add keyboard navigation tests for `ToolCallCard` (expand/collapse) and `ProgressSteps` (`aria-current` updates) — use existing `@testing-library/user-event`          | High     |
+| Add Storybook `play()` interaction tests for `ToolCallCard`, `StreamingText`, `ProgressSteps` using `@storybook/test` — test-runner picks these up automatically      | High     |
+| Add token-to-DOM contract test: render `<AgenticProvider>`, assert CSS custom properties are present on `[data-agentic-ds]` via `getComputedStyle`                    | Medium   |
+| Capture visual snapshots with `reducedMotion: 'reduce'` in the Playwright browser context inside `.storybook/test-runner.ts` to verify `prefers-reduced-motion` paths | Medium   |
+| Add bundle size CI with `size-limit` — enforce per-package gzip budgets (tokens < 5 kB, core < 30 kB, agents < 40 kB); fail PR if exceeded                            | Medium   |
+| Add type-level tests with `tsd` or `vitest`'s `expectTypeOf` to assert public prop API types don't regress across releases                                            | Medium   |
+| Add cross-browser visual regression testing (Firefox + Safari) via Chromatic or Playwright multi-project config                                                       | Low      |
 
 ### Infrastructure
 

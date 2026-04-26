@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect, within } from 'storybook/test'
 import { ProgressSteps } from '@agentic-ds/agents'
 
 const meta: Meta<typeof ProgressSteps> = {
@@ -21,11 +22,31 @@ const steps = [
   { id: '4', label: 'Post-process output', status: 'pending' as const },
 ]
 
-export const Default: Story = { args: { steps } }
+export const Default: Story = {
+  args: { steps },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const items = canvas.getAllByRole('listitem')
+
+    await expect(items[2]).toHaveAttribute('aria-current', 'step')
+    await expect(items[0]).not.toHaveAttribute('aria-current')
+    await expect(items[1]).not.toHaveAttribute('aria-current')
+    await expect(items[3]).not.toHaveAttribute('aria-current')
+  },
+}
 
 export const AllComplete: Story = {
   args: {
     steps: steps.map((s) => ({ ...s, status: 'complete' as const })),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const items = canvas.getAllByRole('listitem')
+    for (const item of items) {
+      await expect(item).not.toHaveAttribute('aria-current')
+    }
+    const checkmarks = canvas.getAllByText('✓')
+    await expect(checkmarks).toHaveLength(4)
   },
 }
 
@@ -49,6 +70,17 @@ export const WithWaiting: Story = {
       { id: '4', label: 'Post-process output', status: 'pending' as const },
     ],
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const items = canvas.getAllByRole('listitem')
+    for (const item of items) {
+      await expect(item).not.toHaveAttribute('aria-current')
+    }
+    await expect(canvas.getByText('Awaiting user confirmation')).toBeInTheDocument()
+    await expect(
+      canvas.getByText('Please review and confirm before continuing.')
+    ).toBeInTheDocument()
+  },
 }
 
 export const WithCancelled: Story = {
@@ -59,5 +91,14 @@ export const WithCancelled: Story = {
       { id: '3', label: 'Generate response', status: 'cancelled' as const },
       { id: '4', label: 'Post-process output', status: 'cancelled' as const },
     ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const items = canvas.getAllByRole('listitem')
+    for (const item of items) {
+      await expect(item).not.toHaveAttribute('aria-current')
+    }
+    const dashes = canvas.getAllByText('—')
+    await expect(dashes).toHaveLength(2)
   },
 }

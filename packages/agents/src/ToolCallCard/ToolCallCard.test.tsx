@@ -107,4 +107,51 @@ describe('ToolCallCard', () => {
       expect(screen.getByRole('button')).toBeInTheDocument()
     })
   })
+
+  describe('keyboard navigation', () => {
+    it('button is focusable via Tab', async () => {
+      const user = userEvent.setup()
+      renderWithProviders(<ToolCallCard toolName="get_weather" />)
+      await user.tab()
+      expect(screen.getByRole('button')).toHaveFocus()
+    })
+
+    it('expands when Enter is pressed on the focused button', async () => {
+      const user = userEvent.setup()
+      renderWithProviders(<ToolCallCard toolName="get_weather" input={{ city: 'NYC' }} />)
+      screen.getByRole('button').focus()
+      await user.keyboard('{Enter}')
+      expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'true')
+      expect(screen.getByText('Input')).toBeInTheDocument()
+    })
+
+    it('expands when Space is pressed on the focused button', async () => {
+      const user = userEvent.setup()
+      renderWithProviders(<ToolCallCard toolName="get_weather" input={{ city: 'NYC' }} />)
+      screen.getByRole('button').focus()
+      await user.keyboard(' ')
+      expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'true')
+    })
+
+    it('collapses when Enter is pressed on an already-expanded card', async () => {
+      const user = userEvent.setup()
+      renderWithProviders(
+        <ToolCallCard toolName="get_weather" input={{ city: 'NYC' }} defaultOpen />
+      )
+      screen.getByRole('button').focus()
+      await user.keyboard('{Enter}')
+      expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'false')
+      expect(screen.queryByText('Input')).not.toBeInTheDocument()
+    })
+
+    it('collapses when Space is pressed on an already-expanded card', async () => {
+      const user = userEvent.setup()
+      renderWithProviders(
+        <ToolCallCard toolName="get_weather" input={{ city: 'NYC' }} defaultOpen />
+      )
+      screen.getByRole('button').focus()
+      await user.keyboard(' ')
+      expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'false')
+    })
+  })
 })

@@ -76,4 +76,33 @@ describe('AgentStatus', () => {
       expect(screen.getByRole('status')).toBeInTheDocument()
     })
   })
+
+  describe('waiting and cancelled state transitions', () => {
+    it('announces the waiting state when status changes from running to waiting', () => {
+      const { rerender } = renderWithProviders(<AgentStatus status="running" />)
+      expect(screen.getByText('Agent status: Running')).toBeInTheDocument()
+
+      rerender(<AgentStatus status="waiting" />)
+      expect(screen.getByText('Agent status: Waiting')).toBeInTheDocument()
+      expect(screen.queryByText('Agent status: Running')).not.toBeInTheDocument()
+    })
+
+    it('announces the cancelled state when status changes from running to cancelled', () => {
+      const { rerender } = renderWithProviders(<AgentStatus status="running" />)
+      expect(screen.getByText('Agent status: Running')).toBeInTheDocument()
+
+      rerender(<AgentStatus status="cancelled" />)
+      expect(screen.getByText('Agent status: Cancelled')).toBeInTheDocument()
+      expect(screen.queryByText('Agent status: Running')).not.toBeInTheDocument()
+    })
+
+    it('transitions from waiting back to running', () => {
+      const { rerender } = renderWithProviders(<AgentStatus status="waiting" />)
+      expect(screen.getByText('Waiting')).toBeInTheDocument()
+
+      rerender(<AgentStatus status="running" />)
+      expect(screen.getByText('Running')).toBeInTheDocument()
+      expect(screen.queryByText('Waiting')).not.toBeInTheDocument()
+    })
+  })
 })
