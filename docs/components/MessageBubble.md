@@ -9,12 +9,11 @@ tokens:
       color.message.user.bg,
       color.message.assistant.bg,
       color.message.tool.bg,
-      color.message.tool.border,
-      text.primary,
-      text.muted,
-      accent.blue,
-      accent.green,
-      border.subtle,
+      color.text.primary,
+      color.text.muted,
+      color.accent.interactive,
+      color.accent.success,
+      color.border.subtle,
     ]
 wcag: AA
 ---
@@ -29,9 +28,9 @@ A single message card within a conversation thread. Background color, label colo
 
 | Role        | Background token             | Label color    | Default label |
 | ----------- | ---------------------------- | -------------- | ------------- |
-| `user`      | `color.message.user.bg`      | `text.muted`   | You           |
-| `assistant` | `color.message.assistant.bg` | `accent.blue`  | Assistant     |
-| `tool`      | `color.message.tool.bg`      | `accent.green` | Tool          |
+| `user`      | `color.message.user.bg`      | `color.text.muted`         | You           |
+| `assistant` | `color.message.assistant.bg` | `color.accent.interactive` | Assistant     |
+| `tool`      | `color.message.tool.bg`      | `color.accent.success`     | Tool          |
 
 ---
 

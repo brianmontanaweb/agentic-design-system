@@ -7,7 +7,7 @@
     "apps/*"
   ],
   "scripts": {
-    "build": "npm run build -w packages/tokens && npm run build -w packages/core && npm run build -w packages/agents",
+    "build": "npm run build -w packages/tokens && npm run build -w packages/core && npm run build -w packages/agents && npm run build -w packages/mcp-builder",
     "dev": "npm run dev --workspaces --if-present",
     "lint": "eslint . && npm run lint --workspaces --if-present",
     "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",

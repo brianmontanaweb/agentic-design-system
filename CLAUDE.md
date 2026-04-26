@@ -48,7 +48,7 @@ All styles must be scoped to `[data-agentic-ds]` — never `:root`. This applies
 
 ### Component Docs
 
-Every implemented component needs a spec file at `docs/components/[ComponentName].md`. See `docs/components/Button.md` for the format. Currently missing: `AgentStatus`, `ThinkingIndicator`, `ProgressSteps`, `ToolCallCard`, `StreamingText`, `MessageBubble`, `MessageThread`.
+Every implemented component needs a spec file at `docs/components/[ComponentName].md`. See `docs/components/Button.md` for the format. All current components have spec docs.
 
 ## Known Gaps (Prioritized)
 

@@ -13,7 +13,9 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    }
+    },
+    "./iife": "./dist/iife/agentic-ds.global.js",
+    "./iife/min": "./dist/iife/agentic-ds.min.js"
   },
   "files": [
     "dist"
@@ -27,8 +29,12 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@agentic-ds/agents": "*",
+    "@agentic-ds/core": "*",
     "@agentic-ds/tokens": "*",
-    "@modelcontextprotocol/sdk": "^1.0.0"
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

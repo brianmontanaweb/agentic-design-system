@@ -4,7 +4,7 @@ package: '@agentic-ds/agents'
 category: layout
 status: implemented
 tokens:
-  colors: [border.subtle]
+  colors: [color.border.subtle]
 wcag: AA
 aria-pattern: https://www.w3.org/TR/wai-aria-1.2/#log
 ---

@@ -112,7 +112,7 @@ Storybook 10 with `@storybook/react-vite`:
 
 ## Docs
 
-### `docs/components/` ✓ (partial)
+### `docs/components/` ✓
 
 Agent-readable component specs — Markdown files structured so an LLM can implement a component correctly without follow-up questions. Each file includes:
 
@@ -123,9 +123,16 @@ Agent-readable component specs — Markdown files structured so an LLM can imple
 - Do / Don't code examples
 - Implementation notes scoped to this codebase
 
-| Spec        | Status |
-| ----------- | ------ |
-| `Button.md` | ✓      |
+| Spec                    | Status |
+| ----------------------- | ------ |
+| `Button.md`             | ✓      |
+| `AgentStatus.md`        | ✓      |
+| `ThinkingIndicator.md`  | ✓      |
+| `ProgressSteps.md`      | ✓      |
+| `ToolCallCard.md`       | ✓      |
+| `StreamingText.md`      | ✓      |
+| `MessageBubble.md`      | ✓      |
+| `MessageThread.md`      | ✓      |
 
 ---
 
@@ -157,24 +164,16 @@ Agent-readable component specs — Markdown files structured so an LLM can imple
 10. ✓ Add visual regression testing
 11. ✓ Make packages independently publishable — peer deps, externals, publishConfig, LICENSE
 12. ✓ Strict ESLint — typescript-eslint strict, jsx-a11y strict, no-hardcoded-hex, no-restricted-imports
-13. Implement `Card` and `Badge` in `@agentic-ds/core`
-14. Write spec docs for all remaining components (AgentStatus, ThinkingIndicator, ProgressSteps, ToolCallCard, StreamingText, MessageBubble, MessageThread)
+13. ✓ Write spec docs for all remaining components (AgentStatus, ThinkingIndicator, ProgressSteps, ToolCallCard, StreamingText, MessageBubble, MessageThread)
 
 ---
 
 ## Known Gaps / Roadmap
 
-### MCP Lifecycle
-
-| Item                                                                        | Component(s)  | Priority |
-| --------------------------------------------------------------------------- | ------------- | -------- |
-| Implement `packages/mcp-builder` — IIFE bundle for MCP App iframe embedding | `mcp-builder` | Medium   |
-
 ### Components
 
 | Item                                                   | Priority |
 | ------------------------------------------------------ | -------- |
-| Implement `Card` and `Badge` in `@agentic-ds/core`     | Medium   |
 | Add `ErrorBoundary` component for agentic error states | Medium   |
 | Add `Skeleton` / loading placeholder primitives        | Medium   |
 

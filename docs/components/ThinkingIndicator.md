@@ -4,8 +4,8 @@ package: '@agentic-ds/agents'
 category: feedback
 status: implemented
 tokens:
-  colors: [accent.blue, text.muted]
-  duration: [duration.normal]
+  colors: [color.accent.interactive, color.text.muted]
+  duration: [duration.stream.thinking]
 wcag: AA
 aria-pattern: https://www.w3.org/TR/wai-aria-1.2/#status
 ---
@@ -58,7 +58,7 @@ Three pulsing dots that indicate an agent is processing. Announces a text label 
 
 - Each dot staggers by `0.2s` (`i * 0.2s`) using the `ds-pulse` keyframe from `AgenticProvider`.
 - `useReducedMotion()` from `@agentic-ds/core` gates the `animation` prop — when true, animation is `undefined`.
-- Dot color `accent.blue` intentionally matches the `running` state of `AgentStatus` for visual consistency.
+- Dot color `color.accent.interactive` intentionally matches the `running` state of `AgentStatus` for visual consistency.
 
 ---
 

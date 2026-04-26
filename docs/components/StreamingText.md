@@ -4,8 +4,8 @@ package: '@agentic-ds/agents'
 category: display
 status: implemented
 tokens:
-  colors: [accent.blue, text.primary]
-  duration: [duration.normal]
+  colors: [color.text.primary, color.stream.cursor]
+  duration: [duration.stream.blink]
 wcag: AA
 aria-pattern: https://www.w3.org/TR/wai-aria-1.2/#log
 ---
@@ -23,7 +23,7 @@ Renders a growing block of text that is being streamed token-by-token from an ag
 | `text`        | `string`  | —                    | The full text accumulated so far (required) |
 | `isStreaming` | `boolean` | `false`              | Shows blinking cursor when `true`           |
 | `fontSize`    | `string`  | `"sm"`               | Chakra font size token                      |
-| `color`       | `string`  | `"text.primary"`     | Chakra color token for the text             |
+| `color`       | `string`  | `"color.text.primary"` | Chakra color token for the text           |
 | `aria-label`  | `string`  | `"Streaming output"` | Label for the live region                   |
 
 ---
@@ -69,7 +69,7 @@ Renders a growing block of text that is being streamed token-by-token from an ag
 ## Implementation notes
 
 - The `text` prop should be the full accumulated string, not a delta. The component does not manage internal buffer state.
-- Cursor is an inline `<span>` with `ds-blink` keyframe (defined by `AgenticProvider`), `w="2px"`, `h="1em"`, `verticalAlign="text-bottom"`.
+- Cursor is an inline `<span>` colored `color.stream.cursor` with `ds-blink` keyframe (defined by `AgenticProvider`), `w="2px"`, `h="1em"`, `verticalAlign="text-bottom"`. Timing is `duration.stream.blink` — do not hardcode.
 - For very high-frequency streams (< 50ms per token), consider debouncing `text` updates in the parent to avoid excessive SR announcements.
 
 ---

@@ -6,15 +6,16 @@ status: implemented
 tokens:
   colors:
     [
-      accent.blue,
-      accent.green,
-      accent.amber,
-      text.muted,
-      text.primary,
-      border.subtle,
-      bg.step.active,
-      bg.step.complete,
-      bg.step.waiting,
+      color.accent.interactive,
+      color.accent.success,
+      color.accent.warning,
+      color.text.muted,
+      color.text.primary,
+      color.border.subtle,
+      color.surface.step.active,
+      color.surface.step.complete,
+      color.surface.step.waiting,
+      color.surface.elevated,
     ]
 wcag: AA
 aria-pattern: https://www.w3.org/WAI/ARIA/apg/patterns/listbox/
@@ -30,11 +31,11 @@ A vertical ordered list of steps showing the progress of a multi-stage agent tas
 
 | Status      | Dot border token | Step background token | Indicator   | Label weight |
 | ----------- | ---------------- | --------------------- | ----------- | ------------ |
-| `pending`   | `border.subtle`  | `bg.elevated`         | Step number | normal       |
-| `active`    | `accent.blue`    | `bg.step.active`      | Step number | medium       |
-| `complete`  | `accent.green`   | `bg.step.complete`    | ✓ checkmark | normal       |
-| `waiting`   | `accent.amber`   | `bg.step.waiting`     | Step number | medium       |
-| `cancelled` | `text.muted`     | `bg.elevated`         | — em-dash   | normal       |
+| `pending`   | `color.border.subtle`       | `color.surface.elevated`      | Step number | normal       |
+| `active`    | `color.accent.interactive`  | `color.surface.step.active`   | Step number | medium       |
+| `complete`  | `color.accent.success`      | `color.surface.step.complete` | ✓ checkmark | normal       |
+| `waiting`   | `color.accent.warning`      | `color.surface.step.waiting`  | Step number | medium       |
+| `cancelled` | `color.text.muted`          | `color.surface.elevated`      | — em-dash   | normal       |
 
 ---
 
@@ -100,9 +101,9 @@ A vertical ordered list of steps showing the progress of a multi-stage agent tas
 
 ## Implementation notes
 
-- `bg.step.*` tokens use 8-digit hex (`RRGGBBAA`) for a 13% opacity tint — do not replace with `rgba()` shorthand, which would break the semantic token contract.
+- `color.surface.step.*` tokens use 8-digit hex (`RRGGBBAA`) for a 13% opacity tint — do not replace with `rgba()` shorthand, which would break the semantic token contract.
 - Do not show a connector line between steps in the current implementation — layout relies on `VStack` gap only.
-- The `waiting` status signals `input_required` in the MCP protocol; it is visually distinct from `active` via `accent.amber`.
+- The `waiting` status signals `input_required` in the MCP protocol; it is visually distinct from `active` via `color.accent.warning`.
 
 ---
 

@@ -10,13 +10,13 @@ tokens:
       color.tool.status.running,
       color.tool.status.done,
       color.tool.status.error,
-      accent.green,
-      accent.red,
-      text.primary,
-      text.muted,
-      bg.surface,
-      bg.elevated,
-      border.subtle,
+      color.accent.success,
+      color.accent.danger,
+      color.text.primary,
+      color.text.muted,
+      color.surface.default,
+      color.surface.elevated,
+      color.border.subtle,
     ]
 wcag: AA
 aria-pattern: https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/
@@ -32,10 +32,10 @@ Collapsible card that shows a single MCP tool invocation — its name, input pay
 
 | Status    | Dot color token             | Output text color |
 | --------- | --------------------------- | ----------------- |
-| `pending` | `color.tool.status.pending` | `accent.green`    |
-| `running` | `color.tool.status.running` | `accent.green`    |
-| `done`    | `color.tool.status.done`    | `accent.green`    |
-| `error`   | `color.tool.status.error`   | `accent.red`      |
+| `pending` | `color.tool.status.pending` | `color.accent.success` |
+| `running` | `color.tool.status.running` | `color.accent.success` |
+| `done`    | `color.tool.status.done`    | `color.accent.success` |
+| `error`   | `color.tool.status.error`   | `color.accent.danger`  |
 
 The `running` status dot animates with `ds-pulse`. `useReducedMotion()` disables the animation.
 
@@ -82,6 +82,7 @@ The `running` status dot animates with `ds-pulse`. `useReducedMotion()` disables
 
 // ❌ Hardcoding hex for output color — use status-driven token
 <Code color="#3dd68c">{output}</Code>
+// Instead: color={status === 'error' ? 'color.accent.danger' : 'color.accent.success'}
 ```
 
 ---
@@ -90,7 +91,7 @@ The `running` status dot animates with `ds-pulse`. `useReducedMotion()` disables
 
 - Content panel ID is generated with React's `useId()` — do not use a hand-written string, as it won't be collision-safe in multi-card views.
 - Input is serialized with `JSON.stringify(input, null, 2)` — the component does not validate or sanitize input structure.
-- Output color is driven by `status`: `error` → `accent.red`, all others → `accent.green`.
+- Output color is driven by `status`: `error` → `color.accent.danger`, all others → `color.accent.success`.
 
 ---
 
