@@ -34,11 +34,14 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "tsup": "^8.5.1",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.4"
   },
   "publishConfig": {
     "access": "public"

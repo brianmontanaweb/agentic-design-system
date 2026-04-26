@@ -123,16 +123,16 @@ Agent-readable component specs — Markdown files structured so an LLM can imple
 - Do / Don't code examples
 - Implementation notes scoped to this codebase
 
-| Spec                    | Status |
-| ----------------------- | ------ |
-| `Button.md`             | ✓      |
-| `AgentStatus.md`        | ✓      |
-| `ThinkingIndicator.md`  | ✓      |
-| `ProgressSteps.md`      | ✓      |
-| `ToolCallCard.md`       | ✓      |
-| `StreamingText.md`      | ✓      |
-| `MessageBubble.md`      | ✓      |
-| `MessageThread.md`      | ✓      |
+| Spec                   | Status |
+| ---------------------- | ------ |
+| `Button.md`            | ✓      |
+| `AgentStatus.md`       | ✓      |
+| `ThinkingIndicator.md` | ✓      |
+| `ProgressSteps.md`     | ✓      |
+| `ToolCallCard.md`      | ✓      |
+| `StreamingText.md`     | ✓      |
+| `MessageBubble.md`     | ✓      |
+| `MessageThread.md`     | ✓      |
 
 ---
 

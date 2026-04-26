@@ -101,6 +101,14 @@ export default tseslint.config(
     },
   },
 
+  // --- mcp-builder: IIFE bundle entry re-exports everything from core including internals ---
+  {
+    files: ['packages/mcp-builder/src/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': 'off',
+    },
+  },
+
   // --- theme.ts: color definitions are the authoritative source of truth ---
   // theme.ts maps token values into the Chakra semantic token system. Raw hex
   // values are expected here. All other files in core/agents must use tokens.

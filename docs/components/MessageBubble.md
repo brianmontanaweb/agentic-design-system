@@ -26,8 +26,8 @@ A single message card within a conversation thread. Background color, label colo
 
 ## Roles
 
-| Role        | Background token             | Label color    | Default label |
-| ----------- | ---------------------------- | -------------- | ------------- |
+| Role        | Background token             | Label color                | Default label |
+| ----------- | ---------------------------- | -------------------------- | ------------- |
 | `user`      | `color.message.user.bg`      | `color.text.muted`         | You           |
 | `assistant` | `color.message.assistant.bg` | `color.accent.interactive` | Assistant     |
 | `tool`      | `color.message.tool.bg`      | `color.accent.success`     | Tool          |

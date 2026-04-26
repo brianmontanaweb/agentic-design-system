@@ -30,8 +30,8 @@ Collapsible card that shows a single MCP tool invocation — its name, input pay
 
 ## Statuses
 
-| Status    | Dot color token             | Output text color |
-| --------- | --------------------------- | ----------------- |
+| Status    | Dot color token             | Output text color      |
+| --------- | --------------------------- | ---------------------- |
 | `pending` | `color.tool.status.pending` | `color.accent.success` |
 | `running` | `color.tool.status.running` | `color.accent.success` |
 | `done`    | `color.tool.status.done`    | `color.accent.success` |

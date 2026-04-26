@@ -19,7 +19,11 @@ export function ThinkingIndicator({ label = 'Thinking' }: ThinkingIndicatorProps
             h="6px"
             borderRadius="full"
             bg="color.accent.interactive"
-            animation={reducedMotion ? undefined : `ds-pulse ${duration.stream.thinking.$value} ease-in-out ${i * 0.2}s infinite`}
+            animation={
+              reducedMotion
+                ? undefined
+                : `ds-pulse ${duration.stream.thinking.$value} ease-in-out ${i * 0.2}s infinite`
+            }
           />
         ))}
       </HStack>

@@ -18,13 +18,13 @@ Renders a growing block of text that is being streamed token-by-token from an ag
 
 ## Props
 
-| Prop          | Type      | Default              | Description                                 |
-| ------------- | --------- | -------------------- | ------------------------------------------- |
-| `text`        | `string`  | —                    | The full text accumulated so far (required) |
-| `isStreaming` | `boolean` | `false`              | Shows blinking cursor when `true`           |
-| `fontSize`    | `string`  | `"sm"`               | Chakra font size token                      |
-| `color`       | `string`  | `"color.text.primary"` | Chakra color token for the text           |
-| `aria-label`  | `string`  | `"Streaming output"` | Label for the live region                   |
+| Prop          | Type      | Default                | Description                                 |
+| ------------- | --------- | ---------------------- | ------------------------------------------- |
+| `text`        | `string`  | —                      | The full text accumulated so far (required) |
+| `isStreaming` | `boolean` | `false`                | Shows blinking cursor when `true`           |
+| `fontSize`    | `string`  | `"sm"`                 | Chakra font size token                      |
+| `color`       | `string`  | `"color.text.primary"` | Chakra color token for the text             |
+| `aria-label`  | `string`  | `"Streaming output"`   | Label for the live region                   |
 
 ---
 

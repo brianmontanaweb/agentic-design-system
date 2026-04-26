@@ -10,16 +10,20 @@ const schemas = vi.hoisted(() => ({
 }))
 
 vi.mock('@modelcontextprotocol/sdk/server/index.js', () => ({
-  Server: vi.fn().mockImplementation(() => ({
-    setRequestHandler: (schema: string, handler: Handler) => {
-      capturedHandlers.set(schema, handler)
-    },
-    connect: vi.fn().mockResolvedValue(undefined),
-  })),
+  Server: vi.fn().mockImplementation(function () {
+    return {
+      setRequestHandler: (schema: string, handler: Handler) => {
+        capturedHandlers.set(schema, handler)
+      },
+      connect: vi.fn().mockResolvedValue(undefined),
+    }
+  }),
 }))
 
 vi.mock('@modelcontextprotocol/sdk/server/stdio.js', () => ({
-  StdioServerTransport: vi.fn().mockImplementation(() => ({})),
+  StdioServerTransport: vi.fn().mockImplementation(function () {
+    return {}
+  }),
 }))
 
 vi.mock('@modelcontextprotocol/sdk/types.js', () => ({

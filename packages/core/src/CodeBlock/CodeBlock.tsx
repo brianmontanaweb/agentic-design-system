@@ -17,7 +17,14 @@ export function CodeBlock({ children, language }: CodeBlockProps) {
       overflow="auto"
     >
       {language && (
-        <Box as="span" fontSize="xs" color="color.text.muted" fontFamily="mono" display="block" mb={2}>
+        <Box
+          as="span"
+          fontSize="xs"
+          color="color.text.muted"
+          fontFamily="mono"
+          display="block"
+          mb={2}
+        >
           {language}
         </Box>
       )}

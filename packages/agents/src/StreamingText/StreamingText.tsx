@@ -34,7 +34,9 @@ export function StreamingText({
           bg="color.stream.cursor"
           ml="1px"
           verticalAlign="text-bottom"
-          animation={reducedMotion ? undefined : `ds-blink ${duration.stream.blink.$value} step-end infinite`}
+          animation={
+            reducedMotion ? undefined : `ds-blink ${duration.stream.blink.$value} step-end infinite`
+          }
         />
       )}
     </Box>

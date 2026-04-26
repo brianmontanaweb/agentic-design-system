@@ -29,13 +29,13 @@ A vertical ordered list of steps showing the progress of a multi-stage agent tas
 
 ## Step statuses
 
-| Status      | Dot border token | Step background token | Indicator   | Label weight |
-| ----------- | ---------------- | --------------------- | ----------- | ------------ |
-| `pending`   | `color.border.subtle`       | `color.surface.elevated`      | Step number | normal       |
-| `active`    | `color.accent.interactive`  | `color.surface.step.active`   | Step number | medium       |
-| `complete`  | `color.accent.success`      | `color.surface.step.complete` | ✓ checkmark | normal       |
-| `waiting`   | `color.accent.warning`      | `color.surface.step.waiting`  | Step number | medium       |
-| `cancelled` | `color.text.muted`          | `color.surface.elevated`      | — em-dash   | normal       |
+| Status      | Dot border token           | Step background token         | Indicator   | Label weight |
+| ----------- | -------------------------- | ----------------------------- | ----------- | ------------ |
+| `pending`   | `color.border.subtle`      | `color.surface.elevated`      | Step number | normal       |
+| `active`    | `color.accent.interactive` | `color.surface.step.active`   | Step number | medium       |
+| `complete`  | `color.accent.success`     | `color.surface.step.complete` | ✓ checkmark | normal       |
+| `waiting`   | `color.accent.warning`     | `color.surface.step.waiting`  | Step number | medium       |
+| `cancelled` | `color.text.muted`         | `color.surface.elevated`      | — em-dash   | normal       |
 
 ---
 
