@@ -80,3 +80,32 @@ export const Collapsed: Story = {
     await expect(button).toHaveAttribute('aria-expanded', 'false')
   },
 }
+
+export const KeyboardNavigation: Story = {
+  args: {
+    toolName: 'get_weather',
+    input: { city: 'NYC' },
+    status: 'done',
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement)
+    const button = canvas.getByRole('button', { name: 'get_weather details' })
+
+    await step('Tab moves focus to the expand button', async () => {
+      await userEvent.tab()
+      await expect(button).toHaveFocus()
+    })
+
+    await step('Space expands the card', async () => {
+      await userEvent.keyboard(' ')
+      await expect(button).toHaveAttribute('aria-expanded', 'true')
+      await expect(canvas.getByText('Input')).toBeInTheDocument()
+    })
+
+    await step('Enter collapses the card', async () => {
+      await userEvent.keyboard('{Enter}')
+      await expect(button).toHaveAttribute('aria-expanded', 'false')
+      await expect(canvas.queryByText('Input')).not.toBeInTheDocument()
+    })
+  },
+}

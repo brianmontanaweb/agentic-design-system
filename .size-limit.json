@@ -1,0 +1,17 @@
+[
+  {
+    "name": "@agentic-ds/tokens",
+    "path": "packages/tokens/dist/index.js",
+    "limit": "5 kB"
+  },
+  {
+    "name": "@agentic-ds/core",
+    "path": "packages/core/dist/index.js",
+    "limit": "30 kB"
+  },
+  {
+    "name": "@agentic-ds/agents",
+    "path": "packages/agents/dist/index.js",
+    "limit": "40 kB"
+  }
+]

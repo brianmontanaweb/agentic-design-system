@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
-import { expect, within } from 'storybook/test'
+import { expect, userEvent, within } from 'storybook/test'
 import { ProgressSteps } from '@agentic-ds/agents'
 
 const meta: Meta<typeof ProgressSteps> = {
@@ -100,5 +101,78 @@ export const WithCancelled: Story = {
     }
     const dashes = canvas.getAllByText('—')
     await expect(dashes).toHaveLength(2)
+  },
+}
+
+const TRANSITION_LABELS = ['Fetch data', 'Process results', 'Format output']
+
+export const StepTransition: Story = {
+  render: function StepTransitionStory() {
+    const [activeIdx, setActiveIdx] = useState(0)
+
+    const stepData = TRANSITION_LABELS.map((label, i) => ({
+      id: String(i),
+      label,
+      status: (i < activeIdx ? 'complete' : i === activeIdx ? 'active' : 'pending') as
+        | 'complete'
+        | 'active'
+        | 'pending',
+    }))
+
+    return (
+      <div>
+        <ProgressSteps steps={stepData} />
+        <button
+          onClick={() => setActiveIdx((prev) => Math.min(prev + 1, TRANSITION_LABELS.length))}
+          data-testid="advance"
+          style={{
+            marginTop: '8px',
+            padding: '6px 12px',
+            background: '#ffffff',
+            color: '#000000',
+            border: '1px solid #666',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          Advance
+        </button>
+      </div>
+    )
+  },
+  play: async ({ canvasElement, step }: Parameters<NonNullable<Story['play']>>[0]) => {
+    const canvas = within(canvasElement)
+
+    await step('first step starts as active', async () => {
+      const items = canvas.getAllByRole('listitem')
+      await expect(items[0]).toHaveAttribute('aria-current', 'step')
+      await expect(items[1]).not.toHaveAttribute('aria-current')
+      await expect(items[2]).not.toHaveAttribute('aria-current')
+    })
+
+    await step('advance to step 2 — aria-current moves', async () => {
+      await userEvent.click(canvas.getByTestId('advance'))
+      const items = canvas.getAllByRole('listitem')
+      await expect(items[0]).not.toHaveAttribute('aria-current')
+      await expect(items[1]).toHaveAttribute('aria-current', 'step')
+      await expect(items[2]).not.toHaveAttribute('aria-current')
+    })
+
+    await step('advance to step 3 — aria-current moves again', async () => {
+      await userEvent.click(canvas.getByTestId('advance'))
+      const items = canvas.getAllByRole('listitem')
+      await expect(items[0]).not.toHaveAttribute('aria-current')
+      await expect(items[1]).not.toHaveAttribute('aria-current')
+      await expect(items[2]).toHaveAttribute('aria-current', 'step')
+    })
+
+    await step('all steps complete — no aria-current, all checkmarks', async () => {
+      await userEvent.click(canvas.getByTestId('advance'))
+      const items = canvas.getAllByRole('listitem')
+      for (const item of items) {
+        await expect(item).not.toHaveAttribute('aria-current')
+      }
+      await expect(canvas.getAllByText('✓')).toHaveLength(3)
+    })
   },
 }

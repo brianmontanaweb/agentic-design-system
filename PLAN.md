@@ -150,16 +150,9 @@ Agent-readable component specs — Markdown files structured so an LLM can imple
 
 ### Testing
 
-| Item                                                                                                                                                                  | Priority |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| Add unit tests for `waiting` + `cancelled` MCP states in `AgentStatus` and `ProgressSteps`                                                                            | High     |
-| Add keyboard navigation tests for `ToolCallCard` (expand/collapse) and `ProgressSteps` (`aria-current` updates) — use existing `@testing-library/user-event`          | High     |
-| Add Storybook `play()` interaction tests for `ToolCallCard`, `StreamingText`, `ProgressSteps` using `@storybook/test` — test-runner picks these up automatically      | High     |
-| Add token-to-DOM contract test: render `<AgenticProvider>`, assert CSS custom properties are present on `[data-agentic-ds]` via `getComputedStyle`                    | Medium   |
-| Capture visual snapshots with `reducedMotion: 'reduce'` in the Playwright browser context inside `.storybook/test-runner.ts` to verify `prefers-reduced-motion` paths | Medium   |
-| Add bundle size CI with `size-limit` — enforce per-package gzip budgets (tokens < 5 kB, core < 30 kB, agents < 40 kB); fail PR if exceeded                            | Medium   |
-| Add type-level tests with `tsd` or `vitest`'s `expectTypeOf` to assert public prop API types don't regress across releases                                            | Medium   |
-| Add cross-browser visual regression testing (Firefox + Safari) via Chromatic or Playwright multi-project config                                                       | Low      |
+| Item                                                                                                            | Priority |
+| --------------------------------------------------------------------------------------------------------------- | -------- |
+| Add cross-browser visual regression testing (Firefox + Safari) via Chromatic or Playwright multi-project config | Low      |
 
 ### Infrastructure
 

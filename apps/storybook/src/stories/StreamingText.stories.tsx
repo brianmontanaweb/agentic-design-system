@@ -1,5 +1,6 @@
+import { useEffect, useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
-import { expect, within } from 'storybook/test'
+import { expect, waitFor, within } from 'storybook/test'
 import { StreamingText } from '@agentic-ds/agents'
 
 const meta: Meta<typeof StreamingText> = {
@@ -50,5 +51,55 @@ export const Multiline: Story = {
 
     await expect(log).toHaveTextContent('Line one of the response.')
     await expect(log).toHaveTextContent('Line three concluding thoughts.')
+  },
+}
+
+const STREAM_TOKENS = ['Analyzing', ' the', ' codebase', '...', ' Found', ' 3', ' issues', '.']
+
+export const StreamingSequence: Story = {
+  render: function StreamingSequenceStory() {
+    const [text, setText] = useState('')
+    const [isStreaming, setIsStreaming] = useState(true)
+
+    useEffect(() => {
+      let idx = 0
+      const id = setInterval(() => {
+        const token = STREAM_TOKENS[idx]
+        idx++
+        if (idx >= STREAM_TOKENS.length) {
+          clearInterval(id)
+          setIsStreaming(false)
+        }
+        setText((prev) => prev + token)
+      }, 80)
+      return () => clearInterval(id)
+    }, [])
+
+    return <StreamingText text={text} isStreaming={isStreaming} />
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement)
+    const log = canvas.getByRole('log')
+
+    await step('cursor is visible while streaming', async () => {
+      await waitFor(() => expect(log.querySelector('[aria-hidden="true"]')).toBeInTheDocument())
+    })
+
+    await step('text accumulates token by token', async () => {
+      await waitFor(() => expect(log).toHaveTextContent('Analyzing the codebase'), {
+        timeout: 1500,
+      })
+      await waitFor(
+        () => expect(log).toHaveTextContent('Analyzing the codebase... Found 3 issues.'),
+        { timeout: 2000 }
+      )
+    })
+
+    await step('cursor disappears when streaming completes', async () => {
+      await waitFor(
+        () => expect(log.querySelector('[aria-hidden="true"]')).not.toBeInTheDocument(),
+        { timeout: 1500 }
+      )
+    })
   },
 }

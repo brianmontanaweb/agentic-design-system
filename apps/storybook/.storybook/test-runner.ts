@@ -37,9 +37,24 @@ const config: TestRunnerConfig = {
       throw new Error(`Accessibility violations in "${context.id}":\n\n${details}`)
     }
 
-    // 2. Freeze all CSS animations and transitions so screenshots are deterministic.
-    //    Without this, ThinkingIndicator, AgentStatus(running), and StreamingText
-    //    cursor produce flaky diffs on every run.
+    // 2. Reduced-motion snapshot — taken before the freeze style is injected so the
+    //    prefers-reduced-motion CSS paths in AgenticProvider and theme.ts are exercised
+    //    naturally. Chromium emulates the media query, triggering the 0.01ms
+    //    animation-duration overrides and static ds-pulse/ds-blink keyframes, which
+    //    makes the screenshot deterministic without a JS-injected freeze style.
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await waitForPageReady(page)
+    const reducedRoot = await page.$('#storybook-root')
+    const reducedImage = await (reducedRoot ?? page).screenshot()
+    expect(reducedImage).toMatchImageSnapshot({
+      ...snapshotOptions,
+      customSnapshotIdentifier: `${context.id}-reduced-motion`,
+    })
+    await page.emulateMedia({ reducedMotion: 'no-preference' })
+
+    // 3. Freeze all CSS animations and transitions so the default screenshot is
+    //    deterministic. Without this, ThinkingIndicator, AgentStatus(running), and
+    //    StreamingText cursor produce flaky diffs on every run.
     await page.addStyleTag({
       content: `
         *, *::before, *::after {
@@ -53,7 +68,7 @@ const config: TestRunnerConfig = {
 
     await waitForPageReady(page)
 
-    // 3. Capture only the story root element, not the full Storybook chrome.
+    // 4. Capture only the story root element, not the full Storybook chrome.
     //    Falls back to full page if the element is not found.
     const root = await page.$('#storybook-root')
     const image = await (root ?? page).screenshot()
