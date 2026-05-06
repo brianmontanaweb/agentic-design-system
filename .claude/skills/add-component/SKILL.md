@@ -59,7 +59,7 @@ Do not read, write, or modify any files. Do not proceed to Step 1.
 
 Before writing any code:
 
-- Read `docs/best-practices.md` sections 1–7 (MCP lifecycle, accessibility, tokens, naming, docs, build targets, CSS scoping). Read section 8 (Figma MCP Usage) only if the user provided a Figma link.
+- Read `docs/best-practices.md` section 8 (Figma MCP Usage) only if the user provided a Figma link. Sections 1–7 rules (tokens, ARIA, CSS scoping, naming) are inlined in this skill — load them only if you hit an edge case not covered here.
 - Read `packages/<package>/src/index.ts` to understand the current export pattern
 - Read one existing component source file in the target package to understand the code style
 - Read one existing component test file (e.g. `packages/<package>/src/Button/Button.test.tsx`) to understand the test conventions
@@ -71,7 +71,32 @@ If the user provided a Figma component node link in their request, extract `file
 
 If no Figma link was provided, note **Figma: skipped** and proceed immediately. Do not ask.
 
-## Step 3 — Create the component source file
+## Step 3 — Present the plan and wait for approval
+
+Before creating any files, output a brief plan:
+
+```
+## Plan: <ComponentName>
+
+**Package:** `@agentic-ds/core` | `@agentic-ds/agents`
+**Inferred from:** <reason — e.g., "streaming/status → agents" or "UI primitive → core" or "user-specified">
+**ARIA pattern:** <e.g., `role="status" aria-live="polite"` — or "none">
+**MCP states:** <list or "n/a">
+**Figma:** reviewed | skipped
+
+Files to create:
+- `packages/<package>/src/<ComponentName>/<ComponentName>.tsx`
+- `packages/<package>/src/<ComponentName>/index.ts`
+- `apps/storybook/src/stories/<ComponentName>.stories.tsx`
+- `packages/<package>/src/<ComponentName>/<ComponentName>.test.tsx`
+- `docs/components/<ComponentName>.md`
+
+Shall I proceed? Reply **yes** to create all files, or clarify anything first (package, ARIA pattern, MCP states).
+```
+
+Wait for explicit approval before writing any files.
+
+## Step 4 — Create the component source file
 
 File: `packages/<package>/src/<ComponentName>/<ComponentName>.tsx`
 
@@ -89,7 +114,7 @@ Requirements (all MUST):
 - If the component has interactive expand/collapse, the trigger MUST be a `<button>` with `aria-expanded` + `aria-controls`
 - Animated decorative elements MUST be `aria-hidden="true"`
 
-## Step 4 — Add export to package index
+## Step 5 — Add export to package index
 
 Files:
 
@@ -106,7 +131,7 @@ export { <ComponentName> } from './<ComponentName>'
 export type { <ComponentName>Props } from './<ComponentName>'
 ```
 
-## Step 5 — Create Storybook story
+## Step 6 — Create Storybook story
 
 File: `apps/storybook/src/stories/<ComponentName>.stories.tsx`
 
@@ -118,7 +143,7 @@ Requirements:
 - Include a story for every status/state value if the component is stateful
 - Do NOT import `React` (jsx-runtime transform is configured)
 
-## Step 6 — Create unit tests
+## Step 7 — Create unit tests
 
 File: `packages/<package>/src/<ComponentName>/<ComponentName>.test.tsx`
 
@@ -169,7 +194,7 @@ Every component test file MUST include these groups:
 - Animation keyframes
 - Implementation details (internal state variable names, specific CSS class names)
 
-## Step 7 — Create component spec doc
+## Step 8 — Create component spec doc
 
 File: `docs/components/<ComponentName>.md`
 
@@ -194,7 +219,7 @@ mcp-states: [list MCP states surfaced, if applicable]
 
 Body MUST include: description, variants table (if applicable), props table, accessibility requirements with WCAG SC references, do/don't examples. Use MUST/SHOULD/MAY (RFC 2119).
 
-## Step 8 — Build, lint, and test
+## Step 9 — Build, lint, and test
 
 Run in order:
 
@@ -208,7 +233,7 @@ Only lint and test the files this skill creates — pre-existing violations in o
 
 Include the actual command output (exit code and last few lines of stdout/stderr) in your response so results are verifiable from the transcript.
 
-## Step 9 — Report
+## Step 10 — Report
 
 Output a concise summary:
 
