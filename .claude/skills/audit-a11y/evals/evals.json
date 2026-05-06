@@ -3,8 +3,10 @@
   "evals": [
     {
       "id": 1,
+      "name": "two-fixture-components",
+      "description": "ToolCallCard + AgentStatus fixtures in place — tests recall across two violated components simultaneously",
       "prompt": "Run the accessibility audit",
-      "expected_output": "A full audit report covering all .tsx files in packages/core/src/ and packages/agents/src/. With fixture versions of ToolCallCard and AgentStatus in place, violations must include: ToolCallCard div/HStack expand trigger without button semantics (SC 4.1.2, High), AgentStatus missing role=status (SC 4.1.3, High), AgentStatus missing aria-live=polite (SC 4.1.3, High), AgentStatus color-only status indicator with no visually-hidden text (SC 1.4.1, High). Report must include file paths with line numbers, a Passing section for clean components, and a Summary. No files must be modified.",
+      "expected_output": "## A11y Audit Report — [date]\n\n### Violations\n\n| Component | File | Line | Rule | WCAG SC | Severity |\n|---|---|---|---|---|---|\n| ToolCallCard | packages/agents/src/ToolCallCard.tsx | [line] | Expand trigger is Box/HStack with onClick, not <button> | SC 4.1.2 | High |\n| AgentStatus | packages/agents/src/AgentStatus.tsx | [line] | Container missing role=\"status\" | SC 4.1.3 | High |\n| AgentStatus | packages/agents/src/AgentStatus.tsx | [line] | Container missing aria-live=\"polite\" | SC 4.1.3 | High |\n| AgentStatus | packages/agents/src/AgentStatus.tsx | [line] | Color-only state indicator — no visually-hidden text | SC 1.4.1 | High |\n\n### Passing\n\n| Component | Notes |\n|---|---|\n| Button | aria-busy, aria-label swap, focusVisible ring all present |\n\n### Summary\n\n4 violations across 2 components. 4 are High severity.",
       "setup": ".claude/skills/audit-a11y/evals/scripts/setup-toolcallcard-agentstatus.sh",
       "teardown": ".claude/skills/audit-a11y/evals/scripts/teardown-toolcallcard-agentstatus.sh",
       "assertions": [
@@ -22,8 +24,10 @@
     },
     {
       "id": 2,
+      "name": "single-fixture-component",
+      "description": "AgentStatus fixture only — tests report format and that Passing section includes clean components",
       "prompt": "Run the accessibility audit",
-      "expected_output": "With only the AgentStatus fixture in place (single-component focus), the audit still covers all .tsx files in both packages but correctly calls out the AgentStatus violations. Passing section must include Button with a note about its accessible features. The report format must be a markdown table with Component, File, Line, Rule, WCAG SC, and Severity columns.",
+      "expected_output": "## A11y Audit Report — [date]\n\n### Violations\n\n| Component | File | Line | Rule | WCAG SC | Severity |\n|---|---|---|---|---|---|\n| AgentStatus | packages/agents/src/AgentStatus.tsx | [line] | Container missing role=\"status\" and aria-live=\"polite\" | SC 4.1.3 | High |\n| AgentStatus | packages/agents/src/AgentStatus.tsx | [line] | Color-only state indicator — no visually-hidden text | SC 1.4.1 | High |\n\n### Passing\n\n| Component | Notes |\n|---|---|\n| Button | aria-busy, aria-label swap, focusVisible ring all present |\n\n### Summary\n\n2 violations across 1 component. 2 are High severity.",
       "setup": ".claude/skills/audit-a11y/evals/scripts/setup-agentstatus.sh",
       "teardown": ".claude/skills/audit-a11y/evals/scripts/teardown-agentstatus.sh",
       "assertions": [
@@ -31,21 +35,25 @@
         "Report identifies AgentStatus missing ARIA live region attributes",
         "Report identifies AgentStatus SC 1.4.1 color-only violation",
         "Report includes Button in the Passing section",
-        "Report uses correct markdown table format with all required columns",
+        "Violations table includes columns for Component, File, Line, Rule, WCAG SC, and Severity",
         "No files are modified"
       ]
     },
     {
       "id": 3,
+      "name": "real-codebase",
+      "description": "No fixtures — audits committed source files and verifies precision (no false positives on token names)",
       "prompt": "Run the accessibility audit",
-      "expected_output": "Audit run against the real codebase with no fixture overrides. Report correctly identifies pre-existing violations in ToolCallCard and AgentStatus. Does not flag color.agent.status.* or color.on.accent token names as hex violations. Button appears in the Passing section. No source files are modified.",
-      "setup": "none",
-      "teardown": "none",
-      "scope": [
-        "packages/agents/src/AgentStatus.tsx",
-        "packages/agents/src/ToolCallCard.tsx",
-        "packages/core/src/Button.tsx"
-      ],
+      "expected_output": "## A11y Audit Report — [date]\n\n### Violations\n\n| Component | File | Line | Rule | WCAG SC | Severity |\n|---|---|---|---|---|---|\n| ToolCallCard | packages/agents/src/ToolCallCard.tsx | [line] | Expand trigger is div/HStack with onClick, not <button> | SC 4.1.2 | High |\n| AgentStatus | packages/agents/src/AgentStatus.tsx | [line] | Container missing role=\"status\" and aria-live=\"polite\" | SC 4.1.3 | High |\n| AgentStatus | packages/agents/src/AgentStatus.tsx | [line] | Color-only state indicator — no visually-hidden text | SC 1.4.1 | High |\n\n### Passing\n\n| Component | Notes |\n|---|---|\n| Button | aria-busy, aria-label swap, focusVisible ring all present |\n\n### Summary\n\n3 violations across 2 components. 3 are High severity.",
+      "setup": null,
+      "teardown": null,
+      "metadata": {
+        "focus_files": [
+          "packages/agents/src/AgentStatus.tsx",
+          "packages/agents/src/ToolCallCard.tsx",
+          "packages/core/src/Button.tsx"
+        ]
+      },
       "assertions": [
         "Report identifies ToolCallCard non-button expand trigger as SC 4.1.2 violation",
         "Report identifies AgentStatus missing role=status and aria-live=polite as SC 4.1.3 violations",
@@ -53,6 +61,68 @@
         "Report does NOT flag color.agent.status.* or color.on.accent token names as hex violations",
         "Report includes Button in the Passing section",
         "No source files are modified — report only"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "two-fixture-casual",
+      "description": "Casual-phrased prompt with ToolCallCard + AgentStatus fixtures — tests that the skill activates from informal language",
+      "prompt": "can you check our components for a11y issues?",
+      "expected_output": "## A11y Audit Report — [date]\n\n### Violations\n\n| Component | File | Line | Rule | WCAG SC | Severity |\n|---|---|---|---|---|---|\n| ToolCallCard | packages/agents/src/ToolCallCard.tsx | [line] | Expand trigger is Box/HStack with onClick, not <button> | SC 4.1.2 | High |\n| AgentStatus | packages/agents/src/AgentStatus.tsx | [line] | Container missing role=\"status\" | SC 4.1.3 | High |\n| AgentStatus | packages/agents/src/AgentStatus.tsx | [line] | Container missing aria-live=\"polite\" | SC 4.1.3 | High |\n| AgentStatus | packages/agents/src/AgentStatus.tsx | [line] | Color-only state indicator — no visually-hidden text | SC 1.4.1 | High |\n\n### Passing\n\n| Component | Notes |\n|---|---|\n| Button | aria-busy, aria-label swap, focusVisible ring all present |\n\n### Summary\n\n4 violations across 2 components. 4 are High severity.",
+      "setup": ".claude/skills/audit-a11y/evals/scripts/setup-toolcallcard-agentstatus.sh",
+      "teardown": ".claude/skills/audit-a11y/evals/scripts/teardown-toolcallcard-agentstatus.sh",
+      "assertions": [
+        "Report identifies ToolCallCard expand/collapse non-button trigger as SC 4.1.2 violation",
+        "Report identifies AgentStatus missing role=status as SC 4.1.3 violation",
+        "Report identifies AgentStatus missing aria-live=polite as SC 4.1.3 violation",
+        "Report identifies AgentStatus color-only status indicator as SC 1.4.1 violation",
+        "All violations include file path and line number",
+        "Report includes a Passing section listing clean components",
+        "Report includes a Summary with violation and severity counts",
+        "No source files are modified — report only",
+        "Report does NOT flag color.agent.status.* token names as hex violations",
+        "Report does NOT flag per-component animation as a violation if AgenticProvider theme-level override exists"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "real-codebase-verbose",
+      "description": "Verbose/specific prompt on committed source — tests that extra specificity doesn't change behavior or cause false positives",
+      "prompt": "Audit all TSX components in packages/core/src/ and packages/agents/src/ against WCAG 2.2 AA and our ARIA requirements, and produce a structured violation report with file paths, line numbers, and WCAG success criteria references",
+      "expected_output": "## A11y Audit Report — [date]\n\n### Violations\n\n| Component | File | Line | Rule | WCAG SC | Severity |\n|---|---|---|---|---|---|\n| ToolCallCard | packages/agents/src/ToolCallCard.tsx | [line] | Expand trigger is div/HStack with onClick, not <button> | SC 4.1.2 | High |\n| AgentStatus | packages/agents/src/AgentStatus.tsx | [line] | Container missing role=\"status\" and aria-live=\"polite\" | SC 4.1.3 | High |\n| AgentStatus | packages/agents/src/AgentStatus.tsx | [line] | Color-only state indicator — no visually-hidden text | SC 1.4.1 | High |\n\n### Passing\n\n| Component | Notes |\n|---|---|\n| Button | aria-busy, aria-label swap, focusVisible ring all present |\n\n### Summary\n\n3 violations across 2 components. 3 are High severity.",
+      "setup": null,
+      "teardown": null,
+      "metadata": {
+        "focus_files": [
+          "packages/agents/src/AgentStatus.tsx",
+          "packages/agents/src/ToolCallCard.tsx",
+          "packages/core/src/Button.tsx"
+        ]
+      },
+      "assertions": [
+        "Report identifies ToolCallCard non-button expand trigger as SC 4.1.2 violation",
+        "Report identifies AgentStatus missing role=status and aria-live=polite as SC 4.1.3 violations",
+        "Report identifies AgentStatus missing visually-hidden text as SC 1.4.1 violation",
+        "Report does NOT flag color.agent.status.* or color.on.accent token names as hex violations",
+        "Report includes Button in the Passing section",
+        "No source files are modified — report only"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "all-clean",
+      "description": "All components patched to be violation-free — tests that the skill produces no false positives on a clean codebase and correctly reports every component as passing",
+      "prompt": "Check all the components for WCAG issues and give me a report",
+      "expected_output": "## A11y Audit Report — [date]\n\n### Violations\n\nNone.\n\n### Passing\n\n| Component | Notes |\n|---|---|\n| Button | aria-busy, aria-label swap, focusVisible ring all present |\n| AgentStatus | role=\"status\", aria-live=\"polite\", visually-hidden text present |\n| ToolCallCard | expand trigger is <button> with aria-expanded and aria-controls |\n\n### Summary\n\n0 violations across 0 components.",
+      "setup": ".claude/skills/audit-a11y/evals/scripts/setup-all-clean.sh",
+      "teardown": ".claude/skills/audit-a11y/evals/scripts/teardown-all-clean.sh",
+      "assertions": [
+        "Report contains no violation rows",
+        "Report lists all audited components in the Passing section",
+        "Report includes a Summary stating 0 violations",
+        "No source files are modified — report only",
+        "Report does NOT flag color.agent.status.* token names as hex violations",
+        "Report does NOT flag VisuallyHidden usage as a violation"
       ]
     }
   ]

@@ -48,6 +48,7 @@ Skills that operate _on_ existing components (`update-component`, `audit-a11y`) 
 
 | Situation                                      | Pattern                                            |
 | ---------------------------------------------- | -------------------------------------------------- |
+| No setup or teardown needed                    | `null`                                             |
 | File created by the eval (didn't exist before) | `rm -f <path>`                                     |
 | File overwritten from git-tracked state        | `git restore <path>`                               |
 | File that may or may not be in git yet         | `git restore <path> 2>/dev/null \|\| rm -f <path>` |

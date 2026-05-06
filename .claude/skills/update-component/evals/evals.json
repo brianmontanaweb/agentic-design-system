@@ -3,8 +3,10 @@
   "evals": [
     {
       "id": 1,
+      "name": "plan-only-toolcallcard",
+      "description": "ToolCallCard fixture with all known violations — tests that the plan detects hex tokens, non-button trigger, unused import, story gap, and spec doc drift",
       "prompt": "Update the ToolCallCard component",
-      "expected_output": "A structured plan identifying: hardcoded hex values in statusColors (#8888aa, #4d9fff, #3dd68c, #f87171), a div expand/collapse trigger that must be replaced with a button element with aria-expanded and aria-controls, an unused React default import in the source, a missing Pending story, and spec doc drift including a missing defaultOpen prop, incorrect input type (object vs Record<string, unknown>), missing pending state in the states table, no ARIA section, and empty tokens frontmatter. The plan must present all findings and wait for user approval before modifying any files.",
+      "expected_output": "## Update plan: ToolCallCard\n\n### Figma conflicts\nFigma: skipped\n\n### Source changes (`packages/agents/src/ToolCallCard.tsx`)\n- Replace hardcoded hex values in `statusColors`: `#8888aa` → `color.tool.status.pending` (or equivalent), `#4d9fff` → `color.tool.status.running`, `#3dd68c` → `color.tool.status.done`, `#f87171` → `color.tool.status.error`\n- Replace `<Box onClick={...}>` (or `<HStack onClick={...}>`) expand/collapse trigger with `<button aria-expanded={open} aria-controls=\"[panel-id]\">` (WAI-ARIA Disclosure pattern)\n- Remove unused `React` default import: `import React, { useId, useState }` → `import { useId, useState }`\n\n### Story changes (`apps/storybook/src/stories/ToolCallCard.stories.tsx`)\n- Add `Pending` story: a story where `status='pending'`\n\n### Spec doc changes (`docs/components/ToolCallCard.md`)\n- Add `defaultOpen` prop row to the props table\n- Update `input` prop type from `object` to `Record<string, unknown>`\n- Add `pending` row to the states table\n- Add ARIA section documenting the WAI-ARIA Disclosure pattern, `aria-expanded`, and `aria-controls`\n- Populate frontmatter `tokens` list with semantic tokens used in source\n\n---\n\n### A11y report\n1. **SC 4.1.2** — Expand/collapse trigger is a `<Box>` or `<HStack>` with `onClick`; must be a `<button>` with `aria-expanded` and `aria-controls`\n\nShall I apply all of these changes? Reply **yes** to proceed, **no** to cancel, or list specific items to skip.",
       "setup": ".claude/skills/update-component/evals/scripts/setup-toolcallcard.sh",
       "teardown": ".claude/skills/update-component/evals/scripts/teardown-toolcallcard.sh",
       "assertions": [
@@ -22,8 +24,10 @@
     },
     {
       "id": 2,
+      "name": "plan-only-agentstatus",
+      "description": "AgentStatus fixture with all known violations — tests detection of missing ARIA live region, hex tokens, incomplete MCP states, story gaps, and spec doc drift",
       "prompt": "Update the AgentStatus component",
-      "expected_output": "A structured plan identifying: hardcoded hex values in statusConfig (#8888aa, #4d9fff, #3dd68c, #f87171), missing role=status on the container, missing aria-live=polite, no visually-hidden text (color is the only state indicator — WCAG SC 1.4.1 violation), missing waiting and cancelled states from the AgentStatusValue type and statusConfig, missing Waiting and Cancelled stories, missing waiting/cancelled from argTypes options, and spec doc drift including wrong mcp-states frontmatter, missing states in the table, wrong prop type, and no ARIA section. Plan must wait for user approval.",
+      "expected_output": "## Update plan: AgentStatus\n\n### Figma conflicts\nFigma: skipped\n\n### Source changes (`packages/agents/src/AgentStatus.tsx`)\n- Replace hardcoded hex values in `statusConfig`: `#8888aa` → `color.agent.status.idle`, `#4d9fff` → `color.agent.status.running`, `#3dd68c` → `color.agent.status.done`, `#f87171` → `color.agent.status.error`\n- Add `waiting` and `cancelled` entries to `AgentStatusValue` type and `statusConfig`\n- Add `role=\"status\"` and `aria-live=\"polite\"` to the container element\n- Add `<VisuallyHidden>{currentStatusLabel}</VisuallyHidden>` inside the container (SC 1.4.1 — color is currently the only state indicator)\n\n### Story changes (`apps/storybook/src/stories/AgentStatus.stories.tsx`)\n- Add `Waiting` story: a story where `status='waiting'`\n- Add `Cancelled` story: a story where `status='cancelled'`\n- Add `waiting` and `cancelled` to `argTypes.status.options`\n\n### Spec doc changes (`docs/components/AgentStatus.md`)\n- Update `mcp-states` frontmatter to list all 6 states: idle, running, waiting, done, error, cancelled\n- Add `waiting` and `cancelled` rows to the states table\n- Update `status` prop type to include `waiting` and `cancelled` union members\n- Add ARIA section documenting `role=\"status\"`, `aria-live=\"polite\"`, and visually-hidden text\n\n---\n\n### A11y report\n1. **SC 4.1.3** — Missing `role=\"status\"` on the container\n2. **SC 4.1.3** — Missing `aria-live=\"polite\"` on the container\n3. **SC 1.4.1** — Color is the only state indicator; no visually-hidden text present\n\nShall I apply all of these changes? Reply **yes** to proceed, **no** to cancel, or list specific items to skip.",
       "setup": ".claude/skills/update-component/evals/scripts/setup-agentstatus.sh",
       "teardown": ".claude/skills/update-component/evals/scripts/teardown-agentstatus.sh",
       "assertions": [
@@ -41,8 +45,10 @@
     },
     {
       "id": 3,
+      "name": "plan-only-button",
+      "description": "Mostly-clean Button fixture — tests precision: finds the one token violation without producing false positives on the React import or LoadingDots animation",
       "prompt": "Update the Button component",
-      "expected_output": "A structured plan identifying: hardcoded 100ms timing value in transition (should reference var(--ds-duration-fast)), unused React default import in the story file, aria-label prop missing from the spec doc props table, color.on.accent missing from the frontmatter tokens list, and a contradictory tabIndex note in the accessibility section. The plan must NOT flag the React import in the source file (used for type annotations) or the LoadingDots animation (suppressed at theme level). A11y report should say no violations found.",
+      "expected_output": "## Update plan: Button\n\n### Figma conflicts\nFigma: skipped\n\n### Source changes (`packages/core/src/Button.tsx`)\n- Replace hardcoded timing in `baseStyles.transition`: `'all 100ms'` → `'all var(--ds-duration-fast)'`\n\n### Story changes (`apps/storybook/src/stories/Button.stories.tsx`)\n- Remove unused `import React from 'react'` (no `React.*` type annotations present in story file)\n\n### Spec doc changes (`docs/components/Button.md`)\n- Add `aria-label` prop row to the props table\n- Add `color.on.accent` to the `tokens.colors` frontmatter list\n- Correct accessibility note: `tabIndex={-1}` → `tabIndex={0}` (source correctly uses `tabIndex={0}` to keep disabled button in tab order)\n\n---\n\n### A11y report\nNo violations found.\n\nShall I apply all of these changes? Reply **yes** to proceed, **no** to cancel, or list specific items to skip.",
       "setup": ".claude/skills/update-component/evals/scripts/setup-button.sh",
       "teardown": ".claude/skills/update-component/evals/scripts/teardown-button.sh",
       "assertions": [
@@ -58,8 +64,10 @@
     },
     {
       "id": 4,
+      "name": "execute-toolcallcard",
+      "description": "ToolCallCard fixture, full execution — tests that all identified violations are actually fixed in the output files",
       "prompt": "Update the ToolCallCard component. Apply all changes including a11y fixes — do not pause for approval at any step.",
-      "expected_output": "All 9 violations resolved in the actual files: statusColors replaced with semantic tokens, expand/collapse trigger replaced with a button element bearing aria-expanded and aria-controls, unused React default import removed, Pending story added, spec doc updated with defaultOpen prop, correct input type, pending state row, ARIA section, and non-empty tokens frontmatter. color='accent.green' on the output Code block is unchanged.",
+      "expected_output": "## Done: ToolCallCard\n\n**Files changed:**\n- packages/agents/src/ToolCallCard.tsx\n- apps/storybook/src/stories/ToolCallCard.stories.tsx\n- docs/components/ToolCallCard.md\n**Violations fixed:** 9\n**Stories added:** 1 (Pending)\n**Spec doc fields updated:** defaultOpen prop, input type corrected to Record<string, unknown>, pending state row, ARIA section, tokens frontmatter populated\n**A11y fixes applied:** 1 (button trigger with aria-expanded + aria-controls)\n**Build + lint:** passing\n**Visual tests:** skipped (no visual changes) or passing\n**Figma:** skipped",
       "setup": ".claude/skills/update-component/evals/scripts/setup-toolcallcard.sh",
       "grade": ".claude/skills/update-component/evals/scripts/grade-toolcallcard.sh",
       "teardown": ".claude/skills/update-component/evals/scripts/teardown-toolcallcard.sh",
@@ -80,8 +88,10 @@
     },
     {
       "id": 5,
+      "name": "execute-agentstatus",
+      "description": "AgentStatus fixture, full execution — tests that ARIA, token, MCP-state, and spec doc changes are all correctly applied",
       "prompt": "Update the AgentStatus component. Apply all changes including a11y fixes — do not pause for approval at any step.",
-      "expected_output": "All 11 violations resolved: statusConfig replaced with color.agent.status.* semantic tokens, waiting and cancelled added to AgentStatusValue type and statusConfig, role='status' and aria-live='polite' added to the container, visually-hidden text added for the current status, Waiting and Cancelled stories added, argTypes.status.options updated to include all 6 states, spec doc mcp-states frontmatter lists all 6 states, states table includes waiting and cancelled rows, status prop type updated, ARIA section added.",
+      "expected_output": "## Done: AgentStatus\n\n**Files changed:**\n- packages/agents/src/AgentStatus.tsx\n- apps/storybook/src/stories/AgentStatus.stories.tsx\n- docs/components/AgentStatus.md\n**Violations fixed:** 11\n**Stories added:** 2 (Waiting, Cancelled)\n**Spec doc fields updated:** mcp-states frontmatter (all 6 states), waiting and cancelled state rows, status prop type, ARIA section\n**A11y fixes applied:** 3 (role=\"status\", aria-live=\"polite\", VisuallyHidden text)\n**Build + lint:** passing\n**Visual tests:** passing or updated\n**Figma:** skipped",
       "setup": ".claude/skills/update-component/evals/scripts/setup-agentstatus.sh",
       "grade": ".claude/skills/update-component/evals/scripts/grade-agentstatus.sh",
       "teardown": ".claude/skills/update-component/evals/scripts/teardown-agentstatus.sh",
@@ -103,8 +113,10 @@
     },
     {
       "id": 6,
+      "name": "execute-button",
+      "description": "Button fixture, full execution — tests targeted fix without side effects; React default import in source must be preserved",
       "prompt": "Update the Button component. Apply all changes — do not pause for approval at any step.",
-      "expected_output": "All 5 violations resolved: transition timing replaced with var(--ds-duration-fast), unused React default import removed from the story, aria-label added to the spec doc props table, color.on.accent added to the frontmatter tokens.colors list, accessibility note corrected to tabIndex={0}. React default import in the source file is NOT removed (valid for type annotations).",
+      "expected_output": "## Done: Button\n\n**Files changed:**\n- packages/core/src/Button.tsx\n- apps/storybook/src/stories/Button.stories.tsx\n- docs/components/Button.md\n**Violations fixed:** 5\n**Stories added:** 0\n**Spec doc fields updated:** aria-label prop added, color.on.accent added to tokens.colors, tabIndex accessibility note corrected to tabIndex={0}\n**A11y fixes applied:** 0\n**Build + lint:** passing\n**Visual tests:** skipped (no visual changes)\n**Figma:** skipped",
       "setup": ".claude/skills/update-component/evals/scripts/setup-button.sh",
       "grade": ".claude/skills/update-component/evals/scripts/grade-button.sh",
       "teardown": ".claude/skills/update-component/evals/scripts/teardown-button.sh",
@@ -115,6 +127,80 @@
         "The updated spec doc frontmatter tokens.colors list includes color.on.accent",
         "The updated spec doc accessibility section states tabIndex={0} (not tabIndex={-1}) for disabled buttons",
         "The React default import in the updated source file is preserved (not removed)"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "plan-only-toolcallcard-casual",
+      "description": "Casual-phrased ToolCallCard prompt — tests that the skill activates and produces a complete plan from informal language",
+      "prompt": "ToolCallCard has some issues — can you take a look and tell me what needs fixing before we change anything?",
+      "expected_output": "## Update plan: ToolCallCard\n\n### Figma conflicts\nFigma: skipped\n\n### Source changes (`packages/agents/src/ToolCallCard.tsx`)\n- Replace hardcoded hex values in `statusColors`: `#8888aa` → `color.tool.status.pending` (or equivalent), `#4d9fff` → `color.tool.status.running`, `#3dd68c` → `color.tool.status.done`, `#f87171` → `color.tool.status.error`\n- Replace `<Box onClick={...}>` (or `<HStack onClick={...}>`) expand/collapse trigger with `<button aria-expanded={open} aria-controls=\"[panel-id]\">` (WAI-ARIA Disclosure pattern)\n- Remove unused `React` default import: `import React, { useId, useState }` → `import { useId, useState }`\n\n### Story changes (`apps/storybook/src/stories/ToolCallCard.stories.tsx`)\n- Add `Pending` story: a story where `status='pending'`\n\n### Spec doc changes (`docs/components/ToolCallCard.md`)\n- Add `defaultOpen` prop row to the props table\n- Update `input` prop type from `object` to `Record<string, unknown>`\n- Add `pending` row to the states table\n- Add ARIA section documenting the WAI-ARIA Disclosure pattern, `aria-expanded`, and `aria-controls`\n- Populate frontmatter `tokens` list with semantic tokens used in source\n\n---\n\n### A11y report\n1. **SC 4.1.2** — Expand/collapse trigger is a `<Box>` or `<HStack>` with `onClick`; must be a `<button>` with `aria-expanded` and `aria-controls`\n\nShall I apply all of these changes? Reply **yes** to proceed, **no** to cancel, or list specific items to skip.",
+      "setup": ".claude/skills/update-component/evals/scripts/setup-toolcallcard.sh",
+      "teardown": ".claude/skills/update-component/evals/scripts/teardown-toolcallcard.sh",
+      "assertions": [
+        "Plan identifies hardcoded hex values in statusColors as a token violation",
+        "Plan identifies the div expand/collapse trigger as an ARIA violation requiring replacement with a button element",
+        "Plan specifies that the button must have aria-expanded and aria-controls attributes",
+        "Plan identifies the unused React default import in the source file",
+        "Plan identifies the missing Pending story as a story gap",
+        "Plan identifies the missing defaultOpen prop in the spec doc props table",
+        "Plan identifies the incorrect input prop type in the spec doc",
+        "Plan includes an A11y report section",
+        "Plan does not write any files before receiving user approval",
+        "Plan does not flag color='accent.green' as a hardcoded hex violation"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "plan-only-agentstatus-verbose",
+      "description": "Verbose AgentStatus prompt — tests that extra specificity in the prompt doesn't suppress or alter the plan output",
+      "prompt": "Audit AgentStatus against WCAG 2.2 AA, our semantic token requirements, and the required MCP lifecycle states — produce a complete change plan and wait for my approval before writing any files",
+      "expected_output": "## Update plan: AgentStatus\n\n### Figma conflicts\nFigma: skipped\n\n### Source changes (`packages/agents/src/AgentStatus.tsx`)\n- Replace hardcoded hex values in `statusConfig`: `#8888aa` → `color.agent.status.idle`, `#4d9fff` → `color.agent.status.running`, `#3dd68c` → `color.agent.status.done`, `#f87171` → `color.agent.status.error`\n- Add `waiting` and `cancelled` entries to `AgentStatusValue` type and `statusConfig`\n- Add `role=\"status\"` and `aria-live=\"polite\"` to the container element\n- Add `<VisuallyHidden>{currentStatusLabel}</VisuallyHidden>` inside the container (SC 1.4.1 — color is currently the only state indicator)\n\n### Story changes (`apps/storybook/src/stories/AgentStatus.stories.tsx`)\n- Add `Waiting` story: a story where `status='waiting'`\n- Add `Cancelled` story: a story where `status='cancelled'`\n- Add `waiting` and `cancelled` to `argTypes.status.options`\n\n### Spec doc changes (`docs/components/AgentStatus.md`)\n- Update `mcp-states` frontmatter to list all 6 states: idle, running, waiting, done, error, cancelled\n- Add `waiting` and `cancelled` rows to the states table\n- Update `status` prop type to include `waiting` and `cancelled` union members\n- Add ARIA section documenting `role=\"status\"`, `aria-live=\"polite\"`, and visually-hidden text\n\n---\n\n### A11y report\n1. **SC 4.1.3** — Missing `role=\"status\"` on the container\n2. **SC 4.1.3** — Missing `aria-live=\"polite\"` on the container\n3. **SC 1.4.1** — Color is the only state indicator; no visually-hidden text present\n\nShall I apply all of these changes? Reply **yes** to proceed, **no** to cancel, or list specific items to skip.",
+      "setup": ".claude/skills/update-component/evals/scripts/setup-agentstatus.sh",
+      "teardown": ".claude/skills/update-component/evals/scripts/teardown-agentstatus.sh",
+      "assertions": [
+        "Plan identifies hardcoded hex values in statusConfig as token violations",
+        "Plan identifies missing role=status as an ARIA violation",
+        "Plan identifies missing aria-live=polite as an ARIA violation",
+        "Plan identifies the absence of visually-hidden text with a WCAG SC 1.4.1 reference",
+        "Plan identifies missing waiting and cancelled states as MCP lifecycle violations",
+        "Plan identifies missing Waiting story as a story gap",
+        "Plan identifies missing Cancelled story as a story gap",
+        "Plan identifies the argTypes options list as needing waiting and cancelled added",
+        "Plan includes an A11y report section with WCAG SC references for the live region and color violations",
+        "Plan does not write any files before receiving user approval"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "component-not-found",
+      "description": "Component does not exist in either package — tests that the skill reports the error gracefully without creating files or producing a partial plan",
+      "prompt": "Update the NonExistentWidget component",
+      "expected_output": "Component not found: NonExistentWidget\n\nNo file exists at packages/core/src/NonExistentWidget.tsx or packages/agents/src/NonExistentWidget.tsx. Use `/add-component NonExistentWidget` to scaffold it first.",
+      "setup": null,
+      "teardown": null,
+      "assertions": [
+        "Skill did not create any new files",
+        "Skill reported that NonExistentWidget was not found in packages/core or packages/agents",
+        "Skill suggested using /add-component to scaffold the component",
+        "No update plan was produced"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "already-compliant",
+      "description": "Fully-clean component fixture with no violations, no story gaps, and no spec doc drift — tests that the skill produces a no-op plan rather than inventing changes",
+      "prompt": "Update the EvalCleanComponent component",
+      "expected_output": "## Update plan: EvalCleanComponent\n\n### Figma conflicts\nFigma: skipped\n\n### Source changes\nNone.\n\n### Story changes\nNone.\n\n### Spec doc changes\nNone.\n\n### A11y report\nNo violations found.\n\nNo changes needed.",
+      "setup": ".claude/skills/update-component/evals/scripts/setup-clean-component.sh",
+      "teardown": ".claude/skills/update-component/evals/scripts/teardown-clean-component.sh",
+      "assertions": [
+        "Plan does not propose any source file changes",
+        "Plan does not propose any story file changes",
+        "Plan does not propose any spec doc changes",
+        "A11y report section says no violations found",
+        "Plan does not write any files before receiving user approval",
+        "Skill did not invent changes that are not present in the source"
       ]
     }
   ]
