@@ -4,18 +4,18 @@ import { handleGetToken } from './get-token.js'
 describe('handleGetToken', () => {
   describe('when tokens match', () => {
     it('returns a found message with match count', () => {
-      const result = handleGetToken({ name: 'space' })
-      expect(result.content[0].text).toMatch(/^Found \d+ tokens? matching "space":/)
+      const result = handleGetToken({ name: 'spacing' })
+      expect(result.content[0].text).toMatch(/^Found \d+ tokens? matching "spacing":/)
     })
 
     it('returns token entries in "path: value (type)" format', () => {
-      const result = handleGetToken({ name: 'space' })
-      expect(result.content[0].text).toMatch(/space\.\S+: .+ \(\w+\)/)
+      const result = handleGetToken({ name: 'spacing' })
+      expect(result.content[0].text).toMatch(/spacing\.\S+: .+ \(\w+\)/)
     })
 
     it('matches case-insensitively', () => {
-      const lower = handleGetToken({ name: 'duration' })
-      const upper = handleGetToken({ name: 'DURATION' })
+      const lower = handleGetToken({ name: 'durations' })
+      const upper = handleGetToken({ name: 'DURATIONS' })
       // The header echoes the original query, so compare only the token entry lines
       const lowerEntries = lower.content[0].text.split('\n').slice(2)
       const upperEntries = upper.content[0].text.split('\n').slice(2)
@@ -23,8 +23,8 @@ describe('handleGetToken', () => {
     })
 
     it('trims whitespace from the query', () => {
-      const clean = handleGetToken({ name: 'space' })
-      const padded = handleGetToken({ name: '  space  ' })
+      const clean = handleGetToken({ name: 'spacing' })
+      const padded = handleGetToken({ name: '  spacing  ' })
       // The header echoes the original query, so compare only the token entry lines
       const cleanEntries = clean.content[0].text.split('\n').slice(2)
       const paddedEntries = padded.content[0].text.split('\n').slice(2)
@@ -32,20 +32,24 @@ describe('handleGetToken', () => {
     })
 
     it('matches partial paths (prefix search)', () => {
-      const result = handleGetToken({ name: 'radius' })
-      expect(result.content[0].text).toMatch(/radius\./)
+      const result = handleGetToken({ name: 'radii' })
+      expect(result.content[0].text).toMatch(/radii\./)
     })
 
-    it('matches tokens across all 8 categories', () => {
+    it('matches tokens across all categories', () => {
       const categories = [
         'colors',
+        'lightColors',
         'semanticColors',
-        'space',
+        'spacing',
         'fonts',
         'fontSizes',
         'fontWeights',
-        'duration',
-        'radius',
+        'durations',
+        'radii',
+        'lineHeights',
+        'shadows',
+        'zIndex',
       ]
       for (const category of categories) {
         const result = handleGetToken({ name: category })
@@ -56,7 +60,7 @@ describe('handleGetToken', () => {
     })
 
     it('uses plural "tokens" when multiple results are found', () => {
-      const result = handleGetToken({ name: 'space' })
+      const result = handleGetToken({ name: 'spacing' })
       expect(result.content[0].text).toMatch(/Found \d+ tokens matching/)
     })
 
@@ -89,13 +93,17 @@ describe('handleGetToken', () => {
       const text = result.content[0].text
       const expected = [
         'colors',
+        'lightColors',
         'semanticColors',
-        'space',
+        'spacing',
         'fonts',
         'fontSizes',
         'fontWeights',
-        'duration',
-        'radius',
+        'durations',
+        'radii',
+        'lineHeights',
+        'shadows',
+        'zIndex',
       ]
       for (const cat of expected) {
         expect(text, `"${cat}" missing from no-match message`).toContain(cat)

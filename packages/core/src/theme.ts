@@ -4,11 +4,14 @@ import {
   colors,
   lightColors,
   stepTints,
-  duration,
+  durations,
   lineHeights,
-  radius,
+  radii,
   shadows,
   zIndex,
+  spacing,
+  fontSizes,
+  fontWeights,
 } from '@agentic-ds/tokens'
 
 export const buttonRecipe = defineRecipe({
@@ -24,7 +27,7 @@ export const buttonRecipe = defineRecipe({
     cursor: 'pointer',
     userSelect: 'none',
     whiteSpace: 'nowrap',
-    transition: `all ${duration.fast.$value}`,
+    transition: `all ${durations.fast.$value}`,
     _focusVisible: {
       outline: '2px solid',
       outlineColor: 'color.accent.interactive',
@@ -78,6 +81,15 @@ export const buttonRecipe = defineRecipe({
   },
 })
 
+// Convert DTCG token group to Chakra token format ({ value: string })
+function toCW<T extends Record<string, { $value: string | number }>>(
+  group: T
+): Record<keyof T, { value: string }> {
+  return Object.fromEntries(
+    Object.entries(group).map(([k, t]) => [k, { value: String(t.$value) }])
+  ) as Record<keyof T, { value: string }>
+}
+
 const config = defineConfig({
   // Scope all CSS custom properties to the provider root element rather than
   // :root. This prevents the design system from leaking token values into the
@@ -88,32 +100,19 @@ const config = defineConfig({
       button: buttonRecipe,
     },
     tokens: {
-      fonts: {
-        mono: { value: fonts.mono.$value },
-        sans: { value: fonts.sans.$value },
-        heading: { value: fonts.sans.$value },
-        body: { value: fonts.sans.$value },
+      fonts: toCW(fonts),
+      spacing: toCW(spacing),
+      fontSizes: toCW(fontSizes),
+      fontWeights: toCW(fontWeights),
+      lineHeights: toCW(lineHeights),
+      radii: toCW(radii),
+      shadows: toCW(shadows),
+      durations: {
+        fast: { value: durations.fast.$value },
+        normal: { value: durations.normal.$value },
+        slow: { value: durations.slow.$value },
       },
-      lineHeights: {
-        tight: { value: lineHeights.tight.$value },
-        base: { value: lineHeights.base.$value },
-        relaxed: { value: lineHeights.relaxed.$value },
-      },
-      radii: {
-        full: { value: radius.full.$value },
-      },
-      shadows: {
-        sm: { value: shadows.sm.$value },
-        md: { value: shadows.md.$value },
-        lg: { value: shadows.lg.$value },
-      },
-      zIndex: {
-        dropdown: { value: String(zIndex.dropdown.$value) },
-        sticky: { value: String(zIndex.sticky.$value) },
-        overlay: { value: String(zIndex.overlay.$value) },
-        modal: { value: String(zIndex.modal.$value) },
-        tooltip: { value: String(zIndex.tooltip.$value) },
-      },
+      zIndex: toCW(zIndex),
     },
     semanticTokens: {
       colors: {

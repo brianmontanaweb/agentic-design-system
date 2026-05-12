@@ -4,13 +4,13 @@ import {
   lightColors,
   stepTints,
   semanticColors,
-  space,
+  spacing,
   fonts,
   fontSizes,
   fontWeights,
   lineHeights,
-  duration,
-  radius,
+  durations,
+  radii,
   shadows,
   zIndex,
   getCSSVariables,
@@ -55,22 +55,22 @@ describe('token shape', () => {
     }
   })
 
-  it('every space token has dimension type and px value', () => {
-    for (const token of collectLeaves(space)) {
+  it('every spacing token has dimension type and px value', () => {
+    for (const token of collectLeaves(spacing)) {
       expect(token.$type).toBe('dimension')
       expect(token.$value as string).toMatch(/^\d+px$/)
     }
   })
 
-  it('every duration token has duration type and ms value', () => {
-    for (const token of collectLeaves(duration)) {
+  it('every durations token has duration type and ms value', () => {
+    for (const token of collectLeaves(durations)) {
       expect(token.$type).toBe('duration')
       expect(token.$value as string).toMatch(/^\d+ms$/)
     }
   })
 
-  it('every radius token has dimension type and px value', () => {
-    for (const token of collectLeaves(radius)) {
+  it('every radii token has dimension type and px value', () => {
+    for (const token of collectLeaves(radii)) {
       expect(token.$type).toBe('dimension')
       expect(token.$value as string).toMatch(/px$/)
     }
@@ -192,12 +192,12 @@ describe('immutability', () => {
     expect(Object.isFrozen(lightColors)).toBe(true)
     expect(Object.isFrozen(stepTints)).toBe(true)
     expect(Object.isFrozen(semanticColors)).toBe(true)
-    expect(Object.isFrozen(space)).toBe(true)
+    expect(Object.isFrozen(spacing)).toBe(true)
     expect(Object.isFrozen(fonts)).toBe(true)
     expect(Object.isFrozen(fontSizes)).toBe(true)
     expect(Object.isFrozen(fontWeights)).toBe(true)
     expect(Object.isFrozen(lineHeights)).toBe(true)
-    expect(Object.isFrozen(radius)).toBe(true)
+    expect(Object.isFrozen(radii)).toBe(true)
     expect(Object.isFrozen(shadows)).toBe(true)
     expect(Object.isFrozen(zIndex)).toBe(true)
     expect(Object.isFrozen(tokens)).toBe(true)
@@ -241,14 +241,14 @@ describe('getCSSVariables', () => {
 
   it('includes all space variables', () => {
     css = getCSSVariables()
-    for (const key of Object.keys(space)) {
+    for (const key of Object.keys(spacing)) {
       expect(css).toContain(`--ds-space-${key}`)
     }
   })
 
   it('includes all radius variables', () => {
     css = getCSSVariables()
-    for (const key of Object.keys(radius)) {
+    for (const key of Object.keys(radii)) {
       expect(css).toContain(`--ds-radius-${key}`)
     }
   })

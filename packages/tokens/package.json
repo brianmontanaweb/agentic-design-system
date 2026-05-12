@@ -24,14 +24,16 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./tokens.css": "./dist/tokens.css"
   },
   "files": [
     "dist"
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "tsup",
+    "tokens:generate": "tsx scripts/generate.ts",
+    "build": "npm run tokens:generate && tsup",
     "dev": "tsup --watch",
     "lint": "tsc --noEmit",
     "test": "vitest run",
@@ -39,6 +41,7 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
+    "tsx": "^4.16.2",
     "tsup": "^8.5.1",
     "typescript": "^6.0.2",
     "vitest": "^4.1.4"

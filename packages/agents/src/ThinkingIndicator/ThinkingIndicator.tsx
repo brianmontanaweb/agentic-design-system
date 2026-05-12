@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, HStack, Text } from '@chakra-ui/react'
 import { useReducedMotion } from '@agentic-ds/core'
-import { duration } from '@agentic-ds/tokens'
+import { durations } from '@agentic-ds/tokens'
 
 export interface ThinkingIndicatorProps {
   label?: string
@@ -10,7 +10,13 @@ export interface ThinkingIndicatorProps {
 export function ThinkingIndicator({ label = 'Thinking' }: ThinkingIndicatorProps) {
   const reducedMotion = useReducedMotion()
   return (
-    <HStack gap={2} alignItems="center" role="status" aria-live="polite">
+    <HStack
+      gap={2}
+      alignItems="center"
+      role="status"
+      aria-live="polite"
+      aria-label={label ?? 'Agent is thinking'}
+    >
       <HStack gap="3px" alignItems="center" aria-hidden="true">
         {[0, 1, 2].map((i) => (
           <Box
@@ -22,7 +28,7 @@ export function ThinkingIndicator({ label = 'Thinking' }: ThinkingIndicatorProps
             animation={
               reducedMotion
                 ? undefined
-                : `ds-pulse ${duration.stream.thinking.$value} ease-in-out ${i * 0.2}s infinite`
+                : `ds-pulse ${durations.stream.thinking.$value} ease-in-out ${i * 0.2}s infinite`
             }
           />
         ))}

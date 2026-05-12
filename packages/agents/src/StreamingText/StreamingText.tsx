@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Text } from '@chakra-ui/react'
 import { useReducedMotion } from '@agentic-ds/core'
-import { duration } from '@agentic-ds/tokens'
+import { durations } from '@agentic-ds/tokens'
 
 export interface StreamingTextProps {
   text: string
@@ -35,7 +35,9 @@ export function StreamingText({
           ml="1px"
           verticalAlign="text-bottom"
           animation={
-            reducedMotion ? undefined : `ds-blink ${duration.stream.blink.$value} step-end infinite`
+            reducedMotion
+              ? undefined
+              : `ds-blink ${durations.stream.blink.$value} step-end infinite`
           }
         />
       )}

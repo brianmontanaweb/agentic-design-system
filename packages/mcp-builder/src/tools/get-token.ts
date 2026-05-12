@@ -1,12 +1,16 @@
 import {
   colors,
+  lightColors,
   semanticColors,
-  space,
+  spacing,
   fonts,
   fontSizes,
   fontWeights,
-  duration,
-  radius,
+  durations,
+  radii,
+  lineHeights,
+  shadows,
+  zIndex,
 } from '@agentic-ds/tokens'
 
 interface TokenEntry {
@@ -46,13 +50,17 @@ function flattenTokens(obj: Record<string, unknown>, prefix: string): TokenEntry
 
 const allTokens: TokenEntry[] = [
   ...flattenTokens(colors as unknown as Record<string, unknown>, 'colors'),
+  ...flattenTokens(lightColors as unknown as Record<string, unknown>, 'lightColors'),
   ...flattenTokens(semanticColors as unknown as Record<string, unknown>, 'semanticColors'),
-  ...flattenTokens(space as unknown as Record<string, unknown>, 'space'),
+  ...flattenTokens(spacing as unknown as Record<string, unknown>, 'spacing'),
   ...flattenTokens(fonts as unknown as Record<string, unknown>, 'fonts'),
   ...flattenTokens(fontSizes as unknown as Record<string, unknown>, 'fontSizes'),
   ...flattenTokens(fontWeights as unknown as Record<string, unknown>, 'fontWeights'),
-  ...flattenTokens(duration as unknown as Record<string, unknown>, 'duration'),
-  ...flattenTokens(radius as unknown as Record<string, unknown>, 'radius'),
+  ...flattenTokens(durations as unknown as Record<string, unknown>, 'durations'),
+  ...flattenTokens(radii as unknown as Record<string, unknown>, 'radii'),
+  ...flattenTokens(lineHeights as unknown as Record<string, unknown>, 'lineHeights'),
+  ...flattenTokens(shadows as unknown as Record<string, unknown>, 'shadows'),
+  ...flattenTokens(zIndex as unknown as Record<string, unknown>, 'zIndex'),
 ]
 
 export function handleGetToken(args: { name: string }) {
@@ -62,13 +70,17 @@ export function handleGetToken(args: { name: string }) {
   if (results.length === 0) {
     const categories = [
       'colors',
+      'lightColors',
       'semanticColors',
-      'space',
+      'spacing',
       'fonts',
       'fontSizes',
       'fontWeights',
-      'duration',
-      'radius',
+      'durations',
+      'radii',
+      'lineHeights',
+      'shadows',
+      'zIndex',
     ]
     return {
       content: [
@@ -79,7 +91,7 @@ export function handleGetToken(args: { name: string }) {
             ``,
             `Available categories: ${categories.join(', ')}`,
             ``,
-            `Examples: "accentBlue", "agent.status", "space.4", "duration.fast"`,
+            `Examples: "accentBlue", "agent.status", "spacing.4", "durations.fast"`,
           ].join('\n'),
         },
       ],

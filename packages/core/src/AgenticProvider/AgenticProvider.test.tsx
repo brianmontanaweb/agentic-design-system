@@ -1,7 +1,7 @@
 import React from 'react'
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { colors, space, duration } from '@agentic-ds/tokens'
+import { colors, spacing, durations } from '@agentic-ds/tokens'
 import { AgenticProvider } from './AgenticProvider'
 
 describe('AgenticProvider', () => {
@@ -74,8 +74,8 @@ describe('AgenticProvider', () => {
       root.style.setProperty('--ds-color-accent-interactive', colors.accentBlue.$value)
       root.style.setProperty('--ds-color-agent-status-running', colors.accentBlue.$value)
       root.style.setProperty('--ds-color-agent-status-error', colors.accentRed.$value)
-      root.style.setProperty('--ds-space-4', space[4].$value)
-      root.style.setProperty('--ds-duration-normal', duration.normal.$value)
+      root.style.setProperty('--ds-space-4', spacing[4].$value)
+      root.style.setProperty('--ds-duration-normal', durations.normal.$value)
 
       const computed = getComputedStyle(root)
       expect(computed.getPropertyValue('--ds-color-surface-base').trim()).toBe(colors.bgBase.$value)
@@ -88,8 +88,8 @@ describe('AgenticProvider', () => {
       expect(computed.getPropertyValue('--ds-color-agent-status-error').trim()).toBe(
         colors.accentRed.$value
       )
-      expect(computed.getPropertyValue('--ds-space-4').trim()).toBe(space[4].$value)
-      expect(computed.getPropertyValue('--ds-duration-normal').trim()).toBe(duration.normal.$value)
+      expect(computed.getPropertyValue('--ds-space-4').trim()).toBe(spacing[4].$value)
+      expect(computed.getPropertyValue('--ds-duration-normal').trim()).toBe(durations.normal.$value)
     })
 
     it('Chakra CSS vars are scoped to [data-agentic-ds], not :root', () => {
