@@ -1,36 +1,23 @@
 ---
 name: add-component
-description: Scaffolds a new component in @agentic-ds/core or @agentic-ds/agents, producing the source file, Storybook story, unit tests, spec doc, and index export — with correct ARIA live regions, semantic tokens, and CSS scoping applied from the start. Use when adding, creating, or scaffolding a new component.
+description: Scaffolds a new component in @agentic-ds/core or @agentic-ds/agents end-to-end — source, Storybook story, unit tests, spec doc, and index export — by planning once, then orchestrating the add-component-source, add-component-story, add-component-tests, add-component-spec, and verify-component skills. Use when adding, creating, or scaffolding a new component.
 ---
 
-# Add Component
+# Add Component (Orchestrator)
 
 Scaffold a new component given `$ARGUMENTS` in the format `<ComponentName> [core|agents]`.
 
-If the package is not specified, infer it:
-
-- Agent-lifecycle, streaming, messaging, tool-call, or status components → `agents`
-- General-purpose UI primitives → `core`
+This skill creates no files itself. It guards against overwrites, plans, gets approval **once**, then invokes five sub-skills in order via the Skill tool. Each sub-skill is also independently invocable; when run from here, they skip their own context reads if the material is already in this conversation.
 
 ---
 
 ## Gotchas
 
-These defuse the most common mistakes before you encounter them:
-
 - **Figma is optional** — if the user skips the link, mark "Figma: skipped" in output and proceed immediately; never block on it.
-- **Never use `import React from 'react'` in story files** — jsx-runtime handles JSX and Storybook's own types cover everything else.
-- **Never use `import React from 'react'` in source files either.** When the props interface needs React types, use named type imports: `import type { ReactElement, ReactNode, MouseEventHandler } from 'react'`. This lets you write `leftIcon?: ReactElement` without the default import. Do not write `React.ReactElement` — that requires the default import and will trigger a lint violation.
-- **Test files DO import React** — existing tests use `import React from 'react'`; follow that pattern for consistency.
-- **Use `renderWithProviders`, never `render` directly** — `renderWithProviders` wraps in `AgenticProvider` so Chakra tokens resolve correctly. Located at `packages/<package>/src/__tests__/test-utils.tsx`.
-- **Test ARIA first** — `role`, `aria-describedby`, `aria-live`, `aria-expanded` are the most important things to assert; they prove accessibility correctness, not just render correctness.
-- **Use `userEvent`, not `fireEvent`** — `userEvent.setup()` simulates real browser events (pointer, keyboard, focus). Use `{ advanceTimers: vi.advanceTimersByTime }` when the component has debounce/delay timers.
-- **Use fake timers for components with setTimeout** — call `vi.useFakeTimers()` in `beforeEach` and `vi.useRealTimers()` in `afterEach` when the component hides/shows with a delay.
-- **Agent-specific ARIA is mandatory from the start** — do not scaffold first and audit later; apply the correct live region from step 3 based on component type.
-- **Package inference default** — when ambiguous, lean `agents` for status/streaming/tool-related names; lean `core` for anything that reads like a generic UI primitive.
-- **`color.on.accent` and similar token names are not hex violations** — only flag `#`-prefixed literal values.
-- **Components live in subdirectories** — all files for a component go in `packages/<package>/src/<ComponentName>/`. The root `index.ts` re-exports from `'./<ComponentName>'`, which resolves to the barrel `index.ts` inside the directory.
-- **Run `npm run build` before `npm run lint`** — `tsc --noEmit` in lint requires the tokens package to be built first.
+- **Approval happens once, here** — after the Step 3 plan is approved, run all five sub-skills without asking again. The sub-skills do not have their own approval gates.
+- **Package inference default** — when ambiguous, lean `agents` for status/streaming/tool-related names; lean `core` for anything that reads like a generic UI primitive (full rules in the shared conventions reference).
+- **Agent-specific ARIA is decided in the plan, not retrofitted** — pick the ARIA pattern in Step 3 from `shared/references/aria-patterns.md` and pass it to `add-component-source`.
+- **Invoke sub-skills in the listed order** — story, tests, and spec doc all read the source file; source must exist first. Verification runs last.
 
 ---
 
@@ -55,25 +42,24 @@ Do not read, write, or modify any files. Do not proceed to Step 1.
 
 ---
 
-## Step 1 — Read existing conventions
+## Step 1 — Read shared references
 
-Before writing any code:
+Read both (skip any already in context):
 
-- Read `docs/best-practices.md` section 8 (Figma MCP Usage) only if the user provided a Figma link. Sections 1–7 rules (tokens, ARIA, CSS scoping, naming) are inlined in this skill — load them only if you hit an edge case not covered here.
-- Read `packages/<package>/src/index.ts` to understand the current export pattern
-- Read one existing component source file in the target package to understand the code style
-- Read one existing component test file (e.g. `packages/<package>/src/Button/Button.test.tsx`) to understand the test conventions
-- Read `docs/components/Button.md` to understand the spec doc format
+- `.claude/skills/shared/references/conventions.md` — file layout, package inference, import/export/token rules
+- `.claude/skills/shared/references/aria-patterns.md` — ARIA pattern per component type, MCP states
+
+Only load `docs/best-practices.md` if you hit an edge case these files don't cover.
 
 ## Step 2 — Fetch the Figma component node
 
-If the user provided a Figma component node link in their request, extract `fileKey` and `nodeId` and call `get_file_nodes(fileKey, [nodeId])`. Follow the extraction and conflict resolution process in `docs/best-practices.md` section 8.
+If the user provided a Figma component node link, extract `fileKey` and `nodeId` and call `get_file_nodes(fileKey, [nodeId])`. Follow the extraction and conflict resolution process in `docs/best-practices.md` section 8.
 
 If no Figma link was provided, note **Figma: skipped** and proceed immediately. Do not ask.
 
 ## Step 3 — Present the plan and wait for approval
 
-Before creating any files, output a brief plan:
+Before invoking any sub-skill, output a brief plan:
 
 ```
 ## Plan: <ComponentName>
@@ -87,153 +73,32 @@ Before creating any files, output a brief plan:
 Files to create:
 - `packages/<package>/src/<ComponentName>/<ComponentName>.tsx`
 - `packages/<package>/src/<ComponentName>/index.ts`
-- `apps/storybook/src/stories/<ComponentName>.stories.tsx`
 - `packages/<package>/src/<ComponentName>/<ComponentName>.test.tsx`
+- `apps/storybook/src/stories/<ComponentName>.stories.tsx`
 - `docs/components/<ComponentName>.md`
 
 Shall I proceed? Reply **yes** to create all files, or clarify anything first (package, ARIA pattern, MCP states).
 ```
 
-Wait for explicit approval before writing any files.
+Wait for explicit approval before invoking any sub-skill.
 
-## Step 4 — Create the component source file
+## Step 4 — Run the sub-skills in order
 
-File: `packages/<package>/src/<ComponentName>/<ComponentName>.tsx`
+Invoke each via the Skill tool, in this exact order:
 
-Requirements (all MUST):
+| Order | Skill                  | Args                        | Produces                                         |
+| ----- | ---------------------- | --------------------------- | ------------------------------------------------ |
+| 1     | `add-component-source` | `<ComponentName> <package>` | Source file, barrel `index.ts`, package export   |
+| 2     | `add-component-story`  | `<ComponentName>`           | Storybook story                                  |
+| 3     | `add-component-tests`  | `<ComponentName>`           | Unit test file (and runs it)                     |
+| 4     | `add-component-spec`   | `<ComponentName>`           | Spec doc at `docs/components/<ComponentName>.md` |
+| 5     | `verify-component`     | `<ComponentName>`           | Build + scoped lint + scoped tests, output shown |
 
-- Functional component, named export (no default export)
-- Do NOT add `import React from 'react'`. For React type annotations in the props interface, use named type imports: `import type { ReactElement, ReactNode, MouseEventHandler } from 'react'`. Write `leftIcon?: ReactElement`, not `leftIcon?: React.ReactElement`.
-- Export the props interface: `export interface <ComponentName>Props { ... }`
-- All color values MUST reference Chakra semantic tokens — no hardcoded hex
-- All timing values MUST reference `duration.*` tokens from `@agentic-ds/tokens`
-- If the component displays status or live-updating content, it MUST include the correct ARIA live region:
-  - Sequential content (streaming text, message thread) → `role="log"` + `aria-live="polite"` + `aria-atomic="false"`
-  - Status indicators → `role="status"` + `aria-live="polite"`
-  - Errors → `role="alert"`
-- If the component has interactive expand/collapse, the trigger MUST be a `<button>` with `aria-expanded` + `aria-controls`
-- Animated decorative elements MUST be `aria-hidden="true"`
+Pass the ARIA pattern and MCP states decided in Step 3 as extra context in the `add-component-source` args (e.g., `EvalStatusPill agents — role="status" aria-live="polite", states: idle/running/done/error`).
 
-## Step 5 — Add export to package index
+If a sub-skill reports a failure, fix it before moving to the next — do not defer failures to the verification step.
 
-Files:
-
-1. Create `packages/<package>/src/<ComponentName>/index.ts`:
-
-```ts
-export * from './<ComponentName>'
-```
-
-2. Update `packages/<package>/src/index.ts`:
-
-```ts
-export { <ComponentName> } from './<ComponentName>'
-export type { <ComponentName>Props } from './<ComponentName>'
-```
-
-## Step 6 — Create Storybook story
-
-File: `apps/storybook/src/stories/<ComponentName>.stories.tsx`
-
-Requirements:
-
-- Use `type { Meta, StoryObj }` from `@storybook/react`
-- Title format: `'Core/<ComponentName>'` or `'Agents/<ComponentName>'`
-- Include a story for every meaningful prop variant and state
-- Include a story for every status/state value if the component is stateful
-- Do NOT import `React` (jsx-runtime transform is configured)
-
-## Step 7 — Create unit tests
-
-File: `packages/<package>/src/<ComponentName>/<ComponentName>.test.tsx`
-
-Requirements:
-
-- Import `React from 'react'` (existing test convention)
-- Import `{ describe, expect, it, vi, beforeEach, afterEach }` from `'vitest'`
-- Import `{ screen, act }` from `'@testing-library/react'`
-- Import `userEvent` from `'@testing-library/user-event'`
-- Import `renderWithProviders` from `packages/<package>/src/__tests__/test-utils`
-- Import the component and its prop types from `'./<ComponentName>'`
-
-### Required test groups
-
-Every component test file MUST include these groups:
-
-**`structure`** — basic render and DOM shape:
-
-- Renders without crashing
-- Key child elements exist in the DOM
-- Any significant DOM roles are present
-
-**`ARIA`** — one test per ARIA attribute the component sets:
-
-- `role`, `aria-live`, `aria-atomic`, `aria-describedby`, `aria-expanded`, `aria-controls`, `aria-label`, `aria-current`, `aria-hidden` — test whichever apply
-- Each test asserts the attribute is set AND that its value is correct (id reference, string value, boolean)
-
-**`props`** — one test per meaningful prop:
-
-- Use `it.each` for enum props (`variant`, `size`, `placement`, `status`)
-- Each variant/size/status MUST have at least a smoke-test asserting it renders without crashing
-
-**`disabled / isDisabled`** — if applicable:
-
-- Confirms blocked behavior (events not fired, element not rendered, attribute absent)
-
-**`interaction`** — for every user-facing behavior:
-
-- Use `userEvent.setup()` for all events — never `fireEvent`
-- Hover: `user.hover()` / `user.unhover()`
-- Keyboard: `user.tab()`, `user.keyboard('{Escape}')`, `user.keyboard('{Enter}')`, `user.keyboard(' ')`
-- Click: `user.click()`
-- When the component uses `setTimeout` for show/hide delays, use `vi.useFakeTimers()` in `beforeEach`, `vi.useRealTimers()` in `afterEach`, and pass `{ advanceTimers: vi.advanceTimersByTime }` to `userEvent.setup()`; wrap timer advancement in `act(() => { vi.runAllTimers() })`
-
-### What not to test
-
-- Visual styles (colors, font sizes, spacing) — these are token values, not logic
-- Animation keyframes
-- Implementation details (internal state variable names, specific CSS class names)
-
-## Step 8 — Create component spec doc
-
-File: `docs/components/<ComponentName>.md`
-
-Use the YAML frontmatter format from `docs/components/Button.md`:
-
-```yaml
----
-component: <ComponentName>
-package: '@agentic-ds/<package>'
-category: <category>
-status: implemented
-tokens:
-  colors: [list semantic tokens used]
-  radius: [list if component uses radius tokens]
-  duration: [list if animated]
-  fonts: [list if component uses font tokens]
-wcag: AA
-aria-pattern: <URL to WAI-ARIA APG pattern if applicable>
-mcp-states: [list MCP states surfaced, if applicable]
----
-```
-
-Body MUST include: description, variants table (if applicable), props table, accessibility requirements with WCAG SC references, do/don't examples. Use MUST/SHOULD/MAY (RFC 2119).
-
-## Step 9 — Build, lint, and test
-
-Run in order:
-
-```sh
-npm run build
-eslint packages/<package>/src/<ComponentName>/<ComponentName>.tsx apps/storybook/src/stories/<ComponentName>.stories.tsx
-npx vitest run packages/<package>/src/<ComponentName>/<ComponentName>.test.tsx
-```
-
-Only lint and test the files this skill creates — pre-existing violations in other files are not your responsibility. Fix any errors ESLint reports on your files before finishing. Do not use `eslint-disable` comments. Fix any failing tests before finishing.
-
-Include the actual command output (exit code and last few lines of stdout/stderr) in your response so results are verifiable from the transcript.
-
-## Step 10 — Report
+## Step 5 — Report
 
 Output a concise summary:
 

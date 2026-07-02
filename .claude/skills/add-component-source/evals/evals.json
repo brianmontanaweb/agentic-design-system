@@ -1,0 +1,62 @@
+{
+  "skill_name": "add-component-source",
+  "evals": [
+    {
+      "id": 1,
+      "name": "agents-package-inference",
+      "description": "Minimal prompt with no package hint — tests that the skill correctly infers agents for a status-type component and creates only source-layer files",
+      "prompt": "Create just the source file for an EvalStatusPill component — no story or docs yet",
+      "expected_output": "## Source created: EvalStatusPill\n\n**Package:** agents\n**Files:**\n- packages/agents/src/EvalStatusPill/EvalStatusPill.tsx\n- packages/agents/src/EvalStatusPill/index.ts\n- packages/agents/src/index.ts (updated)\n**ARIA pattern:** role=\"status\" + aria-live=\"polite\"\n**MCP states:** idle, running, done, error (or equivalent status values)",
+      "setup": null,
+      "teardown": "git restore packages/agents/src/index.ts && rm -rf packages/agents/src/EvalStatusPill",
+      "assertions": [
+        "Package correctly inferred as agents (not core)",
+        "Source file created at packages/agents/src/EvalStatusPill/EvalStatusPill.tsx",
+        "Barrel created at packages/agents/src/EvalStatusPill/index.ts re-exporting from './EvalStatusPill'",
+        "Source exports EvalStatusPill as named export (not default)",
+        "Source exports EvalStatusPillProps interface",
+        "Source includes role=\"status\" and aria-live=\"polite\" ARIA attributes",
+        "Source uses only Chakra semantic tokens — no hardcoded hex values",
+        "Source does NOT have a default React import",
+        "packages/agents/src/index.ts exports EvalStatusPill and EvalStatusPillProps",
+        "No story file was created at apps/storybook/src/stories/EvalStatusPill.stories.tsx",
+        "No spec doc was created at docs/components/EvalStatusPill.md",
+        "No test file was created at packages/agents/src/EvalStatusPill/EvalStatusPill.test.tsx"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "core-package-explicit",
+      "description": "Explicit 'in core' — tests that the skill respects the stated package and applies the required aria-label prop pattern for icon-only components",
+      "prompt": "Create the source for an EvalIconButton component in core",
+      "expected_output": "## Source created: EvalIconButton\n\n**Package:** core\n**Files:**\n- packages/core/src/EvalIconButton/EvalIconButton.tsx\n- packages/core/src/EvalIconButton/index.ts\n- packages/core/src/index.ts (updated)\n**ARIA pattern:** none — aria-label is a required prop (SC 4.1.2)\n**MCP states:** n/a",
+      "setup": null,
+      "teardown": "git restore packages/core/src/index.ts && rm -rf packages/core/src/EvalIconButton",
+      "assertions": [
+        "Source file created at packages/core/src/EvalIconButton/EvalIconButton.tsx",
+        "Barrel created at packages/core/src/EvalIconButton/index.ts",
+        "EvalIconButtonProps interface includes aria-label as a required prop",
+        "Source exports EvalIconButton as named export (not default)",
+        "Source exports EvalIconButtonProps interface",
+        "Source uses only Chakra semantic tokens — no hardcoded hex values",
+        "Source does NOT have a default React import",
+        "packages/core/src/index.ts exports EvalIconButton and EvalIconButtonProps"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "already-exists-guard",
+      "description": "Source file pre-exists — tests that the skill refuses to overwrite and redirects to /update-component",
+      "prompt": "Create the source for an EvalStatusPill component in agents",
+      "expected_output": "## Already exists: EvalStatusPill\n\n`packages/agents/src/EvalStatusPill/EvalStatusPill.tsx` already exists.\nUse `/update-component EvalStatusPill` to audit and update it instead.",
+      "setup": ".claude/skills/shared/scripts/setup-eval-component.sh",
+      "teardown": ".claude/skills/shared/scripts/teardown-eval-component.sh",
+      "assertions": [
+        "Skill did not overwrite packages/agents/src/EvalStatusPill/EvalStatusPill.tsx (fixture content unchanged)",
+        "Skill reported that the component already exists",
+        "Skill suggested using /update-component EvalStatusPill",
+        "packages/agents/src/index.ts was not modified beyond the fixture setup"
+      ]
+    }
+  ]
+}

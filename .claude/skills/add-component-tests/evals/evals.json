@@ -1,0 +1,42 @@
+{
+  "skill_name": "add-component-tests",
+  "evals": [
+    {
+      "id": 1,
+      "name": "tests-for-existing-component",
+      "description": "Fixture component exists with status enum, ARIA live region, and visually-hidden text — tests conventions, group coverage, and a green run",
+      "prompt": "Write unit tests for EvalStatusPill",
+      "expected_output": "## Tests created: EvalStatusPill\n\n**File:** packages/agents/src/EvalStatusPill/EvalStatusPill.test.tsx\n**Groups:** structure, ARIA, props\n**Result:** passing (N tests)",
+      "setup": ".claude/skills/shared/scripts/setup-eval-component.sh",
+      "teardown": ".claude/skills/shared/scripts/teardown-eval-component.sh",
+      "assertions": [
+        "Test file created at packages/agents/src/EvalStatusPill/EvalStatusPill.test.tsx",
+        "Test file imports React from 'react'",
+        "Test file uses renderWithProviders from '../__tests__/test-utils' — never render directly",
+        "Test file does NOT use fireEvent",
+        "ARIA group asserts role=\"status\" and aria-live=\"polite\" with correct values",
+        "props group covers all four status values (it.each or equivalent per-value tests)",
+        "label prop is tested",
+        "No test asserts visual styles (colors, spacing, font sizes) or CSS class names",
+        "npx vitest run on the file passes with exit code 0",
+        "Command output (exit code / tail of stdout) is included in the response",
+        "Component source file was not modified"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "missing-source-guard",
+      "description": "No component exists — tests that the skill stops and redirects instead of writing tests against a nonexistent module",
+      "prompt": "Write unit tests for EvalGhostPanel",
+      "expected_output": "## No source: EvalGhostPanel\n\nNeither package contains `EvalGhostPanel`. Create it first with\n`/add-component-source EvalGhostPanel` (source only) or `/add-component EvalGhostPanel` (full scaffold).",
+      "setup": null,
+      "teardown": "rm -rf packages/core/src/EvalGhostPanel packages/agents/src/EvalGhostPanel && git restore packages/core/src/index.ts packages/agents/src/index.ts 2>/dev/null || true",
+      "assertions": [
+        "No test file was created in either package",
+        "No component source was created in either package",
+        "Skill reported that the component source does not exist",
+        "Skill suggested /add-component-source or /add-component"
+      ]
+    }
+  ]
+}

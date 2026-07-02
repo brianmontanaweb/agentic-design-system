@@ -68,7 +68,12 @@ Figma is the authoritative design reference for all component work. Use the Figm
 
 Invoke with `/skill-name` or `/<skill-name>`:
 
-- `/add-component <ComponentName> [core|agents]` — scaffold a component with source, story, spec doc, and index export
+- `/add-component <ComponentName> [core|agents]` — full component scaffold; plans once, then orchestrates the five sub-skills below
+- `/add-component-source <ComponentName> [core|agents]` — source file, barrel index, and package export only
+- `/add-component-story <ComponentName>` — Storybook story for an existing component
+- `/add-component-tests <ComponentName>` — unit tests for an existing component, run to green
+- `/add-component-spec <ComponentName>` — spec doc at `docs/components/<Name>.md` for an existing component
+- `/verify-component <ComponentName>` — build + scoped lint + scoped tests for one component; fixes errors in its files
 - `/update-component <ComponentName>` — audit and update an existing component; fixes violations, story gaps, and spec doc drift; plans first, waits for approval
 - `/audit-a11y` — audit all components against WCAG 2.2 AA and produce a violation report
 

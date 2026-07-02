@@ -14,6 +14,7 @@ Audit and update an existing component given `$ARGUMENTS` in the format `<Compon
 These defuse the most common mistakes before you encounter them:
 
 - **Read `references/violation-criteria.md` once in Step 2** — it stays in context for Steps 4–6; do not re-read it.
+- **The underlying conventions live in `.claude/skills/shared/references/`** — `conventions.md` (imports, tokens, layout) and `aria-patterns.md` (required ARIA per component type) are the single source of truth shared with the `add-component` skills; `violation-criteria.md` tells you how to _flag_ deviations from them.
 - **Figma is optional** — if the user skips the link, mark "Figma: skipped" in the plan and proceed immediately; never block on it.
 - **`color.on.accent` is not a hex violation** — it is a Chakra semantic token name; do not flag it as a hardcoded color. Do add it to the spec doc frontmatter `tokens.colors` list if it appears in source style props — it is a real token reference that belongs in the frontmatter completeness inventory.
 - **`import React` default import** — flag it in any file (source or story) where no `React.*` type annotations (`React.ReactElement`, `React.MouseEvent`, `React.ReactNode`) appear; do not flag it if any such annotations are present. Actively scan before deciding.
@@ -49,6 +50,7 @@ Do not proceed further.
 
 Read all three component files in full, plus:
 
+- `.claude/skills/shared/references/conventions.md` and `.claude/skills/shared/references/aria-patterns.md` — the conventions being audited (skip any already in context)
 - `docs/best-practices.md` — authoritative standard, including section 8 (Figma MCP Usage)
 - `references/violation-criteria.md` — checklist used in Steps 4–6 below
 - `packages/<package>/src/index.ts` — verify the export is current
