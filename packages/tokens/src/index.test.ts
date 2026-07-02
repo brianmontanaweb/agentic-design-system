@@ -65,7 +65,7 @@ describe('token shape', () => {
   it('every durations token has duration type and ms value', () => {
     for (const token of collectLeaves(durations)) {
       expect(token.$type).toBe('duration')
-      expect(token.$value as string).toMatch(/^\d+ms$/)
+      expect(token.$value as string).toMatch(/^\d+(\.\d+)?ms$/)
     }
   })
 
@@ -101,13 +101,13 @@ describe('token shape', () => {
 describe('color value format', () => {
   it('all primitive color $values are valid 6- or 8-digit hex', () => {
     for (const token of collectLeaves(colors)) {
-      expect(token.$value as string, `colors.${token.$value}`).toMatch(HEX_RE)
+      expect(token.$value as string, `colors.${String(token.$value)}`).toMatch(HEX_RE)
     }
   })
 
   it('all light color $values are valid 6- or 8-digit hex', () => {
     for (const token of collectLeaves(lightColors)) {
-      expect(token.$value as string, `lightColors.${token.$value}`).toMatch(HEX_RE)
+      expect(token.$value as string, `lightColors.${String(token.$value)}`).toMatch(HEX_RE)
     }
   })
 
@@ -133,7 +133,7 @@ describe('semantic alias format', () => {
     const primitiveKeys = new Set(Object.keys(colors))
     for (const token of collectLeaves(semanticColors)) {
       const ref = (token.$value as string).replace(/^\{colors\./, '').replace(/\}$/, '')
-      expect(primitiveKeys, `${token.$value} references unknown primitive`).toContain(ref)
+      expect(primitiveKeys, `${String(token.$value)} references unknown primitive`).toContain(ref)
     }
   })
 })

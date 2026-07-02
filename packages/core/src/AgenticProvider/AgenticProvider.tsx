@@ -1,6 +1,7 @@
-import type { ReactNode } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
 import { ThemeProvider } from 'next-themes'
+import { durations } from '@agentic-ds/tokens'
 import { system } from '../theme'
 
 export interface AgenticProviderProps {
@@ -32,13 +33,16 @@ const keyframes = `
     50%       { opacity: 1; }
   }
   [data-agentic-ds] *, [data-agentic-ds] *::before, [data-agentic-ds] *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+    animation-duration: ${durations.instant.$value} !important;
+    transition-duration: ${durations.instant.$value} !important;
   }
 }
 `
 
-export function AgenticProvider({ children, defaultColorScheme = 'dark' }: AgenticProviderProps) {
+export function AgenticProvider({
+  children,
+  defaultColorScheme = 'dark',
+}: AgenticProviderProps): ReactElement {
   return (
     // data-agentic-ds is the cssVarsRoot selector in theme.ts — all Chakra
     // CSS custom properties are scoped to this element, not :root.

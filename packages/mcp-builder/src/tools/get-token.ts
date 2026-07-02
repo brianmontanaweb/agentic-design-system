@@ -12,6 +12,7 @@ import {
   shadows,
   zIndex,
 } from '@agentic-ds/tokens'
+import type { TextToolResult } from './get-component.js'
 
 interface TokenEntry {
   path: string
@@ -63,7 +64,7 @@ const allTokens: TokenEntry[] = [
   ...flattenTokens(zIndex as unknown as Record<string, unknown>, 'zIndex'),
 ]
 
-export function handleGetToken(args: { name: string }) {
+export function handleGetToken(args: { name: string }): TextToolResult {
   const query = args.name.toLowerCase().trim()
   const results = allTokens.filter((t) => t.path.toLowerCase().includes(query))
 

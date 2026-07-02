@@ -94,22 +94,21 @@ Path-scoped rules only load when editing matching files, keeping context tight. 
 
 Run `npm run lint` from the root. It runs ESLint (flat config in `eslint.config.mjs`) then each package's `tsc --noEmit`.
 
+**Lint is type-aware: run `npm run build` first.** ESLint and `tsc` resolve cross-package imports against sibling `dist/*.d.ts`, so a fresh clone must build before linting (the pre-commit hook assumes this too; pre-push builds automatically).
+
 **Rules enforced:**
 
-- `typescript-eslint` strict + stylistic — no `any`, consistent type imports, unused vars
+- `typescript-eslint` strictTypeChecked + stylisticTypeChecked (projectService) — no `any`, no floating promises, no unsafe `any` flow, consistent type imports, no deprecated APIs
+- `@typescript-eslint/explicit-module-boundary-types` (packages only) — exported functions and components declare return types
+- `@eslint-react` recommended-type-checked + `react-hooks` — React 19-aware; no leaked conditional renders, no nested component definitions, exhaustive-deps as error
 - `eslint-plugin-jsx-a11y` strict — WCAG 2.x coverage; catches missing keyboard handlers, invalid ARIA, non-interactive elements with click handlers
-- `eslint-plugin-react` + `react-hooks` — hooks rules, exhaustive-deps as error
+- `eslint-plugin-import-x` — no cycles, no cross-package relative imports, no undeclared dependencies (respects agents' peerDependencies; core's tokens devDep is whitelisted because tsup inlines it)
 - `eslint-plugin-storybook` — story conventions
-- `no-restricted-syntax` (packages/core, packages/agents only) — bans hardcoded hex color literals; use tokens
-- `no-restricted-imports` — bans importing `system` from `@agentic-ds/core` or `ChakraProvider` from `@chakra-ui/react` directly; use `<AgenticProvider>`
+- `no-restricted-syntax` (packages/core, packages/agents only) — bans hardcoded hex colors, rgb()/hsl()/oklch(), and raw timing values in strings **and template literals**; use tokens (`durations.*` for timing)
+- `no-restricted-imports` — bans importing `system` from `@agentic-ds/core` or `ChakraProvider` from `@chakra-ui/react` directly (use `<AgenticProvider>`), and deep imports into `@agentic-ds/*/dist` or `/src`
+- Unused `eslint-disable` directives and inline config comments are errors
 
-**Current known violations (28 errors — pre-existing, to be fixed):**
-
-- `packages/agents/src/AgentStatus.tsx`, `MessageBubble.tsx`, `ProgressSteps.tsx`, `ToolCallCard.tsx` — hardcoded hex colors; replace with semantic tokens
-- `apps/demo-web/src/App.tsx`, `apps/storybook/src/stories/MessageThread.stories.tsx` — invalid ARIA role values
-- `apps/demo-web/src/main.tsx` — non-null assertion
-
-Do not add `eslint-disable` comments to work around these — fix the underlying issue.
+The lint baseline is **zero errors and zero warnings**. Do not add `eslint-disable` comments to silence new findings — fix the underlying issue. The only sanctioned exemptions live in `eslint.config.mjs` with a comment explaining why (e.g. `theme.ts` defines raw color values; mcp-builder's deprecated `Server` usage pending its implementation).
 
 ## Testing
 

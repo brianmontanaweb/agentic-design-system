@@ -113,10 +113,7 @@ export const StepTransition: Story = {
     const stepData = TRANSITION_LABELS.map((label, i) => ({
       id: String(i),
       label,
-      status: (i < activeIdx ? 'complete' : i === activeIdx ? 'active' : 'pending') as
-        | 'complete'
-        | 'active'
-        | 'pending',
+      status: i < activeIdx ? 'complete' : i === activeIdx ? 'active' : 'pending',
     }))
 
     return (

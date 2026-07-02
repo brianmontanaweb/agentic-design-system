@@ -1,8 +1,10 @@
 import tseslint from 'typescript-eslint'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
-import react from 'eslint-plugin-react'
+import eslintReact from '@eslint-react/eslint-plugin'
 import reactHooks from 'eslint-plugin-react-hooks'
 import storybook from 'eslint-plugin-storybook'
+import importX from 'eslint-plugin-import-x'
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript'
 
 export default tseslint.config(
   // --- Global ignores ---
@@ -10,17 +12,36 @@ export default tseslint.config(
     ignores: ['**/dist/**', '**/node_modules/**', '**/storybook-static/**'],
   },
 
-  // --- All TS/TSX source ---
+  // --- Linter options: disable comments must be justified and effective ---
+  {
+    linterOptions: {
+      reportUnusedDisableDirectives: 'error',
+      reportUnusedInlineConfigs: 'error',
+    },
+  },
+
+  // --- All TS/TSX source (type-aware) ---
+  // Every file matched by these globs is covered by its package tsconfig
+  // (each includes `src`), so projectService needs no allowDefaultProject.
+  // Requires packages to be built first — cross-package imports resolve
+  // against sibling dist/*.d.ts, same as `tsc --noEmit` in each package.
   {
     files: ['packages/*/src/**/*.{ts,tsx}', 'apps/*/src/**/*.{ts,tsx}'],
-    extends: [...tseslint.configs.strict, ...tseslint.configs.stylistic],
+    extends: [
+      ...tseslint.configs.strictTypeChecked,
+      ...tseslint.configs.stylisticTypeChecked,
+      // Type-aware React linting (React 19-native successor to eslint-plugin-react).
+      eslintReact.configs['recommended-type-checked'],
+    ],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
     plugins: {
       'jsx-a11y': jsxA11y,
-      react,
       'react-hooks': reactHooks,
-    },
-    settings: {
-      react: { version: '19.0' },
     },
     rules: {
       // --- Accessibility: strict WCAG 2.x coverage ---
@@ -28,17 +49,20 @@ export default tseslint.config(
       // color-only indicators, missing labels, and more.
       ...jsxA11y.flatConfigs.strict.rules,
 
-      // --- React ---
-      // Flat recommended + jsx-runtime disables the "React must be in scope" rule
-      // for the modern JSX transform (React 17+ / React 19).
-      ...react.configs.flat.recommended.rules,
-      ...react.configs.flat['jsx-runtime'].rules,
+      // --- React (@eslint-react) ---
+      // Type-aware: prevents `count && <Badge/>` rendering a literal 0.
+      '@eslint-react/no-leaked-conditional-rendering': 'error',
+      '@eslint-react/no-nested-component-definitions': 'error',
 
       // --- Hooks ---
       ...reactHooks.configs['recommended-latest'].rules,
       'react-hooks/exhaustive-deps': 'error',
 
       // --- TypeScript best practices ---
+      // Numbers interpolate deterministically; banning them adds String() noise.
+      '@typescript-eslint/restrict-template-expressions': ['error', { allowNumber: true }],
+      // Keep idiomatic React handlers: onClick={() => setState(...)}.
+      '@typescript-eslint/no-confusing-void-expression': ['error', { ignoreArrowShorthand: true }],
       '@typescript-eslint/consistent-type-imports': [
         'error',
         { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
@@ -68,44 +92,177 @@ export default tseslint.config(
                 'Do not use ChakraProvider directly. Use <AgenticProvider> from @agentic-ds/core instead.',
             },
           ],
+          patterns: [
+            {
+              group: ['@agentic-ds/*/dist/*', '@agentic-ds/*/src/*'],
+              message:
+                'Deep imports into @agentic-ds packages are not allowed; import from the package entry point.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  // --- Published package source: explicit public API types ---
+  // Exported functions and components must declare their return types so the
+  // public API surface is deliberate, not inferred. Apps and tests excluded.
+  {
+    files: ['packages/*/src/**/*.{ts,tsx}'],
+    ignores: ['**/*.test.{ts,tsx}', '**/__tests__/**'],
+    rules: {
+      '@typescript-eslint/explicit-module-boundary-types': 'error',
+    },
+  },
+
+  // --- Monorepo import hygiene ---
+  // Enforces the tokens → core → agents dependency direction: no cycles, no
+  // cross-package relative reaches, no imports a package does not declare.
+  {
+    files: ['packages/*/src/**/*.{ts,tsx}', 'apps/*/src/**/*.{ts,tsx}'],
+    plugins: { 'import-x': importX },
+    settings: {
+      'import-x/resolver-next': [
+        createTypeScriptImportResolver({
+          project: ['packages/*/tsconfig.json', 'apps/*/tsconfig.json'],
+          noWarnOnMultipleProjects: true,
+        }),
+      ],
+    },
+    rules: {
+      'import-x/no-cycle': ['error', { maxDepth: 4 }],
+      'import-x/no-relative-packages': 'error',
+      'import-x/no-extraneous-dependencies': [
+        'error',
+        {
+          // packages/agents declares core/tokens/chakra/react as peers.
+          peerDependencies: true,
+          devDependencies: ['**/*.test.{ts,tsx}', '**/__tests__/**', '**/*.stories.{ts,tsx}'],
+        },
+      ],
+    },
+  },
+
+  // --- core: @agentic-ds/tokens is a devDependency by design ---
+  // tsup `noExternal` inlines it into the core bundle (see packages/core/tsup.config.ts),
+  // so it must not appear as a runtime dependency.
+  {
+    files: ['packages/core/src/**/*.{ts,tsx}'],
+    rules: {
+      'import-x/no-extraneous-dependencies': [
+        'error',
+        {
+          peerDependencies: true,
+          devDependencies: ['**/*.test.{ts,tsx}', '**/__tests__/**'],
+          whitelist: ['@agentic-ds/tokens'],
         },
       ],
     },
   },
 
   // --- Package component source: enforce token usage ---
-  // Hardcoded hex color literals are banned in core and agents packages.
-  // All color values must reference a semantic token from @agentic-ds/tokens.
-  // This rule is scoped away from packages/tokens (the token definition file)
-  // and away from apps (stories / demos may use raw values for documentation).
+  // Hardcoded color and timing values are banned in core and agents packages,
+  // in plain strings AND template literals. All values must reference a token
+  // from @agentic-ds/tokens. Scoped away from packages/tokens (the definition
+  // side) and from apps (stories / demos may use raw values for documentation).
+  //
+  // Selector notes: esquery regexes take no flags (hence explicit a-fA-F), the
+  // hex alternation is longest-first so 6/8-digit colors aren't half-matched,
+  // and template interpolations are separate AST nodes — so a token reference
+  // like `${durations.fast.$value}` never trips the TemplateElement selectors.
+  // Known gap: a numeric expression interpolated before a unit (`${i * 0.2}s`)
+  // is not caught.
   {
     files: ['packages/core/src/**/*.{ts,tsx}', 'packages/agents/src/**/*.{ts,tsx}'],
     rules: {
       'no-restricted-syntax': [
         'error',
         {
-          selector:
-            "Literal[value=/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/]",
+          selector: 'Literal[value=/#([0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})\\b/]',
           message:
-            'Hardcoded color values are not allowed in component packages. Use a semantic token from @agentic-ds/tokens instead.',
+            'Hardcoded hex color in a string. Use a semantic token from @agentic-ds/tokens instead.',
+        },
+        {
+          selector:
+            'TemplateElement[value.raw=/#([0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})\\b/]',
+          message:
+            'Hardcoded hex color in a template literal. Use a semantic token from @agentic-ds/tokens instead.',
+        },
+        {
+          selector: 'Literal[value=/\\b(rgba?|hsla?|oklch)\\(/]',
+          message:
+            'Raw color function (rgb/hsl/oklch). Use a semantic token from @agentic-ds/tokens instead.',
+        },
+        {
+          selector: 'TemplateElement[value.raw=/\\b(rgba?|hsla?|oklch)\\(/]',
+          message:
+            'Raw color function (rgb/hsl/oklch). Use a semantic token from @agentic-ds/tokens instead.',
+        },
+        {
+          selector: 'Literal[value=/\\b\\d+(\\.\\d+)?(ms|s)\\b/]',
+          message:
+            'Raw timing value. Use a duration token from @agentic-ds/tokens (durations.*) instead.',
+        },
+        {
+          selector: 'TemplateElement[value.raw=/\\b\\d+(\\.\\d+)?(ms|s)\\b/]',
+          message:
+            'Raw timing value. Use a duration token from @agentic-ds/tokens (durations.*) instead.',
         },
       ],
     },
   },
 
   // --- core package: allow ChakraProvider (AgenticProvider wraps it) ---
+  // Drops the system/ChakraProvider path bans but keeps the deep-import ban.
   {
     files: ['packages/core/src/**/*.{ts,tsx}'],
     rules: {
-      'no-restricted-imports': 'off',
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@agentic-ds/*/dist/*', '@agentic-ds/*/src/*'],
+              message:
+                'Deep imports into @agentic-ds packages are not allowed; import from the package entry point.',
+            },
+          ],
+        },
+      ],
     },
   },
 
   // --- mcp-builder: IIFE bundle entry re-exports everything from core including internals ---
+  // Drops the system/ChakraProvider path bans but keeps the deep-import ban.
   {
     files: ['packages/mcp-builder/src/**/*.{ts,tsx}'],
     rules: {
-      'no-restricted-imports': 'off',
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@agentic-ds/*/dist/*', '@agentic-ds/*/src/*'],
+              message:
+                'Deep imports into @agentic-ds packages are not allowed; import from the package entry point.',
+            },
+          ],
+        },
+      ],
+      // The MCP SDK deprecated the low-level Server class in favor of McpServer.
+      // Migrating is part of implementing this package (CLAUDE.md known gap #7);
+      // until then the deprecation warning is expected.
+      '@typescript-eslint/no-deprecated': 'off',
+    },
+  },
+
+  // --- Test files: relaxations for testing idioms only ---
+  // expect(mock.method) references are the standard vitest assertion pattern;
+  // unbound-method has no unintended-`this` risk there.
+  {
+    files: ['**/*.test.{ts,tsx}', '**/__tests__/**/*.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/unbound-method': 'off',
     },
   },
 
@@ -119,6 +276,21 @@ export default tseslint.config(
     },
   },
 
+  // --- Tooling files: newly linted, not covered by any package tsconfig ---
+  // These get the non-type-checked tier; adding them to a tsconfig (or using
+  // allowDefaultProject) isn't worth the projectService overhead for scripts.
+  {
+    files: [
+      '*.mjs',
+      'scripts/**/*.ts',
+      'packages/tokens/scripts/**/*.ts',
+      'packages/*/vitest.config.ts',
+      'apps/demo-web/vite.config.ts',
+      'apps/storybook/.storybook/**/*.ts',
+    ],
+    extends: [...tseslint.configs.strict, ...tseslint.configs.stylistic],
+  },
+
   // --- Storybook stories ---
   {
     files: ['apps/storybook/src/**/*.stories.{ts,tsx}'],
@@ -129,5 +301,5 @@ export default tseslint.config(
       // not type-only imports used in stories.
       'storybook/no-renderer-packages': 'off',
     },
-  },
+  }
 )

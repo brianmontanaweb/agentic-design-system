@@ -23,8 +23,8 @@ describe('AgentStatusValue type', () => {
   })
 
   it('does not accept arbitrary strings', () => {
-    expectTypeOf<'active'>().not.toMatchTypeOf<AgentStatusValue>()
-    expectTypeOf<'stopped'>().not.toMatchTypeOf<AgentStatusValue>()
+    expectTypeOf<'active'>().not.toExtend<AgentStatusValue>()
+    expectTypeOf<'stopped'>().not.toExtend<AgentStatusValue>()
   })
 })
 
@@ -122,8 +122,8 @@ describe('MessageRole type', () => {
   })
 
   it('does not accept arbitrary strings', () => {
-    expectTypeOf<'system'>().not.toMatchTypeOf<MessageRole>()
-    expectTypeOf<'bot'>().not.toMatchTypeOf<MessageRole>()
+    expectTypeOf<'system'>().not.toExtend<MessageRole>()
+    expectTypeOf<'bot'>().not.toExtend<MessageRole>()
   })
 })
 

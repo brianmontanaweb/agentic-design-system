@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { type ReactElement } from 'react'
 import { Box, HStack, Text } from '@chakra-ui/react'
 import { useReducedMotion } from '@agentic-ds/core'
 import { durations } from '@agentic-ds/tokens'
@@ -7,16 +7,10 @@ export interface ThinkingIndicatorProps {
   label?: string
 }
 
-export function ThinkingIndicator({ label = 'Thinking' }: ThinkingIndicatorProps) {
+export function ThinkingIndicator({ label = 'Thinking' }: ThinkingIndicatorProps): ReactElement {
   const reducedMotion = useReducedMotion()
   return (
-    <HStack
-      gap={2}
-      alignItems="center"
-      role="status"
-      aria-live="polite"
-      aria-label={label ?? 'Agent is thinking'}
-    >
+    <HStack gap={2} alignItems="center" role="status" aria-live="polite" aria-label={label}>
       <HStack gap="3px" alignItems="center" aria-hidden="true">
         {[0, 1, 2].map((i) => (
           <Box

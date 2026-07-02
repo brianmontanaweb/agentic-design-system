@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { type ReactElement } from 'react'
 import { Box, HStack, Text } from '@chakra-ui/react'
 
 export type MessageRole = 'user' | 'assistant' | 'tool'
@@ -20,7 +20,12 @@ const roleConfig: Record<MessageRole, { label: string; labelColor: string; bg: s
   tool: { label: 'Tool', labelColor: 'color.accent.success', bg: 'color.message.tool.bg' },
 }
 
-export function MessageBubble({ sender, content, label, timestamp }: MessageBubbleProps) {
+export function MessageBubble({
+  sender,
+  content,
+  label,
+  timestamp,
+}: MessageBubbleProps): ReactElement {
   const config = roleConfig[sender]
   return (
     <Box

@@ -64,8 +64,9 @@ describe('AgenticProvider', () => {
           <span />
         </AgenticProvider>
       )
-      const root = container.querySelector('[data-agentic-ds]') as HTMLElement
+      const root = container.querySelector('[data-agentic-ds]')
       expect(root).toBeInTheDocument()
+      if (!(root instanceof HTMLElement)) throw new Error('[data-agentic-ds] root not rendered')
 
       // jsdom has no CSS cascade engine, so verify CSS var addressability using inline
       // styles. This confirms the [data-agentic-ds] element is in the DOM and that
@@ -100,7 +101,7 @@ describe('AgenticProvider', () => {
       )
 
       const allStyles = Array.from(document.querySelectorAll('style'))
-        .map((s) => s.textContent ?? '')
+        .map((s) => s.textContent)
         .join('\n')
 
       // cssVarsRoot in theme.ts is '[data-agentic-ds]' — Chakra must emit its

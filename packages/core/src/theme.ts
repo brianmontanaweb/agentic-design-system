@@ -230,8 +230,8 @@ const config = defineConfig({
     '[data-agentic-ds]': {
       '@media (prefers-reduced-motion: reduce)': {
         '& *, & *::before, & *::after': {
-          animationDuration: '0.01ms !important',
-          transitionDuration: '0.01ms !important',
+          animationDuration: `${durations.instant.$value} !important`,
+          transitionDuration: `${durations.instant.$value} !important`,
         },
       },
     },

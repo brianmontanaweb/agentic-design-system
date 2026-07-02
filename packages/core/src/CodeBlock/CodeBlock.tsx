@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 import { Box, Code } from '@chakra-ui/react'
 
 export interface CodeBlockProps {
@@ -6,7 +6,7 @@ export interface CodeBlockProps {
   language?: string
 }
 
-export function CodeBlock({ children, language }: CodeBlockProps) {
+export function CodeBlock({ children, language }: CodeBlockProps): ReactElement {
   return (
     <Box
       bg="color.surface.elevated"

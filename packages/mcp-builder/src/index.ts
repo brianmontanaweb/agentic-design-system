@@ -6,7 +6,7 @@ import { handleGetComponent } from './tools/get-component.js'
 
 const server = new Server({ name: 'agentic-ds', version: '0.1.0' }, { capabilities: { tools: {} } })
 
-server.setRequestHandler(ListToolsRequestSchema, async () => ({
+server.setRequestHandler(ListToolsRequestSchema, () => ({
   tools: [
     {
       name: 'get_token',
@@ -43,7 +43,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
   ],
 }))
 
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
+server.setRequestHandler(CallToolRequestSchema, (request) => {
   const { name, arguments: args } = request.params
 
   if (!args || typeof args !== 'object') {

@@ -1,6 +1,7 @@
-import React, { useId, useState } from 'react'
+import React, { type ReactElement, useId, useState } from 'react'
 import { Box, Button, Code, Text, VStack } from '@chakra-ui/react'
 import { useReducedMotion } from '@agentic-ds/core'
+import { durations } from '@agentic-ds/tokens'
 
 export type ToolCallStatus = 'pending' | 'running' | 'done' | 'error'
 
@@ -25,7 +26,7 @@ export function ToolCallCard({
   output,
   status = 'done',
   defaultOpen = false,
-}: ToolCallCardProps) {
+}: ToolCallCardProps): ReactElement {
   const [open, setOpen] = useState(defaultOpen)
   const contentId = useId()
   const reducedMotion = useReducedMotion()
@@ -50,7 +51,7 @@ export function ToolCallCard({
         alignItems="center"
         borderRadius={0}
         fontWeight="normal"
-        transition="background 100ms"
+        transition={`background ${durations.fast.$value}`}
         onClick={() => setOpen((v) => !v)}
         _hover={{ bg: 'color.surface.elevated' }}
         _active={{ bg: 'color.surface.elevated' }}
@@ -66,7 +67,7 @@ export function ToolCallCard({
           flexShrink={0}
           animation={
             status === 'running' && !reducedMotion
-              ? 'ds-pulse 1.5s ease-in-out infinite'
+              ? `ds-pulse ${durations.pulse.$value} ease-in-out infinite`
               : undefined
           }
         />
