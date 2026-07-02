@@ -125,6 +125,27 @@ Agent-readable component specs — Markdown files structured so an LLM can imple
 
 ---
 
+## Skills Architecture
+
+Decisions made when the monolithic `add-component` skill was split into an orchestrator plus five sub-skills (2026-07-01):
+
+| Decision                                                                                                                                                                            | Rationale                                                                                                                                                      |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/add-component` is a thin orchestrator; `add-component-source/-story/-tests/-spec` and `verify-component` are separate, independently invocable skills                             | Each artifact (tests, story, spec doc) is useful standalone — e.g. backfilling tests for an existing component                                                 |
+| Plan approval lives **only** in the orchestrator; sub-skills have no approval gates                                                                                                 | When invoked standalone, creating the one artifact _is_ the request; when orchestrated, the plan was already approved. Avoids five nested confirmation prompts |
+| Cross-skill conventions live in `.claude/skills/shared/references/` (`conventions.md`, `aria-patterns.md`, `testing.md`)                                                            | Single source of truth shared by the `add-component` family and `update-component`; skills load by path and skip reads already in context                      |
+| Each skill has its own `evals/evals.json`; sub-skill evals reuse one fixture via `shared/scripts/setup-eval-component.sh` / `teardown-eval-component.sh`                            | Targeted per-skill cases without duplicating fixture logic; orchestrator keeps end-to-end evals                                                                |
+| `add-component-spec` refuses when the spec doc already exists and redirects to `/update-component`                                                                                  | Spec _drift_ is `update-component`'s job; keeps the two skills' scopes disjoint                                                                                |
+| Eval paths corrected from flat (`packages/<pkg>/src/<Name>.tsx`) to subdirectory (`packages/<pkg>/src/<Name>/<Name>.tsx`) layout; teardowns use `rm -rf` on the component directory | The repo migrated to subdirectory layout; old `rm -f` teardowns never cleaned up and expected-file lists omitted the test file                                 |
+
+### Follow-up
+
+| Item                                                                                                                                                         | Priority |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
+| `update-component` still assumes the flat layout internally (Step 1 file table, `references/fixtures/`, eval setup/grade scripts) — fix together as one pass | Medium   |
+
+---
+
 ## Toolchain
 
 | Tool                | Version    | Role                                      |

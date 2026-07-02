@@ -1,0 +1,38 @@
+{
+  "skill_name": "verify-component",
+  "evals": [
+    {
+      "id": 1,
+      "name": "clean-component-passes",
+      "description": "Fixture component is clean but has no story or test file — tests scoped verification, honest skip reporting, and no file invention",
+      "prompt": "Verify the EvalStatusPill component",
+      "expected_output": "## Verified: EvalStatusPill\n\n**Build:** passing\n**Lint:** passing (1 file)\n**Tests:** skipped: no test file — run /add-component-tests EvalStatusPill\n**Fixes applied:** none",
+      "setup": ".claude/skills/shared/scripts/setup-eval-component.sh",
+      "teardown": ".claude/skills/shared/scripts/teardown-eval-component.sh",
+      "assertions": [
+        "npm run build was executed before eslint",
+        "eslint was scoped to the EvalStatusPill source file (story path omitted or reported as skipped, since no story exists)",
+        "Tests reported as skipped with a pointer to /add-component-tests — vitest was not run against a nonexistent file",
+        "No story or test file was created",
+        "Component source file was not modified",
+        "Command output (exit codes / tail of stdout) is included in the response"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "fixes-lint-violation",
+      "description": "Fixture source is corrupted with a needless default React import — tests that the skill fixes the underlying issue without eslint-disable and re-runs to green",
+      "prompt": "Verify the EvalStatusPill component",
+      "expected_output": "## Verified: EvalStatusPill\n\n**Build:** passing\n**Lint:** passing (1 file)\n**Tests:** skipped: no test file — run /add-component-tests EvalStatusPill\n**Fixes applied:** removed unused default React import from EvalStatusPill.tsx",
+      "setup": "bash .claude/skills/shared/scripts/setup-eval-component.sh && sed -i '' \"1s/^/import React from 'react'\\n/\" packages/agents/src/EvalStatusPill/EvalStatusPill.tsx",
+      "teardown": ".claude/skills/shared/scripts/teardown-eval-component.sh",
+      "assertions": [
+        "The default React import was removed from packages/agents/src/EvalStatusPill/EvalStatusPill.tsx (fixed, not suppressed)",
+        "No eslint-disable comment was added anywhere",
+        "eslint was re-run after the fix and reported passing",
+        "The fix is listed in the report",
+        "No other component files were modified"
+      ]
+    }
+  ]
+}

@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react'
+import React, { type ReactElement, useEffect, useRef } from 'react'
 import { Box, VStack } from '@chakra-ui/react'
+import { colors } from '@agentic-ds/tokens'
 
 export interface MessageThreadProps {
   children: React.ReactNode
@@ -13,7 +14,7 @@ export function MessageThread({
   maxHeight = '600px',
   autoScroll = true,
   'aria-label': ariaLabel = 'Message thread',
-}: MessageThreadProps) {
+}: MessageThreadProps): ReactElement {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -35,7 +36,9 @@ export function MessageThread({
       css={{
         '&::-webkit-scrollbar': { width: '4px' },
         '&::-webkit-scrollbar-track': { background: 'transparent' },
-        '&::-webkit-scrollbar-thumb': { background: 'var(--ds-color-border-subtle, #2a2a38)' },
+        '&::-webkit-scrollbar-thumb': {
+          background: `var(--ds-color-border-subtle, ${colors.borderSubtle.$value})`,
+        },
       }}
     >
       <VStack gap={3} align="stretch">

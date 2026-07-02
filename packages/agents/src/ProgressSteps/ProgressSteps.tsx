@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { type ReactElement } from 'react'
 import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 
 export type StepStatus = 'pending' | 'active' | 'complete' | 'waiting' | 'cancelled'
@@ -35,7 +35,7 @@ function stepBg(status: StepStatus): string {
   }
 }
 
-export function ProgressSteps({ steps }: ProgressStepsProps) {
+export function ProgressSteps({ steps }: ProgressStepsProps): ReactElement {
   return (
     <VStack gap={2} align="stretch" role="list">
       {steps.map((step, index) => {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { type ReactElement } from 'react'
 import { Box, Text } from '@chakra-ui/react'
 import { useReducedMotion } from '@agentic-ds/core'
 import { durations } from '@agentic-ds/tokens'
@@ -17,7 +17,7 @@ export function StreamingText({
   fontSize = 'sm',
   color = 'color.text.primary',
   'aria-label': ariaLabel = 'Streaming output',
-}: StreamingTextProps) {
+}: StreamingTextProps): ReactElement {
   const reducedMotion = useReducedMotion()
   return (
     <Box role="log" aria-live="polite" aria-atomic="false" aria-label={ariaLabel}>

@@ -1,5 +1,6 @@
 import type { ReactElement, ReactNode, MouseEventHandler } from 'react'
 import { Box, chakra, useRecipe } from '@chakra-ui/react'
+import { durations } from '@agentic-ds/tokens'
 import { buttonRecipe } from '../theme'
 
 export type ButtonVariant = 'solid' | 'outline' | 'ghost' | 'danger'
@@ -40,7 +41,7 @@ function LoadingDots() {
           borderRadius="full"
           bg="currentColor"
           opacity={0.8}
-          animation={`ds-pulse 1.2s ease-in-out ${i * 0.2}s infinite`}
+          animation={`ds-pulse ${durations.stream.thinking.$value} ease-in-out ${i * 0.2}s infinite`}
         />
       ))}
     </Box>
@@ -60,7 +61,7 @@ export function Button({
   onClick,
   children,
   'aria-label': ariaLabel,
-}: ButtonProps) {
+}: ButtonProps): ReactElement {
   const recipe = useRecipe({ recipe: buttonRecipe })
   const styles = recipe({ variant, size })
 

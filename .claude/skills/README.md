@@ -4,24 +4,41 @@ Custom Claude Code skills for this monorepo. Each skill is a directory containin
 
 ## Skills in this repo
 
-| Skill              | What it does                                                     | Rubric? |
-| ------------------ | ---------------------------------------------------------------- | ------- |
-| `add-component`    | Scaffolds a new component: source, story, spec doc, index export | No      |
-| `update-component` | Audits and updates an existing component; plans before writing   | Yes     |
-| `audit-a11y`       | Full WCAG 2.2 AA audit across all components; report only        | Yes     |
+| Skill                  | What it does                                                                | Rubric? |
+| ---------------------- | --------------------------------------------------------------------------- | ------- |
+| `add-component`        | Orchestrates a full scaffold by invoking the five sub-skills below in order | No      |
+| `add-component-source` | Creates the source file, barrel index, and package export                   | No      |
+| `add-component-story`  | Creates/extends the Storybook story for an existing component               | No      |
+| `add-component-tests`  | Creates the unit test file for an existing component and runs it to green   | No      |
+| `add-component-spec`   | Creates the spec doc at `docs/components/<Name>.md`                         | No      |
+| `verify-component`     | Builds, lints, and tests one component's files; fixes errors in them        | No      |
+| `update-component`     | Audits and updates an existing component; plans before writing              | Yes     |
+| `audit-a11y`           | Full WCAG 2.2 AA audit across all components; report only                   | Yes     |
+
+The `add-component-*` sub-skills and `verify-component` are independently invocable (e.g. backfill tests for an existing component with `/add-component-tests Button`) and are also sequenced by the `/add-component` orchestrator, which owns the single plan-approval gate for full scaffolds. Sub-skills have no approval gates of their own.
 
 ## Directory layout
 
 ```
 .claude/skills/
+  shared/
+    references/               # Single source of truth for cross-skill conventions
+      conventions.md          #   file layout, imports, exports, tokens, CSS scoping
+      aria-patterns.md        #   required ARIA per component type, MCP states
+      testing.md              #   unit test conventions and required test groups
+    scripts/                  # Eval fixtures shared by sub-skill evals
+      setup-eval-component.sh #   creates a minimal EvalStatusPill in packages/agents
+      teardown-eval-component.sh
   <skill-name>/
     SKILL.md                  # Frontmatter + step-by-step instructions
     evals/
       evals.json              # Machine-readable test cases with assertions
       eval-rubric.md          # Human-readable scoring guide (when needed — see below)
       scripts/                # Setup, teardown, and grade shell scripts (when needed)
-    references/               # Reference files loaded on demand (progressive disclosure)
+    references/               # Skill-specific reference files loaded on demand
 ```
+
+Conventions used by more than one skill belong in `shared/references/`, not in any single `SKILL.md` — skills load them by path and skip the read when the file is already in context.
 
 ## When to add an eval-rubric.md
 

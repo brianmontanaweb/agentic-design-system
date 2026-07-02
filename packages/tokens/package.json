@@ -1,6 +1,6 @@
 {
   "name": "@agentic-ds/tokens",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Design tokens for the Agentic Design System — framework-agnostic JS constants and CSS custom properties",
   "license": "MIT",
   "repository": {

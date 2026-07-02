@@ -1,0 +1,40 @@
+{
+  "skill_name": "add-component-story",
+  "evals": [
+    {
+      "id": 1,
+      "name": "story-for-existing-component",
+      "description": "Fixture component exists with a 4-value status enum — tests full variant coverage, correct title, and no React import",
+      "prompt": "Add a Storybook story for EvalStatusPill",
+      "expected_output": "## Story created: EvalStatusPill\n\n**File:** apps/storybook/src/stories/EvalStatusPill.stories.tsx\n**Stories:** Default, Idle, Running, Done, Error (or equivalent per-status stories), CustomLabel\n**Coverage:** all four status values plus the label prop\n**Lint:** passing",
+      "setup": ".claude/skills/shared/scripts/setup-eval-component.sh",
+      "teardown": ".claude/skills/shared/scripts/teardown-eval-component.sh",
+      "assertions": [
+        "Story file created at apps/storybook/src/stories/EvalStatusPill.stories.tsx",
+        "Story imports EvalStatusPill from '@agentic-ds/agents' (not a relative path)",
+        "Story title is 'Agents/EvalStatusPill'",
+        "Story does NOT have a default React import",
+        "Uses `import type { Meta, StoryObj } from '@storybook/react'`",
+        "There is a story exercising each status value: idle, running, done, error",
+        "There is a story exercising the label prop",
+        "Component source file was not modified",
+        "No spec doc or test file was created"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "missing-source-guard",
+      "description": "No component exists — tests that the skill stops and redirects instead of inventing a component or a story for a nonexistent import",
+      "prompt": "Add a Storybook story for EvalGhostPanel",
+      "expected_output": "## No source: EvalGhostPanel\n\nNeither package contains `EvalGhostPanel`. Create it first with\n`/add-component-source EvalGhostPanel` (source only) or `/add-component EvalGhostPanel` (full scaffold).",
+      "setup": null,
+      "teardown": "rm -f apps/storybook/src/stories/EvalGhostPanel.stories.tsx && rm -rf packages/core/src/EvalGhostPanel packages/agents/src/EvalGhostPanel && git restore packages/core/src/index.ts packages/agents/src/index.ts 2>/dev/null || true",
+      "assertions": [
+        "No story file was created at apps/storybook/src/stories/EvalGhostPanel.stories.tsx",
+        "No component source was created in either package",
+        "Skill reported that the component source does not exist",
+        "Skill suggested /add-component-source or /add-component"
+      ]
+    }
+  ]
+}

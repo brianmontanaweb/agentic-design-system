@@ -259,6 +259,16 @@ export const durations = Object.freeze({
   },
   normal: { $value: '200ms', $type: 'duration', $description: 'Standard UI transitions' },
   slow: { $value: '400ms', $type: 'duration', $description: 'Deliberate or complex transitions' },
+  pulse: {
+    $value: '1500ms',
+    $type: 'duration',
+    $description: 'Status indicator pulse cycle (AgentStatus dot, ToolCallCard running state)',
+  },
+  instant: {
+    $value: '0.01ms',
+    $type: 'duration',
+    $description: 'Effectively-zero duration for prefers-reduced-motion overrides',
+  },
   stream: {
     blink: {
       $value: '1000ms',
@@ -389,6 +399,8 @@ export function getCSSVariables(): string {
     `  --ds-duration-fast: ${durations.fast.$value};  `,
     `  --ds-duration-normal: ${durations.normal.$value};  `,
     `  --ds-duration-slow: ${durations.slow.$value};  `,
+    `  --ds-duration-pulse: ${durations.pulse.$value};  `,
+    `  --ds-duration-instant: ${durations.instant.$value};  `,
     `  --ds-duration-stream-blink: ${durations.stream.blink.$value};  `,
     `  --ds-duration-stream-thinking: ${durations.stream.thinking.$value};  `,
     // Radius

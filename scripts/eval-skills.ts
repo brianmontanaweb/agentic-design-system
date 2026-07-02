@@ -69,7 +69,7 @@ const failLine = (msg: string, reason: string) =>
 
 // ── Skill discovery ────────────────────────────────────────────────────────
 
-function findEvalsFiles(filter?: string): Array<{ skill: string; evalsPath: string }> {
+function findEvalsFiles(filter?: string): { skill: string; evalsPath: string }[] {
   if (!existsSync(SKILLS_DIR)) return []
   return readdirSync(SKILLS_DIR)
     .filter((name) => !filter || name === filter)
@@ -217,7 +217,7 @@ async function runEval(evalCase: EvalCase, skillName: string): Promise<EvalResul
     )
 
     evalCase.assertions.forEach((assertion, i) => {
-      const grade = grades[i]!
+      const grade = grades[i]
       if (grade.pass) {
         result.passed.push(assertion)
       } else {

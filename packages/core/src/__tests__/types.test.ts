@@ -22,8 +22,8 @@ describe('ButtonVariant type', () => {
   })
 
   it('does not include arbitrary strings', () => {
-    expectTypeOf<'primary'>().not.toMatchTypeOf<ButtonVariant>()
-    expectTypeOf<'secondary'>().not.toMatchTypeOf<ButtonVariant>()
+    expectTypeOf<'primary'>().not.toExtend<ButtonVariant>()
+    expectTypeOf<'secondary'>().not.toExtend<ButtonVariant>()
   })
 })
 
@@ -33,8 +33,8 @@ describe('ButtonSize type', () => {
   })
 
   it('does not include arbitrary strings', () => {
-    expectTypeOf<'xs'>().not.toMatchTypeOf<ButtonSize>()
-    expectTypeOf<'xl'>().not.toMatchTypeOf<ButtonSize>()
+    expectTypeOf<'xs'>().not.toExtend<ButtonSize>()
+    expectTypeOf<'xl'>().not.toExtend<ButtonSize>()
   })
 })
 

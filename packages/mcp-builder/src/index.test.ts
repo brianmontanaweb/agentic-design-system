@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest'
 
-type Handler = (req: { params: { name: string; arguments: unknown } }) => Promise<unknown>
+type Handler = (req: { params: { name: string; arguments: unknown } }) => unknown
 
 // Use vi.hoisted so these values are available inside vi.mock factory closures
 const capturedHandlers = vi.hoisted(() => new Map<string, Handler>())
@@ -93,21 +93,21 @@ describe('CallTool handler', () => {
     expect(result.content[0].type).toBe('text')
   })
 
-  it('throws for an unknown tool name', async () => {
-    await expect(
+  it('throws for an unknown tool name', () => {
+    expect(() =>
       getHandler(schemas.callTool)({ params: { name: 'not_a_tool', arguments: {} } })
-    ).rejects.toThrow('Unknown tool: not_a_tool')
+    ).toThrow('Unknown tool: not_a_tool')
   })
 
-  it('throws "Missing arguments" when arguments is null', async () => {
-    await expect(
+  it('throws "Missing arguments" when arguments is null', () => {
+    expect(() =>
       getHandler(schemas.callTool)({ params: { name: 'get_token', arguments: null } })
-    ).rejects.toThrow('Missing arguments')
+    ).toThrow('Missing arguments')
   })
 
-  it('throws "Missing arguments" when arguments is a string', async () => {
-    await expect(
+  it('throws "Missing arguments" when arguments is a string', () => {
+    expect(() =>
       getHandler(schemas.callTool)({ params: { name: 'get_token', arguments: 'oops' } })
-    ).rejects.toThrow('Missing arguments')
+    ).toThrow('Missing arguments')
   })
 })

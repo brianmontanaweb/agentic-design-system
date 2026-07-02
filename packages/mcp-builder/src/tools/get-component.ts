@@ -1,6 +1,14 @@
+import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js'
 import { components } from '../metadata/components.js'
 
-export function handleGetComponent(args: { name: string }) {
+// Narrows content to text blocks so callers can read `.text` without casts,
+// while inheriting CallToolResult's index signature (required for
+// assignability to the SDK's handler result union).
+export interface TextToolResult extends CallToolResult {
+  content: TextContent[]
+}
+
+export function handleGetComponent(args: { name: string }): TextToolResult {
   if (args.name === '*') {
     const list = components.map((c) => `${c.name} (${c.package}) — ${c.description}`).join('\n')
     return {

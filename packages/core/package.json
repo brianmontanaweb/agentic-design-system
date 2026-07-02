@@ -1,6 +1,6 @@
 {
   "name": "@agentic-ds/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Core components and theme for the Agentic Design System — AgenticProvider, Button, CodeBlock",
   "license": "MIT",
   "repository": {

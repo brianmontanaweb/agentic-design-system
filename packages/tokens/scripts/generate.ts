@@ -13,44 +13,10 @@ interface TokenNode {
   $value?: string | number
   $type?: string
   $description?: string
-  [key: string]: any
+  [key: string]: unknown
 }
 
-interface ResolveContext {
-  allTokens: Map<string, TokenNode>
-}
-
-function flattenForAliasResolution(
-  obj: TokenNode,
-  prefix: string,
-  result: Map<string, TokenNode>
-): void {
-  for (const [key, val] of Object.entries(obj)) {
-    if (key.startsWith('$')) continue
-    const path = prefix ? `${prefix}.${key}` : key
-    if (typeof val === 'object' && val !== null) {
-      if (val.$value !== undefined) {
-        result.set(path, val)
-      } else {
-        flattenForAliasResolution(val, path, result)
-      }
-    }
-  }
-}
-
-function resolveAlias(value: string, ctx: ResolveContext): string {
-  if (!value.startsWith('{') || !value.endsWith('}')) {
-    return value
-  }
-  const ref = value.slice(1, -1)
-  const token = ctx.allTokens.get(ref)
-  if (token && token.$value !== undefined) {
-    return String(token.$value)
-  }
-  return value
-}
-
-function tokenToCode(token: TokenNode, ctx: ResolveContext): string {
+function tokenToCode(token: TokenNode): string {
   // Keep DTCG alias notation as-is; don't resolve {group.key} references
   // Resolution happens in theme.ts for semantic token system
   const value = token.$value !== undefined ? String(token.$value) : ''
@@ -59,19 +25,20 @@ function tokenToCode(token: TokenNode, ctx: ResolveContext): string {
   return `{ $value: ${jsonValue}, $type: '${token.$type}'${desc} }`
 }
 
-function groupToCode(group: TokenNode, ctx: ResolveContext, indent: number): string {
+function groupToCode(group: TokenNode, indent: number): string {
   const lines: string[] = ['{']
   const ind = ' '.repeat(indent)
   const entries = Object.entries(group).filter(([k]) => !k.startsWith('$'))
 
   for (const [key, val] of entries) {
     if (typeof val === 'object' && val !== null) {
+      const node = val as TokenNode
       // Quote keys that aren't valid identifiers (e.g., "2xl")
       const quotedKey = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key) ? key : `'${key}'`
-      if (val.$value !== undefined) {
-        lines.push(`  ${ind}${quotedKey}: ${tokenToCode(val, ctx)},`)
+      if (node.$value !== undefined) {
+        lines.push(`  ${ind}${quotedKey}: ${tokenToCode(node)},`)
       } else {
-        lines.push(`  ${ind}${quotedKey}: ${groupToCode(val, ctx, indent + 2)},`)
+        lines.push(`  ${ind}${quotedKey}: ${groupToCode(node, indent + 2)},`)
       }
     }
   }
@@ -82,19 +49,12 @@ function groupToCode(group: TokenNode, ctx: ResolveContext, indent: number): str
 // Read tokens.dtcg.json
 const tokenData = JSON.parse(fs.readFileSync(tokensPath, 'utf-8')) as Record<string, TokenNode>
 
-// Flatten for alias resolution
-const allTokens = new Map<string, TokenNode>()
-for (const [key, val] of Object.entries(tokenData)) {
-  flattenForAliasResolution(val, key, allTokens)
-}
-const ctx: ResolveContext = { allTokens }
-
 // Generate index exports
 const exports: string[] = []
 const groups = Object.entries(tokenData).filter(([key]) => key !== '$schema')
 
 for (const [name, group] of groups) {
-  const code = groupToCode(group, ctx, 2)
+  const code = groupToCode(group, 2)
   exports.push(`export const ${name} = Object.freeze(${code})`)
 }
 
@@ -113,37 +73,17 @@ const fullCode = [
   ``,
   ...exports,
   ``,
-  getCSSVariablesTemplate(tokenData),
+  getCSSVariablesTemplate(),
   tokenExport,
 ].join('\n')
 
 fs.writeFileSync(outputPath, fullCode)
 console.log(`✓ Generated ${outputPath}`)
 
-function getCSSVariablesTemplate(tokens: TokenNode): string {
-  // Generate getCSSVariables by iterating tokens
-  // Note: CSS variable names use a consistent mapping
-  // (e.g., colors.bgBase → --ds-color-surface-base)
-  // Update this function when new tokens are added in Phase 2
-
-  const cssLines: string[] = []
-
-  // Helper to add a variable
-  function addVar(name: string, value: string) {
-    cssLines.push(`    \`  --ds-${name}: ${value};  \`,`)
-  }
-
-  // Helper to resolve token references
-  function getTokenValue(path: string): string {
-    const parts = path.split('.')
-    let current: any = tokens
-    for (const part of parts) {
-      current = current[part]
-      if (!current) return ''
-    }
-    return current.$value || ''
-  }
-
+function getCSSVariablesTemplate(): string {
+  // Hand-maintained template: CSS variable names use an intent-based mapping
+  // (e.g., colors.bgBase → --ds-color-surface-base), so it can't be derived
+  // mechanically from the token tree. Add a line here when adding a token.
   return `export function getCSSVariables(): string {
   return [
     '[data-agentic-ds] {',
@@ -213,6 +153,8 @@ function getCSSVariablesTemplate(tokens: TokenNode): string {
     \`  --ds-duration-fast: \${durations.fast.$value};  \`,
     \`  --ds-duration-normal: \${durations.normal.$value};  \`,
     \`  --ds-duration-slow: \${durations.slow.$value};  \`,
+    \`  --ds-duration-pulse: \${durations.pulse.$value};  \`,
+    \`  --ds-duration-instant: \${durations.instant.$value};  \`,
     \`  --ds-duration-stream-blink: \${durations.stream.blink.$value};  \`,
     \`  --ds-duration-stream-thinking: \${durations.stream.thinking.$value};  \`,
     // Radius
