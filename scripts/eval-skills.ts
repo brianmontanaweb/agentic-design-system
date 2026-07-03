@@ -4,8 +4,8 @@
  *
  * Usage:
  *   npx tsx scripts/eval-skills.ts               # run all skills
- *   npx tsx scripts/eval-skills.ts audit-a11y    # run one skill
- *   npx tsx scripts/eval-skills.ts audit-a11y --id 1  # run one eval case
+ *   npx tsx scripts/eval-skills.ts update-component    # run one skill
+ *   npx tsx scripts/eval-skills.ts update-component --id 1  # run one eval case
  */
 
 import { query } from '@anthropic-ai/claude-agent-sdk'

@@ -1,30 +1,30 @@
 #!/usr/bin/env bash
-# Grade one eval run's assertions and write grading.json.
+# Grade one workflow eval run's assertions and write grading.json.
+#
+# Workflow counterpart to .claude/skills/grade-eval.sh (same grading prompt
+# and schema; workflow workspace paths, no with/without mode).
 #
 # Usage:
-#   bash .claude/skills/grade-eval.sh <skill> <eval-name> <mode> [iteration]
-#
-# <mode> is "with_skill" or "without_skill".
+#   bash .claude/workflows/evals/grade-workflow-eval.sh <workflow> <eval-name> [iteration]
 #
 # Reads:
-#   <skill>-workspace/iteration-<N>/eval-<name>/<mode>/outputs/response.txt
+#   <workflow>-workspace/iteration-<N>/eval-<name>/outputs/response.txt
 # Writes:
-#   <skill>-workspace/iteration-<N>/eval-<name>/<mode>/grading.json
+#   <workflow>-workspace/iteration-<N>/eval-<name>/grading.json
 
 set -euo pipefail
 
-SKILL="${1:?Usage: grade-eval.sh <skill> <eval-name> <mode> [iteration]}"
+WORKFLOW="${1:?Usage: grade-workflow-eval.sh <workflow> <eval-name> [iteration]}"
 EVAL_NAME="${2:?}"
-MODE="${3:?}"   # with_skill | without_skill
-ITER="${4:-1}"
+ITER="${3:-1}"
 
-SKILLS_DIR="$(cd "$(dirname "$0")" && pwd)"
-EVALS="$SKILLS_DIR/$SKILL/evals/evals.json"
-EVAL_DIR="$SKILLS_DIR/${SKILL}-workspace/iteration-$ITER/eval-$EVAL_NAME/$MODE"
+EVALS_DIR="$(cd "$(dirname "$0")" && pwd)"
+EVALS="$EVALS_DIR/$WORKFLOW/evals.json"
+EVAL_DIR="$EVALS_DIR/${WORKFLOW}-workspace/iteration-$ITER/eval-$EVAL_NAME"
 RESPONSE_FILE="$EVAL_DIR/outputs/response.txt"
 GRADING_FILE="$EVAL_DIR/grading.json"
 
-[[ -f "$RESPONSE_FILE" ]] || { echo "Error: $RESPONSE_FILE not found. Run run-evals.sh first." >&2; exit 1; }
+[[ -f "$RESPONSE_FILE" ]] || { echo "Error: $RESPONSE_FILE not found. Run run-workflow-evals.sh first." >&2; exit 1; }
 
 RESPONSE=$(cat "$RESPONSE_FILE")
 ASSERTIONS=$(jq -c ".evals[] | select(.name == \"$EVAL_NAME\") | .assertions" "$EVALS")
@@ -79,7 +79,7 @@ $ASSERTIONS
 OUTPUT:
 $RESPONSE"
 
-echo "Grading eval-$EVAL_NAME/$MODE..."
+echo "Grading eval-$EVAL_NAME..."
 
 raw=$(claude -p \
   --output-format json \

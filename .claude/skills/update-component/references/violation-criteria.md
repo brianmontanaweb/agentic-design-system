@@ -6,6 +6,12 @@
 - Hardcoded timing values — any literal `ms` or `s` value in a `transition`, `animation`, or `animationDuration` prop (e.g., `transition: 'all 100ms'`, `animation: \`ds-pulse 1.2s ease\``) — replace with `duration.\*`tokens. Scan every`transition`and`animation`prop in the source to find these; they will not contain`#`.
 - Raw CSS color keywords (`red`, `blue`, etc.) not routed through a token
 
+### Theming (light/dark)
+
+- Raw single-scheme palette usage — importing `colors` or `lightColors` from `@agentic-ds/tokens` for color styling in a component (they are only consumed by `theme.ts` when defining semantic tokens)
+- Color-mode branching in component code — any `useColorMode`/`useTheme` read or `scheme === 'dark' ? … : …` conditional used for styling; semantic tokens handle scheme switching
+- A semantic token in `packages/core/src/theme.ts` whose value is missing either the `_dark` or `_light` entry
+
 ### ARIA / Accessibility
 
 - `StreamingText` — must have `role="log"` + `aria-live="polite"` + `aria-atomic="false"`

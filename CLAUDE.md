@@ -75,7 +75,10 @@ Invoke with `/skill-name` or `/<skill-name>`:
 - `/add-component-spec <ComponentName>` — spec doc at `docs/components/<Name>.md` for an existing component
 - `/verify-component <ComponentName>` — build + scoped lint + scoped tests for one component; fixes errors in its files
 - `/update-component <ComponentName>` — audit and update an existing component; fixes violations, story gaps, and spec doc drift; plans first, waits for approval
-- `/audit-a11y` — audit all components against WCAG 2.2 AA and produce a violation report
+
+## Workflows
+
+- `/audit-a11y` — dynamic workflow (`.claude/workflows/audit-a11y.js`): audits every component against WCAG 2.2 AA with one agent per component, adversarially verifies findings, and returns a single violation report. Report-only. Scope it by passing paths: `Run /audit-a11y on ["packages/agents/src/AgentStatus/AgentStatus.tsx"]`. **When asked to audit accessibility, run a WCAG check, or find a11y violations, launch this workflow — do not audit ad hoc.** Audit criteria: `.claude/skills/shared/references/a11y-audit-criteria.md`. Evals: `.claude/workflows/evals/audit-a11y/`.
 
 ## Scaling This CLAUDE.md
 

@@ -14,6 +14,7 @@ Create the Storybook story given `$ARGUMENTS` in the format `<ComponentName>`.
 - **Never `import React from 'react'` in story files** — jsx-runtime handles JSX and Storybook's own types cover everything else.
 - **Import the component from the package** (`@agentic-ds/core` or `@agentic-ds/agents`), not by relative path — this is the existing story convention.
 - **Every variant needs a story before the component is considered done** — enumerate the props interface; do not stop at `Default`.
+- **Light/dark comes from the global toolbar, not from stories** — `.storybook/preview.tsx` wraps every story in `AgenticProvider` with the selected `colorScheme`. Never wrap a story in `AgenticProvider` yourself, never add per-scheme story duplicates, and never hardcode scheme-specific background hexes in a story.
 - **No approval gate** — creating/extending one story file is the whole task; proceed without asking.
 
 ---

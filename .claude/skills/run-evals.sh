@@ -49,14 +49,15 @@ run_claude() {
 
   local start end duration raw result tokens
 
-  start=$(date +%s%3N)
+  # date +%s only — %N is GNU-specific and emits a literal N on macOS/BSD
+  start=$(date +%s)
   raw=$(claude -p \
     --output-format json \
     --dangerously-skip-permissions \
     "${extra_args[@]}" \
     "$prompt" 2>/dev/null)
-  end=$(date +%s%3N)
-  duration=$((end - start))
+  end=$(date +%s)
+  duration=$(((end - start) * 1000))
 
   # --output-format json wraps: {"type":"result","subtype":"success","result":"...","usage":{...}}
   result=$(echo "$raw" | jq -r 'if type == "object" then .result // . else . end' 2>/dev/null || echo "$raw")

@@ -68,6 +68,8 @@ mcp-states: [list MCP states surfaced, if applicable]
 
 Body MUST include: description, variants table (if applicable), props table, accessibility requirements with WCAG SC references, do/don't examples. Use MUST/SHOULD/MAY (RFC 2119).
 
+Theming: both light and dark schemes are supported via the semantic tokens listed in the frontmatter — the body only needs a theming note when the component introduced **new** semantic tokens (name them and state that each carries `_dark` and `_light` values) or has scheme-specific contrast considerations (e.g. text on accent backgrounds — see `color.text.on.accent` in `theme.ts`).
+
 ## Step 4 — Report
 
 ```

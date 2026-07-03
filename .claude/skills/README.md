@@ -13,7 +13,8 @@ Custom Claude Code skills for this monorepo. Each skill is a directory containin
 | `add-component-spec`   | Creates the spec doc at `docs/components/<Name>.md`                         | No      |
 | `verify-component`     | Builds, lints, and tests one component's files; fixes errors in them        | No      |
 | `update-component`     | Audits and updates an existing component; plans before writing              | Yes     |
-| `audit-a11y`           | Full WCAG 2.2 AA audit across all components; report only                   | Yes     |
+
+The full accessibility audit is **not** a skill — it is the `/audit-a11y` dynamic workflow at `.claude/workflows/audit-a11y.js` (one agent per component, adversarial verification, merged report). Its criteria live in `shared/references/a11y-audit-criteria.md` and its eval cases and rubric in `.claude/workflows/evals/audit-a11y/`.
 
 The `add-component-*` sub-skills and `verify-component` are independently invocable (e.g. backfill tests for an existing component with `/add-component-tests Button`) and are also sequenced by the `/add-component` orchestrator, which owns the single plan-approval gate for full scaffolds. Sub-skills have no approval gates of their own.
 
@@ -47,7 +48,7 @@ Add a rubric when the skill's output quality has **multiple independent dimensio
 | Skill type                          | Output                                                  | Use rubric?                                     |
 | ----------------------------------- | ------------------------------------------------------- | ----------------------------------------------- |
 | Scaffolding (`add-component`)       | Files either exist with the right content or they don't | **No** — `evals.json` assertions are sufficient |
-| Report/audit (`audit-a11y`)         | Report quality varies: recall, precision, format, scope | **Yes**                                         |
+| Report/audit (e.g. an a11y audit)   | Report quality varies: recall, precision, format, scope | **Yes**                                         |
 | Plan + execute (`update-component`) | Plan quality varies; execution correctness is checkable | **Yes**                                         |
 
 A rubric should define named dimensions, a point allocation, a grading scale, expected violation tables per test case, and an Iteration Log for recording misses and false positives.
@@ -59,7 +60,7 @@ A rubric should define named dimensions, a point allocation, a grading scale, ex
 - Use the `Eval` prefix: `EvalStatusPill`, `EvalIconButton`, `EvalToolProgress`
 - The name should still exercise the inference logic being tested (e.g., "Status" → agents package)
 
-Skills that operate _on_ existing components (`update-component`, `audit-a11y`) use real names intentionally — their setup copies from fixtures and teardown uses `git restore`.
+Skills and workflows that operate _on_ existing components (`update-component`, the `/audit-a11y` workflow) use real names intentionally — their setup copies from fixtures and teardown uses `git restore`.
 
 ## Teardown patterns
 

@@ -16,6 +16,7 @@ If the package is not specified, infer it using the package inference rules in t
 - **Never `import React from 'react'`** — use named type imports (`import type { ReactElement, ReactNode } from 'react'`); write `leftIcon?: ReactElement`, never `React.ReactElement`.
 - **ARIA is mandatory from the first line** — apply the correct live region while writing the component, not in a later audit pass.
 - **`color.on.accent` and similar token names are not hex violations** — only flag `#`-prefixed literal values.
+- **Light/dark support is free if you stay on semantic tokens** — never read color mode in the component and never use raw `colors.*`/`lightColors.*` exports for styling. If a needed color has no semantic token, follow the three-step token addition in the Theming section of the shared conventions reference (raw dark + light values → semantic token with `_dark`/`_light` → use the token name).
 - **No approval gate** — this skill creates exactly the files listed below; proceed without asking. The `/add-component` orchestrator owns plan approval for full scaffolds.
 
 ---
@@ -55,6 +56,7 @@ Requirements (all MUST):
 - Functional component, named export (no default export)
 - Export the props interface: `export interface <ComponentName>Props { ... }`
 - All color values reference Chakra semantic tokens — no hardcoded hex
+- The component must render correctly in both light and dark schemes: semantic tokens only, no color-mode reads, no raw palette exports; any new token gets both `_dark` and `_light` values per the shared conventions Theming section
 - All timing values reference `duration.*` tokens from `@agentic-ds/tokens`
 - If the component displays status or live-updating content, include the correct ARIA live region per `shared/references/aria-patterns.md`
 - If the component has interactive expand/collapse, the trigger MUST be a `<button>` with `aria-expanded` + `aria-controls`
@@ -86,8 +88,10 @@ export type { <ComponentName>Props } from './<ComponentName>'
 - packages/<package>/src/<ComponentName>/<ComponentName>.tsx
 - packages/<package>/src/<ComponentName>/index.ts
 - packages/<package>/src/index.ts (updated)
+- packages/tokens/src/index.ts + packages/core/src/theme.ts (updated — only if new tokens were added)
 **ARIA pattern:** <pattern or "none">
 **MCP states:** <list or "n/a">
+**Theming:** existing semantic tokens | new tokens added: <list, noting dark + light values>
 ```
 
 If invoked standalone (not from `/add-component`), remind the user of the follow-ups: `/add-component-story`, `/add-component-tests`, `/add-component-spec`, then `/verify-component`.

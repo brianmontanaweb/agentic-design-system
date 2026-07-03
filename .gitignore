@@ -36,3 +36,6 @@ Thumbs.db
 
 # Skill eval workspaces — generated output from run-evals.sh / grade-eval.sh
 .claude/skills/*-workspace/
+
+# Workflow eval workspaces — generated output from run-workflow-evals.sh / grade-workflow-eval.sh
+.claude/workflows/evals/*-workspace/

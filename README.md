@@ -312,13 +312,18 @@ This repo ships Claude Code skills for component authoring, alongside an eval ha
 
 ### Skills
 
-Three skills are available via `/skill-name` in Claude Code:
+Two skills are available via `/skill-name` in Claude Code:
 
-| Skill                                  | What it does                                                                        |
-| -------------------------------------- | ----------------------------------------------------------------------------------- |
-| `/add-component <Name> [core\|agents]` | Scaffolds source, story, spec doc, and index export                                 |
-| `/update-component <Name>`             | Audits source, story, and spec doc; plans fixes and waits for approval              |
-| `/audit-a11y`                          | Audits all components against WCAG 2.2 AA; reports violations with file + line refs |
+| Skill                                  | What it does                                                           |
+| -------------------------------------- | ---------------------------------------------------------------------- |
+| `/add-component <Name> [core\|agents]` | Scaffolds source, story, spec doc, and index export                    |
+| `/update-component <Name>`             | Audits source, story, and spec doc; plans fixes and waits for approval |
+
+### Workflows
+
+| Workflow      | What it does                                                                                                                                                  |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/audit-a11y` | Dynamic workflow (`.claude/workflows/audit-a11y.js`): one audit agent per component, findings adversarially verified, one merged WCAG 2.2 AA violation report |
 
 ### Evals
 

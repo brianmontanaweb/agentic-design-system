@@ -6,7 +6,7 @@
       "name": "agents-package-inference",
       "description": "Minimal prompt with no package hint — tests that the skill correctly infers agents for a status-type component and creates only source-layer files",
       "prompt": "Create just the source file for an EvalStatusPill component — no story or docs yet",
-      "expected_output": "## Source created: EvalStatusPill\n\n**Package:** agents\n**Files:**\n- packages/agents/src/EvalStatusPill/EvalStatusPill.tsx\n- packages/agents/src/EvalStatusPill/index.ts\n- packages/agents/src/index.ts (updated)\n**ARIA pattern:** role=\"status\" + aria-live=\"polite\"\n**MCP states:** idle, running, done, error (or equivalent status values)",
+      "expected_output": "## Source created: EvalStatusPill\n\n**Package:** agents\n**Files:**\n- packages/agents/src/EvalStatusPill/EvalStatusPill.tsx\n- packages/agents/src/EvalStatusPill/index.ts\n- packages/agents/src/index.ts (updated)\n**ARIA pattern:** role=\"status\" + aria-live=\"polite\"\n**MCP states:** idle, running, done, error (or equivalent status values)\n**Theming:** existing semantic tokens",
       "setup": null,
       "teardown": "git restore packages/agents/src/index.ts && rm -rf packages/agents/src/EvalStatusPill",
       "assertions": [
@@ -17,6 +17,7 @@
         "Source exports EvalStatusPillProps interface",
         "Source includes role=\"status\" and aria-live=\"polite\" ARIA attributes",
         "Source uses only Chakra semantic tokens — no hardcoded hex values",
+        "Source does not import colors/lightColors from @agentic-ds/tokens for styling and does not read color mode — light/dark support comes from semantic tokens",
         "Source does NOT have a default React import",
         "packages/agents/src/index.ts exports EvalStatusPill and EvalStatusPillProps",
         "No story file was created at apps/storybook/src/stories/EvalStatusPill.stories.tsx",
@@ -29,7 +30,7 @@
       "name": "core-package-explicit",
       "description": "Explicit 'in core' — tests that the skill respects the stated package and applies the required aria-label prop pattern for icon-only components",
       "prompt": "Create the source for an EvalIconButton component in core",
-      "expected_output": "## Source created: EvalIconButton\n\n**Package:** core\n**Files:**\n- packages/core/src/EvalIconButton/EvalIconButton.tsx\n- packages/core/src/EvalIconButton/index.ts\n- packages/core/src/index.ts (updated)\n**ARIA pattern:** none — aria-label is a required prop (SC 4.1.2)\n**MCP states:** n/a",
+      "expected_output": "## Source created: EvalIconButton\n\n**Package:** core\n**Files:**\n- packages/core/src/EvalIconButton/EvalIconButton.tsx\n- packages/core/src/EvalIconButton/index.ts\n- packages/core/src/index.ts (updated)\n**ARIA pattern:** none — aria-label is a required prop (SC 4.1.2)\n**MCP states:** n/a\n**Theming:** existing semantic tokens",
       "setup": null,
       "teardown": "git restore packages/core/src/index.ts && rm -rf packages/core/src/EvalIconButton",
       "assertions": [
@@ -39,6 +40,7 @@
         "Source exports EvalIconButton as named export (not default)",
         "Source exports EvalIconButtonProps interface",
         "Source uses only Chakra semantic tokens — no hardcoded hex values",
+        "Source does not import colors/lightColors from @agentic-ds/tokens for styling and does not read color mode — light/dark support comes from semantic tokens",
         "Source does NOT have a default React import",
         "packages/core/src/index.ts exports EvalIconButton and EvalIconButtonProps"
       ]

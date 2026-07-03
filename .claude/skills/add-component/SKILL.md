@@ -17,6 +17,7 @@ This skill creates no files itself. It guards against overwrites, plans, gets ap
 - **Approval happens once, here** — after the Step 3 plan is approved, run all five sub-skills without asking again. The sub-skills do not have their own approval gates.
 - **Package inference default** — when ambiguous, lean `agents` for status/streaming/tool-related names; lean `core` for anything that reads like a generic UI primitive (full rules in the shared conventions reference).
 - **Agent-specific ARIA is decided in the plan, not retrofitted** — pick the ARIA pattern in Step 3 from `shared/references/aria-patterns.md` and pass it to `add-component-source`.
+- **Theming is decided in the plan too** — light/dark support comes from semantic tokens (see the Theming section of the shared conventions reference). Decide in Step 3 whether existing semantic tokens cover the component or new ones are needed; new tokens require both `_dark` and `_light` values.
 - **Invoke sub-skills in the listed order** — story, tests, and spec doc all read the source file; source must exist first. Verification runs last.
 
 ---
@@ -68,6 +69,7 @@ Before invoking any sub-skill, output a brief plan:
 **Inferred from:** <reason — e.g., "streaming/status → agents" or "UI primitive → core" or "user-specified">
 **ARIA pattern:** <e.g., `role="status" aria-live="polite"` — or "none">
 **MCP states:** <list or "n/a">
+**Theming:** existing semantic tokens | new tokens: <intent-named list, each with dark + light values>
 **Figma:** reviewed | skipped
 
 Files to create:
@@ -94,7 +96,7 @@ Invoke each via the Skill tool, in this exact order:
 | 4     | `add-component-spec`   | `<ComponentName>`           | Spec doc at `docs/components/<ComponentName>.md` |
 | 5     | `verify-component`     | `<ComponentName>`           | Build + scoped lint + scoped tests, output shown |
 
-Pass the ARIA pattern and MCP states decided in Step 3 as extra context in the `add-component-source` args (e.g., `EvalStatusPill agents — role="status" aria-live="polite", states: idle/running/done/error`).
+Pass the ARIA pattern, MCP states, and theming decision from Step 3 as extra context in the `add-component-source` args (e.g., `EvalStatusPill agents — role="status" aria-live="polite", states: idle/running/done/error, tokens: existing semantic only` or `…, new token: color.eval.status.queued (dark + light)`).
 
 If a sub-skill reports a failure, fix it before moving to the next — do not defer failures to the verification step.
 
@@ -109,6 +111,7 @@ Output a concise summary:
 **Files created:** <list>
 **ARIA pattern:** <pattern applied or "none">
 **MCP states:** <list or "n/a">
+**Theming:** existing semantic tokens | new tokens added: <list>
 **Build + lint:** passing
 **Tests:** passing (N tests)
 **Figma:** reviewed | skipped

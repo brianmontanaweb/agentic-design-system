@@ -25,9 +25,28 @@
       "WebFetch(domain:medium.com)",
       "Bash(npx prettier --write:*)",
       "Bash(npx eslint:*)",
-      "Edit(/.claude/skills/update-component/**)"
+      "Edit(/.claude/skills/update-component/**)",
+      "Bash(chmod +x /Users/brianmontana/code/agentic-design-system/.claude/workflows/evals/audit-a11y/scripts/*.sh)",
+      "Bash(node --check /Users/brianmontana/code/agentic-design-system/.claude/workflows/audit-a11y.js)",
+      "Bash(python3 -m json.tool /Users/brianmontana/code/agentic-design-system/.claude/workflows/evals/audit-a11y/evals.json)",
+      "Bash(rm -rf /Users/brianmontana/code/agentic-design-system/.claude/skills/audit-a11y && ls /Users/brianmontana/code/agentic-design-system/.claude/skills/)",
+      "Bash(claude --version)",
+      "Bash(claude -p --output-format json --dangerously-skip-permissions 'Run /audit-a11y on [\"packages/core/src/Button/Button.tsx\"]')",
+      "Bash(chmod +x /Users/brianmontana/code/agentic-design-system/.claude/workflows/evals/*.sh)",
+      "Bash(env)",
+      "Bash(claude -p --help)",
+      "Bash(bash -n /Users/brianmontana/code/agentic-design-system/.claude/workflows/evals/run-workflow-evals.sh)",
+      "Bash(bash -n /Users/brianmontana/code/agentic-design-system/.claude/workflows/evals/grade-workflow-eval.sh)",
+      "Bash(git -C /Users/brianmontana/code/agentic-design-system status --porcelain packages/)",
+      "Bash(bash /Users/brianmontana/code/agentic-design-system/.claude/workflows/evals/run-workflow-evals.sh audit-a11y 1 --id 5)",
+      "Bash(bash /Users/brianmontana/code/agentic-design-system/.claude/workflows/evals/grade-workflow-eval.sh audit-a11y scoped-run 1)",
+      "Bash(git -C /Users/brianmontana/code/agentic-design-system restore packages/agents/src/AgentStatus/AgentStatus.tsx)"
+    ],
+    "additionalDirectories": [
+      "/Users/brianmontana/code/agentic-design-system/.claude/skills/audit-a11y"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "hooks": {
     "PostToolUse": [
       {
@@ -43,6 +62,5 @@
   },
   "enabledPlugins": {
     "skill-creator@claude-plugins-official": true
-  },
-  "enableAllProjectMcpServers": true
+  }
 }

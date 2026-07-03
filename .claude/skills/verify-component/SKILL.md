@@ -50,6 +50,14 @@ npx vitest run packages/<package>/src/<ComponentName>/<ComponentName>.test.tsx
 
 Fix any errors ESLint or vitest reports on this component's files, then re-run the failed command until it passes. If the build itself fails because of this component's files, fix and re-run; if it fails elsewhere in the repo, report it and stop — that is outside this skill's scope.
 
+Also run the theme-safety check — components must support light/dark via semantic tokens only (see the Theming section of the shared conventions reference):
+
+```sh
+grep -nE "lightColors|useColorMode|useTheme" packages/<package>/src/<ComponentName>/<ComponentName>.tsx
+```
+
+Any match is a violation (raw single-scheme palette usage or color-mode branching); fix it by routing through semantic tokens. No output = passing.
+
 Include the actual command output (exit code and last few lines of stdout/stderr) in your response so results are verifiable from the transcript.
 
 ## Step 3 — Report
@@ -59,6 +67,7 @@ Include the actual command output (exit code and last few lines of stdout/stderr
 
 **Build:** passing
 **Lint:** passing (N files) | skipped: <missing file>
+**Theme safety:** passing | fixed: <what was routed through semantic tokens>
 **Tests:** passing (N tests) | skipped: no test file — run /add-component-tests <ComponentName>
 **Fixes applied:** <list or "none">
 ```
