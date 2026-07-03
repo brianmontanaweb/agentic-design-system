@@ -38,6 +38,14 @@ export const Done: Story = {
   },
 }
 
+export const Pending: Story = {
+  args: {
+    toolName: 'summarize_thread',
+    input: { thread_id: 'msg_0142' },
+    status: 'pending',
+  },
+}
+
 export const Running: Story = {
   args: {
     toolName: 'fetch_abstract',

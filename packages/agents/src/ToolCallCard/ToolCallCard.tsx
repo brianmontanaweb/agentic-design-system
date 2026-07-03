@@ -1,5 +1,5 @@
-import React, { type ReactElement, useId, useState } from 'react'
-import { Box, Button, Code, Text, VStack } from '@chakra-ui/react'
+import { type ReactElement, useId, useState } from 'react'
+import { Box, Button, Code, Text, VisuallyHidden, VStack } from '@chakra-ui/react'
 import { useReducedMotion } from '@agentic-ds/core'
 import { durations } from '@agentic-ds/tokens'
 
@@ -18,6 +18,13 @@ const statusColors: Record<ToolCallStatus, string> = {
   running: 'color.tool.status.running',
   done: 'color.tool.status.done',
   error: 'color.tool.status.error',
+}
+
+const statusLabels: Record<ToolCallStatus, string> = {
+  pending: 'pending',
+  running: 'running',
+  done: 'completed',
+  error: 'failed',
 }
 
 export function ToolCallCard({
@@ -60,6 +67,7 @@ export function ToolCallCard({
         aria-label={`${toolName} details`}
       >
         <Box
+          aria-hidden="true"
           w="6px"
           h="6px"
           borderRadius="full"
@@ -78,6 +86,7 @@ export function ToolCallCard({
           {open ? '▾' : '▸'}
         </Text>
       </Button>
+      <VisuallyHidden>Status: {statusLabels[status]}</VisuallyHidden>
 
       {open && (
         <VStack
@@ -129,6 +138,9 @@ export function ToolCallCard({
               >
                 Output
               </Text>
+              <VisuallyHidden>
+                {status === 'error' ? 'Tool call failed' : 'Tool call succeeded'}
+              </VisuallyHidden>
               <Code
                 display="block"
                 fontSize="xs"

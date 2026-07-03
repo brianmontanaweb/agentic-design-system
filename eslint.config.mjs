@@ -8,8 +8,11 @@ import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescrip
 
 export default tseslint.config(
   // --- Global ignores ---
+  // .claude/workflows scripts run in the dynamic-workflow runtime (implicit
+  // `args`/`agent`/`pipeline` globals, top-level return) — not parseable as
+  // standard modules.
   {
-    ignores: ['**/dist/**', '**/node_modules/**', '**/storybook-static/**'],
+    ignores: ['**/dist/**', '**/node_modules/**', '**/storybook-static/**', '.claude/workflows/**'],
   },
 
   // --- Linter options: disable comments must be justified and effective ---

@@ -40,7 +40,10 @@
       "Bash(git -C /Users/brianmontana/code/agentic-design-system status --porcelain packages/)",
       "Bash(bash /Users/brianmontana/code/agentic-design-system/.claude/workflows/evals/run-workflow-evals.sh audit-a11y 1 --id 5)",
       "Bash(bash /Users/brianmontana/code/agentic-design-system/.claude/workflows/evals/grade-workflow-eval.sh audit-a11y scoped-run 1)",
-      "Bash(git -C /Users/brianmontana/code/agentic-design-system restore packages/agents/src/AgentStatus/AgentStatus.tsx)"
+      "Bash(git -C /Users/brianmontana/code/agentic-design-system restore packages/agents/src/AgentStatus/AgentStatus.tsx)",
+      "Bash(git check-ignore *)",
+      "Bash(kill 9041)",
+      "Edit(/.claude/skills/commit-message/**)"
     ],
     "additionalDirectories": [
       "/Users/brianmontana/code/agentic-design-system/.claude/skills/audit-a11y"

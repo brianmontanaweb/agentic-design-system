@@ -18,6 +18,7 @@ tokens:
       color.surface.elevated,
       color.border.subtle,
     ]
+  durations: [duration.fast, duration.pulse]
 wcag: AA
 aria-pattern: https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/
 ---
@@ -30,12 +31,14 @@ Collapsible card that shows a single MCP tool invocation — its name, input pay
 
 ## Statuses
 
-| Status    | Dot color token             | Output text color      |
-| --------- | --------------------------- | ---------------------- |
-| `pending` | `color.tool.status.pending` | `color.accent.success` |
-| `running` | `color.tool.status.running` | `color.accent.success` |
-| `done`    | `color.tool.status.done`    | `color.accent.success` |
-| `error`   | `color.tool.status.error`   | `color.accent.danger`  |
+| Status    | Dot color token             | Output text color      | Screen reader label |
+| --------- | --------------------------- | ---------------------- | ------------------- |
+| `pending` | `color.tool.status.pending` | `color.accent.success` | `pending`           |
+| `running` | `color.tool.status.running` | `color.accent.success` | `running`           |
+| `done`    | `color.tool.status.done`    | `color.accent.success` | `completed`         |
+| `error`   | `color.tool.status.error`   | `color.accent.danger`  | `failed`            |
+
+The screen reader label is rendered as visually-hidden text (`Status: <label>`) inside the card, alongside the dot — the dot's color is never the only state indicator.
 
 The `running` status dot animates with `ds-pulse`. `useReducedMotion()` disables the animation.
 
@@ -60,6 +63,9 @@ The `running` status dot animates with `ds-pulse`. `useReducedMotion()` disables
 - The button MUST have `aria-controls` pointing to the detail panel's `id`.
 - The button MUST have an `aria-label` of `"${toolName} details"` — the visible tool name alone is sufficient but the label scopes the action for screen readers.
 - The chevron character (`▾` / `▸`) MUST have `aria-hidden="true"` — it is a decorative direction indicator.
+- The status dot MUST have `aria-hidden="true"` — it is an animated decorative element.
+- Visually-hidden text (`<VisuallyHidden>Status: {label}</VisuallyHidden>`) MUST name the current status so the dot color is never the only state indicator. _(WCAG SC 1.4.1 Use of Color)_
+- The output outcome MUST be named in visually-hidden text (`Tool call failed` / `Tool call succeeded`) — the danger/success text color is never the only outcome indicator. _(WCAG SC 1.4.1 Use of Color)_
 - Code blocks (input/output) do not need additional ARIA; `<code>` is semantically sufficient.
 
 ---
