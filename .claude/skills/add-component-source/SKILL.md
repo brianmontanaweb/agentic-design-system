@@ -1,5 +1,6 @@
 ---
 name: add-component-source
+context: fork
 description: Creates the source file, barrel index, and package export for a new component in @agentic-ds/core or @agentic-ds/agents — with the correct ARIA live region, semantic tokens, and CSS scoping applied from the start. Use when creating just a component's implementation file (no story, tests, or docs), or as step 1 of the /add-component flow.
 ---
 

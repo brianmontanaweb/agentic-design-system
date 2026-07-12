@@ -1,5 +1,6 @@
 ---
 name: verify-component
+context: fork
 description: Builds, lints, and unit-tests a single component's files (source, story, tests) in @agentic-ds/core or @agentic-ds/agents, fixing any errors in those files, and reports verifiable command output. Use to check one component after changes, or as the final step of the /add-component flow.
 ---
 

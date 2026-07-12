@@ -1,5 +1,6 @@
 ---
 name: add-component-story
+context: fork
 description: Creates or extends the Storybook story for an existing component in @agentic-ds/core or @agentic-ds/agents, covering every prop variant and state. Use when a component needs a story, when backfilling story coverage, or as step 2 of the /add-component flow.
 ---
 

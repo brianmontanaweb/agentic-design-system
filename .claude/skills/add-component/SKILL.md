@@ -7,7 +7,7 @@ description: Scaffolds a new component in @agentic-ds/core or @agentic-ds/agents
 
 Scaffold a new component given `$ARGUMENTS` in the format `<ComponentName> [core|agents]`.
 
-This skill creates no files itself. It guards against overwrites, plans, gets approval **once**, then invokes five sub-skills in order via the Skill tool. Each sub-skill is also independently invocable; when run from here, they skip their own context reads if the material is already in this conversation.
+This skill creates no files itself. It guards against overwrites, plans, gets approval **once**, then invokes five sub-skills in order via the Skill tool. Each sub-skill declares `context: fork`, so every invocation runs in a fresh subagent with no access to this conversation — a sub-skill cannot see the plan, the Figma data, or earlier file reads. Everything it needs must be passed explicitly in its args.
 
 ---
 
@@ -97,6 +97,8 @@ Invoke each via the Skill tool, in this exact order:
 | 5     | `verify-component`     | `<ComponentName>`           | Build + scoped lint + scoped tests, output shown |
 
 Pass the ARIA pattern, MCP states, and theming decision from Step 3 as extra context in the `add-component-source` args (e.g., `EvalStatusPill agents — role="status" aria-live="polite", states: idle/running/done/error, tokens: existing semantic only` or `…, new token: color.eval.status.queued (dark + light)`).
+
+Because each sub-skill forks into a fresh context, args are the only channel into it — also pass the package to the later sub-skills (e.g., `EvalStatusPill agents`) and any relevant Figma decisions from Step 2, rather than assuming the sub-skill can see this conversation. Each sub-skill's final report comes back as the Skill tool result; read it before moving on.
 
 If a sub-skill reports a failure, fix it before moving to the next — do not defer failures to the verification step.
 

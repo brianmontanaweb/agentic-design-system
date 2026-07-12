@@ -1,5 +1,6 @@
 ---
 name: add-component-tests
+context: fork
 description: Creates the unit test file for an existing component in @agentic-ds/core or @agentic-ds/agents — ARIA-first test groups using renderWithProviders and userEvent — and runs it to green. Use when a component needs tests, when backfilling test coverage, or as step 3 of the /add-component flow.
 ---
 

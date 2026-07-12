@@ -4,14 +4,14 @@ This is a monorepo for a React design system purpose-built for agentic/MCP appli
 
 ## Packages
 
-| Package                | Purpose                                                     |
-| ---------------------- | ----------------------------------------------------------- |
-| `packages/tokens`      | Design tokens — source of truth for all values              |
-| `packages/core`        | Base components (Button, CodeBlock, AgenticProvider, theme) |
-| `packages/agents`      | Agent-specific components (streaming, tool calls, status)   |
-| `packages/mcp-builder` | MCP Apps bundle target — currently unimplemented            |
-| `apps/storybook`       | Visual regression tests and component stories               |
-| `apps/demo-web`        | Integration demo                                            |
+| Package                | Purpose                                                                       |
+| ---------------------- | ----------------------------------------------------------------------------- |
+| `packages/tokens`      | Design tokens — source of truth for all values                                |
+| `packages/core`        | Base components (Button, CodeBlock, AgenticProvider, theme)                   |
+| `packages/agents`      | Agent-specific components (streaming, tool calls, status)                     |
+| `packages/mcp-builder` | MCP stdio server (get_token, get_component) + IIFE bundle for MCP App iframes |
+| `apps/storybook`       | Visual regression tests and component stories                                 |
+| `apps/demo-web`        | Integration demo                                                              |
 
 Build order is enforced: `tokens → core → agents`. Always run `npm run build` from the root.
 
@@ -35,12 +35,11 @@ All components must meet WCAG 2.2 AA. Agent-specific components have specific AR
 
 - No hardcoded hex values, px values (outside layout), or timing values in components — use tokens
 - Token names communicate intent, not raw values: `color.agent.status.running` not `accentBlue`
-- The `statusColors` record in `ToolCallCard.tsx` is a known violation — fix it when touching that file
-- New tokens belong in `packages/tokens/src/index.ts` before they are used in components
+- New tokens belong in `packages/tokens/tokens.dtcg.json` (regenerated via `npm run tokens:generate`) before they are used in components
 
 ### MCP Lifecycle States
 
-`AgentStatus` and `ProgressSteps` must support all 6 MCP task states: `idle`, `running`, `waiting` (input_required), `done`, `error`, `cancelled`. `waiting` and `cancelled` are currently missing.
+`AgentStatus` and `ProgressSteps` must support all 6 MCP task states: `idle`, `running`, `waiting` (input_required), `done`, `error`, `cancelled`.
 
 ### CSS Scoping
 
@@ -52,13 +51,12 @@ Every implemented component needs a spec file at `docs/components/[ComponentName
 
 ## Known Gaps (Prioritized)
 
-1. ARIA live regions missing on `StreamingText`, `ThinkingIndicator`, `AgentStatus`, `MessageThread`
-2. `ToolCallCard` expand trigger is a `div` — must be `<button>`
-3. No `prefers-reduced-motion` override in `AgenticProvider` theme
-4. `waiting` + `cancelled` states missing from `AgentStatus` and `ProgressSteps`
-5. `statusColors` in `ToolCallCard.tsx` uses hardcoded hex — replace with semantic tokens
-6. Tokens are pre-DTCG format — migration to W3C DTCG 2025.10 needed
-7. `mcp-builder` package has no implementation
+1. DTCG 2025.10 migration incomplete — light/dark are parallel token groups (`colors`/`lightColors`) not DTCG modes, and the `theme.ts` semanticTokens mapping is hand-maintained, not generated
+2. `Button` uses native `disabled` instead of `aria-disabled` + `tabIndex={0}`
+3. No `ErrorBoundary` or `Skeleton` primitives
+4. Zero light-mode visual regression baselines (all 99 are dark-mode captures)
+
+See `PLAN.md` → Known Gaps / Roadmap for the full list, including the Astryx-inspired architecture items.
 
 ## Figma
 

@@ -129,20 +129,22 @@ Agent-readable component specs — Markdown files structured so an LLM can imple
 
 Decisions made when the monolithic `add-component` skill was split into an orchestrator plus five sub-skills (2026-07-01):
 
-| Decision                                                                                                                                                                            | Rationale                                                                                                                                                      |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/add-component` is a thin orchestrator; `add-component-source/-story/-tests/-spec` and `verify-component` are separate, independently invocable skills                             | Each artifact (tests, story, spec doc) is useful standalone — e.g. backfilling tests for an existing component                                                 |
-| Plan approval lives **only** in the orchestrator; sub-skills have no approval gates                                                                                                 | When invoked standalone, creating the one artifact _is_ the request; when orchestrated, the plan was already approved. Avoids five nested confirmation prompts |
-| Cross-skill conventions live in `.claude/skills/shared/references/` (`conventions.md`, `aria-patterns.md`, `testing.md`)                                                            | Single source of truth shared by the `add-component` family and `update-component`; skills load by path and skip reads already in context                      |
-| Each skill has its own `evals/evals.json`; sub-skill evals reuse one fixture via `shared/scripts/setup-eval-component.sh` / `teardown-eval-component.sh`                            | Targeted per-skill cases without duplicating fixture logic; orchestrator keeps end-to-end evals                                                                |
-| `add-component-spec` refuses when the spec doc already exists and redirects to `/update-component`                                                                                  | Spec _drift_ is `update-component`'s job; keeps the two skills' scopes disjoint                                                                                |
-| Eval paths corrected from flat (`packages/<pkg>/src/<Name>.tsx`) to subdirectory (`packages/<pkg>/src/<Name>/<Name>.tsx`) layout; teardowns use `rm -rf` on the component directory | The repo migrated to subdirectory layout; old `rm -f` teardowns never cleaned up and expected-file lists omitted the test file                                 |
+| Decision                                                                                                                                                                            | Rationale                                                                                                                                                                                                                                  |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `/add-component` is a thin orchestrator; `add-component-source/-story/-tests/-spec` and `verify-component` are separate, independently invocable skills                             | Each artifact (tests, story, spec doc) is useful standalone — e.g. backfilling tests for an existing component                                                                                                                             |
+| Plan approval lives **only** in the orchestrator; sub-skills have no approval gates                                                                                                 | When invoked standalone, creating the one artifact _is_ the request; when orchestrated, the plan was already approved. Avoids five nested confirmation prompts                                                                             |
+| Cross-skill conventions live in `.claude/skills/shared/references/` (`conventions.md`, `aria-patterns.md`, `testing.md`)                                                            | Single source of truth shared by the `add-component` family and `update-component`; each skill loads them by path                                                                                                                          |
+| The five sub-skills declare `context: fork` — every invocation runs in a fresh subagent; the orchestrator does not (2026-07-04)                                                     | Fresh context per step, no bleed between sub-skills; args are the only channel in. Orchestrator stays unforked because its plan-approval gate needs the user. Trade-off: each fork re-reads references/source, costing more tokens per run |
+| Each skill has its own `evals/evals.json`; sub-skill evals reuse one fixture via `shared/scripts/setup-eval-component.sh` / `teardown-eval-component.sh`                            | Targeted per-skill cases without duplicating fixture logic; orchestrator keeps end-to-end evals                                                                                                                                            |
+| `add-component-spec` refuses when the spec doc already exists and redirects to `/update-component`                                                                                  | Spec _drift_ is `update-component`'s job; keeps the two skills' scopes disjoint                                                                                                                                                            |
+| Eval paths corrected from flat (`packages/<pkg>/src/<Name>.tsx`) to subdirectory (`packages/<pkg>/src/<Name>/<Name>.tsx`) layout; teardowns use `rm -rf` on the component directory | The repo migrated to subdirectory layout; old `rm -f` teardowns never cleaned up and expected-file lists omitted the test file                                                                                                             |
 
 ### Follow-up
 
-| Item                                                                                                                                                         | Priority |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
-| `update-component` still assumes the flat layout internally (Step 1 file table, `references/fixtures/`, eval setup/grade scripts) — fix together as one pass | Medium   |
+| Item                                                                                                                                                                                        | Priority |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `update-component` still assumes the flat layout internally (Step 1 file table, `references/fixtures/`, eval setup/grade scripts) — fix together as one pass                                | Medium   |
+| Sub-skills still say "Skip anything already in context from earlier in this conversation" — vestigial under `context: fork` (a fork never has prior context); reword to unconditional reads | Low      |
 
 ---
 
@@ -175,15 +177,24 @@ Decisions made when the monolithic `add-component` skill was split into an orche
 | --------------------------------------------------------------------------------------------------------------- | -------- |
 | Add cross-browser visual regression testing (Firefox + Safari) via Chromatic or Playwright multi-project config | Low      |
 
-### Infrastructure
+### Architecture (Astryx-inspired, 2026-07-12)
 
-| Item                                           | Priority |
-| ---------------------------------------------- | -------- |
-| Add versioning strategy — see discussion below | Medium   |
+Approaches borrowed from Meta's [Astryx](https://github.com/facebook/astryx) design system, mapped to this codebase's existing gaps. Full analysis in the 2026-07-12 review session.
+
+| Item                                                                                                                                                                                                                                                                                                                                         | Priority |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| **Mode tuples in token definitions** — define each color once with light/dark modes in `tokens.dtcg.json` (DTCG resolver/modes) instead of parallel `colors`/`lightColors` groups; have `generate.ts` emit the Chakra `semanticTokens` block so `theme.ts` mappings are generated, not hand-maintained. Fold into the DTCG 2025.10 migration | High     |
+| **`defineAgenticTheme()` + theme prop on `AgenticProvider`** — replace the singleton `system` export with a factory so host apps can brand the system (accent hex, neutral warmth → parametric scale generation, Astryx `defineTheme`-style). Keeps the existing direct-import lint ban; adds the sanctioned extension point                 | Medium   |
+| **Generate MCP metadata from spec docs** — build step parses `docs/components/*.md` YAML frontmatter and emits `mcp-builder`'s `metadata/components.ts`, making the spec doc the single source of truth (same pattern as `tokens/scripts/generate.ts`). `/add-component-spec` then keeps the MCP server current automatically                | Medium   |
+| **Built CSS artifact for the MCP Apps IIFE bundle** — pre-extract `[data-agentic-ds]`-scoped custom properties + keyframes into a static `.css` file at build time (Astryx runtime-vs-`/built` split) for CSP-strict iframe embedding. Lands with the `mcp-builder` IIFE implementation                                                      | Medium   |
+| **`search()` MCP tool + dense output mode** — natural-language discovery over component descriptions and token `$description` fields, plus a token-efficient output flag for agent context windows. Depends on spec-doc-generated metadata                                                                                                   | Low      |
+| **Data-attribute state exposure** — emit `data-status` on `ToolCallCard` / `AgentStatus` / `ProgressSteps` so host CSS and Tailwind variants can target states without new props; also gives visual-regression and E2E tests stable selectors                                                                                                | Low      |
 
 ---
 
-## Discussion: Versioning Strategy
+## Discussion: Versioning Strategy (Resolved — Changesets adopted)
+
+> **Resolved:** Changesets is in place — `.changeset/` config, per-package `CHANGELOG.md`s, and `.github/workflows/release.yml` exist. Discussion retained for the decision record.
 
 The three packages (`@agentic-ds/tokens`, `@agentic-ds/core`, `@agentic-ds/agents`) are independently publishable but have a strict dependency chain. A versioning strategy must handle both coordinated releases (token change that cascades through all three) and isolated releases (a single component fix in `agents`).
 

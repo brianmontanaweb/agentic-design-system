@@ -1,5 +1,6 @@
 ---
 name: add-component-spec
+context: fork
 description: Creates the spec doc at docs/components/[ComponentName].md for an existing component — YAML frontmatter with token inventory, props table, accessibility requirements with WCAG SC references. Use when a component is missing its spec doc, when documenting a component, or as step 4 of the /add-component flow.
 ---
 

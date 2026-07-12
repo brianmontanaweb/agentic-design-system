@@ -21,26 +21,26 @@ Generic design systems (Radix, Shadcn, MUI) are built for forms, dashboards, and
 
 ## Packages
 
-| Package                                            | Description                                                             |
-| -------------------------------------------------- | ----------------------------------------------------------------------- |
-| [`@agentic-ds/tokens`](packages/tokens/)           | Framework-agnostic design tokens (JS constants + CSS custom properties) |
-| [`@agentic-ds/core`](packages/core/)               | Chakra UI v3 theme extension, `AgenticProvider`, and base components    |
-| [`@agentic-ds/agents`](packages/agents/)           | Agent-specific UI primitives (streaming, tool calls, status, threads)   |
-| [`@agentic-ds/mcp-builder`](packages/mcp-builder/) | MCP server exposing design tokens and component metadata to AI tools    |
+| Package                                            | Description                                                                                |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| [`@agentic-ds/tokens`](packages/tokens/)           | Framework-agnostic design tokens (JS constants + CSS custom properties)                    |
+| [`@agentic-ds/core`](packages/core/)               | Chakra UI v3 theme extension, `AgenticProvider`, and base components                       |
+| [`@agentic-ds/agents`](packages/agents/)           | Agent-specific UI primitives (streaming, tool calls, status, threads)                      |
+| [`@agentic-ds/mcp-builder`](packages/mcp-builder/) | MCP server exposing tokens and component metadata, plus an IIFE bundle for MCP App iframes |
 
 ## Components
 
 ### `@agentic-ds/agents`
 
-| Component           | Description                                                            |
-| ------------------- | ---------------------------------------------------------------------- |
-| `AgentStatus`       | Lifecycle badge — `idle`, `running`, `done`, `error` with animated dot |
-| `ThinkingIndicator` | 3-dot pulse animation for model inference state                        |
-| `ProgressSteps`     | Numbered step list with `pending`, `active`, `complete` states         |
-| `ToolCallCard`      | Collapsible card showing tool name, JSON input, and output             |
-| `StreamingText`     | Incrementally renders text with a blinking cursor                      |
-| `MessageThread`     | Scrollable message history container with auto-scroll                  |
-| `MessageBubble`     | Single message bubble — `user`, `assistant`, `tool` variants           |
+| Component           | Description                                                                                                       |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `AgentStatus`       | Lifecycle badge — all 6 MCP states (`idle`, `running`, `waiting`, `done`, `error`, `cancelled`) with animated dot |
+| `ThinkingIndicator` | 3-dot pulse animation for model inference state                                                                   |
+| `ProgressSteps`     | Numbered step list with `pending`, `active`, `complete`, `waiting`, `cancelled` states                            |
+| `ToolCallCard`      | Collapsible card showing tool name, JSON input, and output                                                        |
+| `StreamingText`     | Incrementally renders text with a blinking cursor                                                                 |
+| `MessageThread`     | Scrollable message history container with auto-scroll                                                             |
+| `MessageBubble`     | Single message bubble — `user`, `assistant`, `tool` variants                                                      |
 
 ### `@agentic-ds/core`
 
@@ -217,7 +217,7 @@ ESLint 10 flat config enforces:
 
 **No global styles** — The library sets no styles on `body` or any global selector.
 
-**MCP lifecycle** — Components are designed around MCP task states. `AgentStatus` and `ProgressSteps` currently cover `idle`, `running`, `done`, and `error`. The `waiting` (`input_required`) and `cancelled` states from the [MCP 2025-11-25 spec](https://modelcontextprotocol.io/specification/2025-11-25) are not yet implemented.
+**MCP lifecycle** — Components are designed around the 6 MCP task states from the [MCP 2025-11-25 spec](https://modelcontextprotocol.io/specification/2025-11-25): `idle`, `running`, `waiting` (`input_required`), `done`, `error`, and `cancelled`. `AgentStatus` covers all 6; `ProgressSteps` covers `pending`, `active`, `complete`, `waiting`, and `cancelled`.
 
 ## Standards
 
@@ -230,63 +230,13 @@ ESLint 10 flat config enforces:
 
 These gaps are documented and tracked. Contributions and discussion welcome.
 
-### Accessibility (WCAG 2.2 AA)
+### Token Format (Migration In Progress)
 
-The README currently claims AA compliance but the following are not yet implemented:
-
-- **Missing ARIA live regions** — `StreamingText`, `ThinkingIndicator`, `AgentStatus`, and `MessageThread` have no `role="log"` or `role="status"` + `aria-live` attributes. Status changes and streaming content are invisible to screen readers. ([SC 4.1.3](https://www.w3.org/WAI/WCAG21/Understanding/status-messages.html))
-- **`ToolCallCard` is not keyboard accessible** — The expand/collapse trigger is a `div` with `onClick`, not a `<button>`. Requires `aria-expanded` + `aria-controls` per the [WAI-ARIA Disclosure pattern](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/).
-- **`ProgressSteps` missing list semantics** — No `role="list"` on the container or `aria-current="step"` on the active item.
-- **No `prefers-reduced-motion` support** — Animated components (`ThinkingIndicator`, `AgentStatus` running dot, `ToolCallCard` pulse, `StreamingText` cursor) animate unconditionally with no reduced-motion override in `AgenticProvider` or `theme.ts`.
-
-### MCP Lifecycle Coverage
-
-`AgentStatus` and `ProgressSteps` are missing two MCP task states defined in the [2025-11-25 spec](https://modelcontextprotocol.io/specification/2025-11-25):
-
-- `waiting` — maps to MCP `input_required` (agent paused, needs user input)
-- `cancelled` — maps to MCP `cancelled` (explicitly stopped)
-
-The `AgentStatus` component table above should currently read `idle | running | done | error` only.
-
-### Token Format
-
-Tokens are not yet in [W3C DTCG 2025.10](https://www.designtokens.org/tr/2025.10/format/) format (`$value`/`$type`/`$description`). This blocks compatibility with Style Dictionary v4 and Tokens Studio pipelines. Migration is in progress.
-
-### Component Spec Docs
-
-Agent-readable spec files (`docs/components/`) only exist for `Button`. The following are missing: `AgentStatus`, `ThinkingIndicator`, `ProgressSteps`, `ToolCallCard`, `StreamingText`, `MessageBubble`, `MessageThread`.
-
-### MCP Apps Bundle
-
-`packages/mcp-builder` implements a stdio MCP server (see [MCP Server](#mcp-server-claude-code-integration) above). An `iife` bundle for embedding components in MCP App iframes via the `ui://` resource URI scheme is not yet implemented.
-
-### `MessageThread` Auto-Scroll Bug
-
-The `useEffect` in `MessageThread` has no dependency array, causing it to fire on every render — not just when children change. Any state update in a parent component forces a scroll to the bottom, making it impossible for users to scroll up to read earlier messages.
-
-### No CI/CD Pipeline
-
-There is no GitHub Actions workflow. Lint, build, and visual regression tests are not run automatically on pull requests. For independently publishable packages this is a significant gap.
-
-### No Storybook Accessibility Addon
-
-`apps/storybook/.storybook/main.ts` has no addons configured. The `@storybook/addon-a11y` addon would catch ARIA violations at the story level automatically, directly supporting the WCAG AA target.
-
-### `getCSSVariables()` Contradicts CSS Isolation Principle
-
-`packages/tokens/src/index.ts` exports a `getCSSVariables()` function that scopes output to `:root {}` — directly contradicting the library's core rule that all styles must be scoped to `[data-agentic-ds]`. Calling it injects globally-scoped CSS variables that leak into host applications.
-
-### `AgenticProvider` Has No `defaultColorScheme` Prop
-
-`defaultTheme="dark"` is hardcoded in `AgenticProvider` with no way for consumers to override it. This makes the provider unsuitable for embedding in light-mode host applications without forking the component.
+Tokens use the [W3C DTCG](https://www.designtokens.org/tr/2025.10/format/) `$value`/`$type`/`$description` structure in `tokens.dtcg.json`, but full 2025.10 compliance is incomplete: light/dark values are parallel token groups (`colors` / `lightColors`) rather than DTCG modes, and the Chakra `semanticTokens` mapping in `theme.ts` is hand-maintained rather than generated. See the roadmap in [PLAN.md](PLAN.md).
 
 ### `Button` Uses Native `disabled` Instead of `aria-disabled`
 
 The native `disabled` attribute removes the button from the tab order entirely. For agentic UIs where buttons are frequently disabled while waiting for agent output, the preferred pattern is `aria-disabled="true"` with `tabIndex={0}` so the button remains keyboard-discoverable and screen readers can announce its unavailable state.
-
-### No Versioning Strategy
-
-Three independently publishable packages with peer dependency version constraints exist, but there is no documented process for version bumps, no Changesets or semantic-release tooling, and no `CHANGELOG.md`. Coordinated and independent releases are undefined.
 
 ### No Error Boundary Component
 
@@ -296,13 +246,9 @@ Agentic UIs have a high failure rate — tool calls fail, APIs time out, streame
 
 Agentic UIs are inherently async. There are no `Skeleton` or content placeholder primitives for initial load states before agent output arrives.
 
-### TypeScript Version Mismatch
+### No Light Mode Visual Regression Coverage
 
-The root and all packages declare `"typescript": "^6.0.2"` in devDependencies, but `packages/mcp-builder` declares `"typescript": "^5.7.2"`. This creates an inconsistent compiler version across the monorepo.
-
-### No Light Mode Storybook Coverage
-
-`apps/storybook/.storybook/preview.tsx` only registers dark backgrounds (`#0a0a0f`, `#13131a`). The theme fully supports light mode but has zero stories or visual regression baselines testing it.
+Storybook has a light/dark color scheme toggle and a light background registered in `preview.tsx`, but all 99 visual regression baselines are dark-mode captures. The theme fully supports light mode with zero baselines testing it.
 
 ---
 
@@ -312,12 +258,17 @@ This repo ships Claude Code skills for component authoring, alongside an eval ha
 
 ### Skills
 
-Two skills are available via `/skill-name` in Claude Code:
+Available via `/skill-name` in Claude Code:
 
-| Skill                                  | What it does                                                           |
-| -------------------------------------- | ---------------------------------------------------------------------- |
-| `/add-component <Name> [core\|agents]` | Scaffolds source, story, spec doc, and index export                    |
-| `/update-component <Name>`             | Audits source, story, and spec doc; plans fixes and waits for approval |
+| Skill                                         | What it does                                                                    |
+| --------------------------------------------- | ------------------------------------------------------------------------------- |
+| `/add-component <Name> [core\|agents]`        | Full scaffold — plans once, then orchestrates the five sub-skills below         |
+| `/add-component-source <Name> [core\|agents]` | Source file, barrel index, and package export only                              |
+| `/add-component-story <Name>`                 | Storybook story for an existing component                                       |
+| `/add-component-tests <Name>`                 | Unit tests for an existing component, run to green                              |
+| `/add-component-spec <Name>`                  | Spec doc at `docs/components/<Name>.md` for an existing component               |
+| `/verify-component <Name>`                    | Build + scoped lint + scoped tests for one component; fixes errors in its files |
+| `/update-component <Name>`                    | Audits source, story, and spec doc; plans fixes and waits for approval          |
 
 ### Workflows
 
