@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactElement, type ReactNode } from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
 import { durations } from '@agentic-ds/tokens'
-import { system } from '../theme'
+import { defaultTheme, type AgenticTheme } from '../theme'
 
 export type ColorScheme = 'dark' | 'light' | 'system'
 
@@ -13,6 +13,12 @@ export interface AgenticProviderProps {
    * Hosts with their own theme toggle re-render with the new value.
    */
   colorScheme?: ColorScheme
+  /**
+   * Branded theme created by defineAgenticTheme(). Defaults to the stock
+   * theme. Create it once at module scope — not inside render — so the
+   * underlying style system is stable across re-renders.
+   */
+  theme?: AgenticTheme
 }
 
 // Keyframe names use the ds- prefix to prevent collisions in the host app's
@@ -65,6 +71,7 @@ function useSystemScheme(): 'dark' | 'light' {
 export function AgenticProvider({
   children,
   colorScheme = 'dark',
+  theme = defaultTheme,
 }: AgenticProviderProps): ReactElement {
   const systemScheme = useSystemScheme()
   const resolved = colorScheme === 'system' ? systemScheme : colorScheme
@@ -74,12 +81,20 @@ export function AgenticProvider({
     // data-color-mode is the single color-mode signal: theme.ts conditions
     // and the static tokens.css both key off it, and it stays on this wrapper
     // so multiple providers with different schemes can coexist on one page.
+    // data-agentic-theme (named themes only) narrows the cssVarsRoot so
+    // differently-branded providers can also coexist — the two-attribute
+    // selector out-specifies the stock [data-agentic-ds] one.
     // color-scheme makes UA rendering (scrollbars, form controls) match the
     // mode; being inherited CSS, it covers the subtree without touching the
     // host page — hosts own their own canvas color-scheme.
-    <div data-agentic-ds="" data-color-mode={resolved} style={{ colorScheme: resolved }}>
+    <div
+      data-agentic-ds=""
+      data-agentic-theme={theme.name}
+      data-color-mode={resolved}
+      style={{ colorScheme: resolved }}
+    >
       <style>{keyframes}</style>
-      <ChakraProvider value={system}>{children}</ChakraProvider>
+      <ChakraProvider value={theme.system}>{children}</ChakraProvider>
     </div>
   )
 }

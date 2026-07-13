@@ -1,6 +1,9 @@
 export { AgenticProvider } from './AgenticProvider'
 export type { AgenticProviderProps, ColorScheme } from './AgenticProvider'
 
+export { defineAgenticTheme } from './theme'
+export type { AgenticTheme, AgenticThemeOptions, AgenticColorToken, ModeColor } from './theme'
+
 export { Button } from './Button'
 export type { ButtonProps, ButtonVariant, ButtonSize } from './Button'
 

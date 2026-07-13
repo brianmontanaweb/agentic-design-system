@@ -23,12 +23,52 @@ The root provider for the design system. Every application using `@agentic-ds/co
 
 ## Props
 
-| Prop          | Type                            | Default  | Description                                                                                                                                                         |
-| ------------- | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `children`    | `ReactNode`                     | —        | Application content to render inside the provider.                                                                                                                  |
-| `colorScheme` | `"dark" \| "light" \| "system"` | `"dark"` | Controlled color scheme. `"dark"`/`"light"` pin the mode; `"system"` follows the OS `prefers-color-scheme` and live-updates. Hosts toggle by re-rendering the prop. |
+| Prop          | Type                            | Default     | Description                                                                                                                                                         |
+| ------------- | ------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `children`    | `ReactNode`                     | —           | Application content to render inside the provider.                                                                                                                  |
+| `colorScheme` | `"dark" \| "light" \| "system"` | `"dark"`    | Controlled color scheme. `"dark"`/`"light"` pin the mode; `"system"` follows the OS `prefers-color-scheme` and live-updates. Hosts toggle by re-rendering the prop. |
+| `theme`       | `AgenticTheme`                  | stock theme | Branded theme created by `defineAgenticTheme()`. Create it once at module scope — never inside render.                                                              |
 
 With `colorScheme="system"` during SSR, the first render resolves to dark (no `matchMedia` on the server) and corrects itself after hydration if the OS prefers light.
+
+---
+
+## Theming — `defineAgenticTheme()`
+
+`defineAgenticTheme(options)` is the sanctioned branding extension point. It builds a complete Chakra system from the stock semantic tokens plus the requested adjustments, and returns an opaque `AgenticTheme` handle for the `theme` prop. Importing the Chakra `system` directly remains banned by lint.
+
+```tsx
+import { AgenticProvider, defineAgenticTheme } from '@agentic-ds/core'
+
+const theme = defineAgenticTheme({
+  accent: '#e8590c',
+  neutralWarmth: 0.5,
+})
+
+export function App() {
+  return (
+    <AgenticProvider theme={theme}>
+      <Dashboard />
+    </AgenticProvider>
+  )
+}
+```
+
+### Options
+
+| Option          | Type                                            | Effect                                                                                                                                                                                                                   |
+| --------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `accent`        | `string \| { dark?: string; light?: string }`   | Hex color for `color.accent.interactive` (buttons, focus rings, links). `color.text.on.accent` is re-derived per mode by WCAG contrast unless overridden.                                                                |
+| `neutralWarmth` | `number` (−1 … 1)                               | Parametric OKLCH tint of the neutral tokens (`color.surface.*`, `color.border.subtle`, `color.text.primary/muted`). Positive = warm amber cast, negative = cool blue. Lightness — and therefore contrast — is preserved. |
+| `colors`        | `Partial<Record<AgenticColorToken, ModeColor>>` | Per-token escape hatch, applied last. Keys are typed semantic token paths (e.g. `'color.stream.cursor'`).                                                                                                                |
+| `name`          | `string` (kebab-case)                           | Scopes the theme's CSS variables to `[data-agentic-ds][data-agentic-theme="<name>"]`. Required only when providers with _different_ themes share a page.                                                                 |
+
+Rules:
+
+- Themes MUST be created at module scope. `defineAgenticTheme` builds a full style system; calling it in render churns styles on every update.
+- Semantic status colors (`color.agent.status.*`, `color.tool.status.*`, `color.accent.success/warning/danger`) are deliberately untouched by `accent` and `neutralWarmth` — their hue carries meaning. Override them via `colors` only with equivalent-meaning hues.
+- All hex inputs are validated (`#rgb`/`#rrggbb`); invalid values, unknown token paths, out-of-range warmth, and malformed names throw at theme-creation time.
+- Multiple providers with different **unnamed** themes on one page collide (all scope to `[data-agentic-ds]`). Give each theme a `name` in that case.
 
 ---
 
@@ -127,6 +167,12 @@ function Orphan() {
 // ❌ Importing ChakraProvider or system directly
 import { ChakraProvider } from '@chakra-ui/react' // banned by no-restricted-imports rule
 import { system } from '@agentic-ds/core' // banned by no-restricted-imports rule
+
+// ❌ Creating a theme inside render — rebuilds the style system every update
+function App() {
+  const theme = defineAgenticTheme({ accent: '#e8590c' }) // move to module scope
+  return <AgenticProvider theme={theme}>…</AgenticProvider>
+}
 ```
 
 ---

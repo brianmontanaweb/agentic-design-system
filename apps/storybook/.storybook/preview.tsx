@@ -1,6 +1,6 @@
 import React from 'react'
 import type { Preview } from 'storybook/internal/types'
-import { AgenticProvider } from '@agentic-ds/core'
+import { AgenticProvider, type AgenticTheme } from '@agentic-ds/core'
 
 const preview: Preview = {
   parameters: {
@@ -33,6 +33,10 @@ const preview: Preview = {
     (Story, context) => {
       const scheme = (context.globals['colorScheme'] ?? 'dark') as 'dark' | 'light'
       const bg = scheme === 'light' ? '#f8f9fa' : '#0a0a0f'
+      // Branded-theme stories set parameters.agenticTheme (a defineAgenticTheme
+      // result) instead of nesting a second AgenticProvider, which the provider
+      // contract forbids.
+      const theme = context.parameters['agenticTheme'] as AgenticTheme | undefined
       // The preview page is a host app, so page-level color-scheme is its
       // call (the provider only scopes color-scheme to its own wrapper).
       // Keeping the canvas in sync matters for the visual baselines: the
@@ -41,7 +45,7 @@ const preview: Preview = {
         document.documentElement.style.colorScheme = scheme
       }, [scheme])
       return (
-        <AgenticProvider colorScheme={scheme}>
+        <AgenticProvider colorScheme={scheme} theme={theme}>
           <div style={{ padding: '2rem', minWidth: '400px', backgroundColor: bg }}>
             <Story />
           </div>

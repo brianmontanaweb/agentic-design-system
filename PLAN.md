@@ -52,15 +52,16 @@ Chakra UI v3 theme extension + base component wrappers.
 
 **Theme:**
 
-- Extends Chakra's `createSystem()` with token values
+- `defineAgenticTheme()` factory over Chakra's `createSystem()` — hosts brand the system with an accent hex (on-accent text re-derived per mode by WCAG contrast), parametric OKLCH neutral warmth (−1…1, lightness-preserving), and typed per-token overrides; the stock theme is the no-options call
 - Dark mode as default semantic layer
-- `cssVarsRoot: '[data-agentic-ds]'` — all CSS custom properties scoped to the provider wrapper, not `:root`, so the library does not leak styles into the host application's global scope
-- No `globalCss` — libraries must not set styles on `body` or any global selector
+- `cssVarsRoot: '[data-agentic-ds]'` — all CSS custom properties scoped to the provider wrapper, not `:root`, so the library does not leak styles into the host application's global scope; named themes narrow it to `[data-agentic-ds][data-agentic-theme="<name>"]` so differently-branded providers can coexist
+- `globalCss` restricted to the `[data-agentic-ds]` scope (reduced-motion enforcement only) — libraries must not set styles on `body` or any global selector
 - Custom component recipes: Button ✓, Card (planned), Badge (planned)
 
 **Exports:**
 
-- `AgenticProvider` — wraps `ChakraProvider` with the custom theme; renders `<div data-agentic-ds="">` as the CSS vars scope boundary
+- `AgenticProvider` — wraps `ChakraProvider` with the theme (stock by default, `theme` prop for branded); renders `<div data-agentic-ds="">` as the CSS vars scope boundary
+- `defineAgenticTheme` ✓ — sanctioned branding extension point; the Chakra `system` itself stays unexported and lint-banned
 - `Button` ✓ — 4 variants (solid, outline, ghost, danger), 3 sizes, loading state with width preservation, full WCAG AA accessibility
 - `CodeBlock` ✓ — themed code display primitive
 - `Card`, `Badge` — planned
@@ -173,21 +174,21 @@ Decisions made when the monolithic `add-component` skill was split into an orche
 
 ### Testing
 
-| Item                                                                                                            | Priority |
-| --------------------------------------------------------------------------------------------------------------- | -------- |
-| Add cross-browser visual regression testing (Firefox + Safari) via Chromatic or Playwright multi-project config | Low      |
+| Item                                                                                                                                                        | Priority |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| Capture ubuntu visual baselines for the four new `AgenticProvider` theming stories (`npm run test:visual:update:docker` or CI regenerate; added 2026-07-13) | High     |
+| Add cross-browser visual regression testing (Firefox + Safari) via Chromatic or Playwright multi-project config                                             | Low      |
 
 ### Architecture (Astryx-inspired, 2026-07-12)
 
 Approaches borrowed from Meta's [Astryx](https://github.com/facebook/astryx) design system, mapped to this codebase's existing gaps. Full analysis in the 2026-07-12 review session.
 
-| Item                                                                                                                                                                                                                                                                                                                          | Priority |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| **`defineAgenticTheme()` + theme prop on `AgenticProvider`** — replace the singleton `system` export with a factory so host apps can brand the system (accent hex, neutral warmth → parametric scale generation, Astryx `defineTheme`-style). Keeps the existing direct-import lint ban; adds the sanctioned extension point  | Medium   |
-| **Generate MCP metadata from spec docs** — build step parses `docs/components/*.md` YAML frontmatter and emits `mcp-builder`'s `metadata/components.ts`, making the spec doc the single source of truth (same pattern as `tokens/scripts/generate.ts`). `/add-component-spec` then keeps the MCP server current automatically | Medium   |
-| **Built CSS artifact for the MCP Apps IIFE bundle** — pre-extract `[data-agentic-ds]`-scoped custom properties + keyframes into a static `.css` file at build time (Astryx runtime-vs-`/built` split) for CSP-strict iframe embedding. Lands with the `mcp-builder` IIFE implementation                                       | Medium   |
-| **`search()` MCP tool + dense output mode** — natural-language discovery over component descriptions and token `$description` fields, plus a token-efficient output flag for agent context windows. Depends on spec-doc-generated metadata                                                                                    | Low      |
-| **Data-attribute state exposure** — emit `data-status` on `ToolCallCard` / `AgentStatus` / `ProgressSteps` so host CSS and Tailwind variants can target states without new props; also gives visual-regression and E2E tests stable selectors                                                                                 | Low      |
+| Item                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Priority |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| **Generate MCP metadata from spec docs** — build step parses `docs/components/*.md` YAML frontmatter and emits `mcp-builder`'s `metadata/components.ts`, making the spec doc the single source of truth (same pattern as `tokens/scripts/generate.ts`). `/add-component-spec` then keeps the MCP server current automatically                                                                                                                                                                | Medium   |
+| **Built CSS artifact for the MCP Apps IIFE bundle** — pre-extract `[data-agentic-ds]`-scoped custom properties + keyframes into a static `.css` file at build time (Astryx runtime-vs-`/built` split) for CSP-strict iframe embedding. Lands with the `mcp-builder` IIFE implementation. Note: a static artifact captures the stock theme only — `defineAgenticTheme()` output is runtime-emitted, so branded MCP-App embeds either accept stock styling or need a per-theme extraction step | Medium   |
+| **`search()` MCP tool + dense output mode** — natural-language discovery over component descriptions and token `$description` fields, plus a token-efficient output flag for agent context windows. Depends on spec-doc-generated metadata                                                                                                                                                                                                                                                   | Low      |
+| **Data-attribute state exposure** — emit `data-status` on `ToolCallCard` / `AgentStatus` / `ProgressSteps` so host CSS and Tailwind variants can target states without new props; also gives visual-regression and E2E tests stable selectors                                                                                                                                                                                                                                                | Low      |
 
 ---
 
