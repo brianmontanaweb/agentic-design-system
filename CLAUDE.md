@@ -4,14 +4,14 @@ This is a monorepo for a React design system purpose-built for agentic/MCP appli
 
 ## Packages
 
-| Package                | Purpose                                                                       |
-| ---------------------- | ----------------------------------------------------------------------------- |
-| `packages/tokens`      | Design tokens — source of truth for all values                                |
-| `packages/core`        | Base components (Button, CodeBlock, AgenticProvider, theme)                   |
-| `packages/agents`      | Agent-specific components (streaming, tool calls, status)                     |
-| `packages/mcp-builder` | MCP stdio server (get_token, get_component) + IIFE bundle for MCP App iframes |
-| `apps/storybook`       | Visual regression tests and component stories                                 |
-| `apps/demo-web`        | Integration demo                                                              |
+| Package                | Purpose                                                                               |
+| ---------------------- | ------------------------------------------------------------------------------------- |
+| `packages/tokens`      | Design tokens — source of truth for all values                                        |
+| `packages/core`        | Base components (Button, CodeBlock, AgenticProvider, theme)                           |
+| `packages/agents`      | Agent-specific components (streaming, tool calls, status)                             |
+| `packages/mcp-builder` | MCP stdio server (get_token, get_component, search) + IIFE bundle for MCP App iframes |
+| `apps/storybook`       | Visual regression tests and component stories                                         |
+| `apps/demo-web`        | Integration demo                                                                      |
 
 Build order is enforced: `tokens → core → agents`. Always run `npm run build` from the root.
 

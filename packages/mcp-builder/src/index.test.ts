@@ -42,16 +42,16 @@ beforeAll(async () => {
 })
 
 describe('ListTools handler', () => {
-  it('returns exactly two tools', async () => {
+  it('returns exactly three tools', async () => {
     const result = (await getHandler(schemas.listTools)({
       params: { name: '', arguments: {} },
     })) as {
       tools: unknown[]
     }
-    expect(result.tools).toHaveLength(2)
+    expect(result.tools).toHaveLength(3)
   })
 
-  it('exposes get_token and get_component by name', async () => {
+  it('exposes get_token, get_component, and search by name', async () => {
     const result = (await getHandler(schemas.listTools)({
       params: { name: '', arguments: {} },
     })) as {
@@ -60,6 +60,7 @@ describe('ListTools handler', () => {
     const names = result.tools.map((t) => t.name)
     expect(names).toContain('get_token')
     expect(names).toContain('get_component')
+    expect(names).toContain('search')
   })
 
   it('each tool has name, description, and inputSchema', async () => {
@@ -88,6 +89,14 @@ describe('CallTool handler', () => {
   it('routes get_component and returns a content array', async () => {
     const result = (await getHandler(schemas.callTool)({
       params: { name: 'get_component', arguments: { name: 'Button' } },
+    })) as { content: { type: string; text: string }[] }
+    expect(result.content).toHaveLength(1)
+    expect(result.content[0].type).toBe('text')
+  })
+
+  it('routes search and returns a content array', async () => {
+    const result = (await getHandler(schemas.callTool)({
+      params: { name: 'search', arguments: { query: 'status' } },
     })) as { content: { type: string; text: string }[] }
     expect(result.content).toHaveLength(1)
     expect(result.content[0].type).toBe('text')

@@ -131,6 +131,55 @@ describe('handleGetComponent', () => {
     })
   })
 
+  describe('dense mode', () => {
+    it('returns a compact header without markdown headings', () => {
+      const result = handleGetComponent({ name: 'Button', dense: true })
+      const text = result.content[0].text
+      expect(text).not.toContain('## ')
+      expect(text.split('\n')[0]).toBe('Button @agentic-ds/core action')
+    })
+
+    it('renders props as signature-style entries with defaults', () => {
+      const result = handleGetComponent({ name: 'Button', dense: true })
+      const text = result.content[0].text
+      expect(text).toMatch(/props: .*variant\?:"solid" \| "outline" \| "ghost" \| "danger"="solid"/)
+    })
+
+    it('marks required props without "?"', () => {
+      const result = handleGetComponent({ name: 'AgentStatus', dense: true })
+      expect(result.content[0].text).toMatch(/props: .*\bstatus:AgentStatusValue/)
+      expect(result.content[0].text).not.toContain('status?:')
+    })
+
+    it('renders union types as pipe-joined values', () => {
+      const result = handleGetComponent({ name: 'AgentStatus', dense: true })
+      expect(result.content[0].text).toContain(
+        'AgentStatusValue=idle|running|waiting|done|error|cancelled'
+      )
+    })
+
+    it('omits descriptions, tokens, and accessibility notes', () => {
+      const result = handleGetComponent({ name: 'AgentStatus', dense: true })
+      const text = result.content[0].text
+      expect(text).not.toContain('### ')
+      expect(text).not.toContain('MUST')
+    })
+
+    it('lists names and packages only for wildcard "*"', () => {
+      const result = handleGetComponent({ name: '*', dense: true })
+      const text = result.content[0].text
+      expect(text).not.toContain('total')
+      expect(text).not.toContain(' — ')
+      expect(text).toContain('Button (@agentic-ds/core)')
+    })
+
+    it('is shorter than the default output for the same component', () => {
+      const dense = handleGetComponent({ name: 'AgentStatus', dense: true })
+      const full = handleGetComponent({ name: 'AgentStatus' })
+      expect(dense.content[0].text.length).toBeLessThan(full.content[0].text.length)
+    })
+  })
+
   describe('not found', () => {
     it('returns an error message naming the unknown component', () => {
       const result = handleGetComponent({ name: 'Nonexistent' })

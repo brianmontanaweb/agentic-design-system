@@ -130,10 +130,13 @@ agentic-design-system/
 
 **Tools exposed:**
 
-| Tool            | Description                                                                                        |
-| --------------- | -------------------------------------------------------------------------------------------------- |
-| `get_token`     | Look up token values by name or partial path — e.g. `"accentBlue"`, `"agent.status"`, `"duration"` |
-| `get_component` | Get props, types, and ARIA notes for any component. Pass `"*"` to list all.                        |
+| Tool            | Description                                                                                                             |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `get_token`     | Look up token values by name or partial path — e.g. `"accentBlue"`, `"agent.status"`, `"duration"`                      |
+| `get_component` | Get props, types, and ARIA notes for any component. Pass `"*"` to list all.                                             |
+| `search`        | Natural-language search across component and token descriptions — e.g. `"show agent progress"`. Returns ranked matches. |
+
+All three tools accept `dense: true` for compact, context-window-friendly output (names, signatures, and values only — no descriptions or prose).
 
 ### Setup
 
@@ -160,7 +163,7 @@ Replace `/absolute/path/to/agentic-design-system` with the actual path on your m
 
 **3. Start a new Claude Code session.** MCP servers are initialized at session start — existing sessions will not pick up the change.
 
-Once connected, Claude Code will have `mcp__agentic_ds__get_token` and `mcp__agentic_ds__get_component` available as tools.
+Once connected, Claude Code will have `mcp__agentic_ds__get_token`, `mcp__agentic_ds__get_component`, and `mcp__agentic_ds__search` available as tools.
 
 > **Note:** The server resolves `@agentic-ds/tokens` from the monorepo's `node_modules`. Run `npm install` from the repo root before using it, and rebuild after any token changes (`npm run build -w packages/tokens && npm run build -w packages/mcp-builder`).
 

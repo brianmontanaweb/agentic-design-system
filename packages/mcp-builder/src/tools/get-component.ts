@@ -8,14 +8,18 @@ export interface TextToolResult extends CallToolResult {
   content: TextContent[]
 }
 
-export function handleGetComponent(args: { name: string }): TextToolResult {
+export function handleGetComponent(args: { name: string; dense?: boolean }): TextToolResult {
   if (args.name === '*') {
-    const list = components.map((c) => `${c.name} (${c.package}) — ${c.description}`).join('\n')
+    const list = args.dense
+      ? components.map((c) => `${c.name} (${c.package})`).join('\n')
+      : components.map((c) => `${c.name} (${c.package}) — ${c.description}`).join('\n')
     return {
       content: [
         {
           type: 'text' as const,
-          text: [`Available components (${components.length} total):`, ``, list].join('\n'),
+          text: args.dense
+            ? list
+            : [`Available components (${components.length} total):`, ``, list].join('\n'),
         },
       ],
     }
@@ -37,6 +41,35 @@ export function handleGetComponent(args: { name: string }): TextToolResult {
             ``,
             `Pass "*" to list all components with descriptions.`,
           ].join('\n'),
+        },
+      ],
+    }
+  }
+
+  if (args.dense) {
+    const lines: string[] = [`${component.name} ${component.package} ${component.category}`]
+    const propEntries = Object.entries(component.props)
+    if (propEntries.length > 0) {
+      const props = propEntries
+        .map(([propName, def]) => {
+          const opt = def.required ? '' : '?'
+          const dflt = def.default ? `=${def.default}` : ''
+          return `${propName}${opt}:${def.type}${dflt}`
+        })
+        .join('; ')
+      lines.push(`props: ${props}`)
+    }
+    if (component.types && Object.keys(component.types).length > 0) {
+      const types = Object.entries(component.types)
+        .map(([typeName, def]) => `${typeName}=${def.values.join('|')}`)
+        .join('; ')
+      lines.push(`types: ${types}`)
+    }
+    return {
+      content: [
+        {
+          type: 'text' as const,
+          text: lines.join('\n'),
         },
       ],
     }

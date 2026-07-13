@@ -119,6 +119,29 @@ describe('handleGetToken', () => {
     })
   })
 
+  describe('dense mode', () => {
+    it('returns bare "path: value" lines with no header', () => {
+      const result = handleGetToken({ name: 'durations', dense: true })
+      const lines = result.content[0].text.split('\n')
+      expect(lines[0]).not.toMatch(/^Found/)
+      for (const line of lines) {
+        expect(line).toMatch(/^durations\.\S+: .+/)
+      }
+    })
+
+    it('omits type annotations and descriptions', () => {
+      const result = handleGetToken({ name: 'agent.status', dense: true })
+      const text = result.content[0].text
+      expect(text).not.toContain('//')
+      expect(text).not.toMatch(/\(color\)/)
+    })
+
+    it('still returns the no-match message when nothing matches', () => {
+      const result = handleGetToken({ name: 'xyznotarealtoken', dense: true })
+      expect(result.content[0].text).toContain('No tokens found matching')
+    })
+  })
+
   describe('response envelope', () => {
     it('always returns content array with a single text entry', () => {
       for (const name of ['space', 'xyznotarealtoken']) {

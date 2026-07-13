@@ -3,6 +3,8 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js'
 import { handleGetToken } from './tools/get-token.js'
 import { handleGetComponent } from './tools/get-component.js'
+import { handleSearch } from './tools/search.js'
+import type { SearchArgs } from './tools/search.js'
 
 const server = new Server({ name: 'agentic-ds', version: '0.1.0' }, { capabilities: { tools: {} } })
 
@@ -20,6 +22,11 @@ server.setRequestHandler(ListToolsRequestSchema, () => ({
             description:
               'Token name or partial path to search for (e.g. "accentBlue", "agent.status", "space.4", "duration")',
           },
+          dense: {
+            type: 'boolean',
+            description:
+              'Compact "path: value" output with no header, type, or descriptions. Use when saving context tokens.',
+          },
         },
         required: ['name'],
       },
@@ -36,8 +43,42 @@ server.setRequestHandler(ListToolsRequestSchema, () => ({
             description:
               'Component name (e.g. "Button", "AgentStatus", "ToolCallCard"). Pass "*" to list all components.',
           },
+          dense: {
+            type: 'boolean',
+            description:
+              'Compact signature-style output (props and union types only, no descriptions or accessibility notes). Use when saving context tokens.',
+          },
         },
         required: ['name'],
+      },
+    },
+    {
+      name: 'search',
+      description:
+        'Natural-language search across component descriptions and design token descriptions. Returns ranked matches; follow up with get_component or get_token for full details.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          query: {
+            type: 'string',
+            description:
+              'What you are looking for, in plain words (e.g. "show agent progress", "status colors", "monospace font")',
+          },
+          kind: {
+            type: 'string',
+            enum: ['component', 'token', 'all'],
+            description: 'Restrict results to components or tokens. Defaults to "all".',
+          },
+          limit: {
+            type: 'number',
+            description: 'Maximum results to return (1–50, default 10).',
+          },
+          dense: {
+            type: 'boolean',
+            description: 'Names only, no descriptions. Use when saving context tokens.',
+          },
+        },
+        required: ['query'],
       },
     },
   ],
@@ -52,9 +93,11 @@ server.setRequestHandler(CallToolRequestSchema, (request) => {
 
   switch (name) {
     case 'get_token':
-      return handleGetToken(args as { name: string })
+      return handleGetToken(args as { name: string; dense?: boolean })
     case 'get_component':
-      return handleGetComponent(args as { name: string })
+      return handleGetComponent(args as { name: string; dense?: boolean })
+    case 'search':
+      return handleSearch(args as SearchArgs)
     default:
       throw new Error(`Unknown tool: ${name}`)
   }
