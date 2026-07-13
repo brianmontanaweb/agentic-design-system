@@ -23,12 +23,12 @@ A clickable element that triggers an action or submits a form. The Button is the
 
 The `variant` prop controls visual weight. Use the lowest-weight variant that still makes the action clear.
 
-| Variant   | Use case                                         | Background    | Border          | Text           |
-| --------- | ------------------------------------------------ | ------------- | --------------- | -------------- |
-| `solid`   | Primary action per context (one per view max)    | `accent.blue` | none            | white          |
-| `outline` | Secondary action alongside a `solid` button      | transparent   | `border.subtle` | `text.primary` |
-| `ghost`   | Tertiary or toolbar actions; low visual priority | transparent   | none            | `text.muted`   |
-| `danger`  | Destructive actions (delete, revoke, reset)      | `accent.red`  | none            | white          |
+| Variant   | Use case                                         | Background    | Border          | Text             |
+| --------- | ------------------------------------------------ | ------------- | --------------- | ---------------- |
+| `solid`   | Primary action per context (one per view max)    | `accent.blue` | none            | white            |
+| `outline` | Secondary action alongside a `solid` button      | transparent   | `border.subtle` | `text.primary`   |
+| `ghost`   | Tertiary or toolbar actions; low visual priority | transparent   | none            | `text.muted`     |
+| `danger`  | Destructive actions (delete, revoke, reset)      | `accent.red`  | none            | `text.on.danger` |
 
 Rules:
 

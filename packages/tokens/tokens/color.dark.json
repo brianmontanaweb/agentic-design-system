@@ -107,6 +107,16 @@
           },
           "$type": "color",
           "$description": "Text on accent backgrounds. Dark mode accents are light pastels — white text fails WCAG AA (≈2.7:1), so use near-black (surface.base) for >7:1 contrast"
+        },
+        "danger": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [0.0392, 0.0392, 0.0588],
+            "alpha": 1,
+            "hex": "#0a0a0f"
+          },
+          "$type": "color",
+          "$description": "Text on the danger background. Fixed independently of color.text.on.accent — a custom theme accent (e.g. a dark brand purple) can flip on.accent to white, which fails against dark mode's light salmon danger red (≈2.8:1); near-black holds >7:1 here regardless of theme"
         }
       }
     },

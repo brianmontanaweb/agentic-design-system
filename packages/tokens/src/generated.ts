@@ -22,7 +22,7 @@ export const colorModes = Object.freeze({
   },
   'color.agent.status.done': {
     dark: '#3dd68c',
-    light: '#16a34a',
+    light: '#166534',
     $type: 'color',
     $description: 'MCP completed — successfully finished',
   },
@@ -52,7 +52,7 @@ export const colorModes = Object.freeze({
   },
   'color.tool.status.done': {
     dark: '#3dd68c',
-    light: '#16a34a',
+    light: '#166534',
     $type: 'color',
     $description: 'Tool call completed successfully',
   },
@@ -153,6 +153,13 @@ export const colorModes = Object.freeze({
     $description:
       'Text on accent backgrounds. Dark mode accents are light pastels — white text fails WCAG AA (≈2.7:1), so use near-black (surface.base) for >7:1 contrast',
   },
+  'color.text.on.danger': {
+    dark: '#0a0a0f',
+    light: '#ffffff',
+    $type: 'color',
+    $description:
+      "Text on the danger background. Fixed independently of color.text.on.accent — a custom theme accent (e.g. a dark brand purple) can flip on.accent to white, which fails against dark mode's light salmon danger red (≈2.8:1); near-black holds >7:1 here regardless of theme",
+  },
   'color.accent.interactive': {
     dark: '#4d9fff',
     light: '#2563eb',
@@ -161,7 +168,7 @@ export const colorModes = Object.freeze({
   },
   'color.accent.success': {
     dark: '#3dd68c',
-    light: '#16a34a',
+    light: '#166534',
     $type: 'color',
     $description: 'Success and done state',
   },

@@ -69,7 +69,7 @@ export const buttonRecipe = defineRecipe({
       },
       danger: {
         bg: 'color.accent.danger',
-        color: 'color.text.on.accent',
+        color: 'color.text.on.danger',
         _hover: { opacity: 0.85 },
         _active: { transform: 'scale(0.97)', opacity: 0.75 },
       },
