@@ -50,6 +50,8 @@ All styles must be scoped to `[data-agentic-ds]` — never `:root`. This applies
 
 Every implemented component needs a spec file at `docs/components/[ComponentName].md`. See `docs/components/Button.md` for the format. All current components have spec docs.
 
+Spec docs are the single source of truth for the MCP server's component metadata: `packages/mcp-builder/src/metadata/components.ts` is generated from them by `npm run metadata:generate -w packages/mcp-builder` (also runs during that package's build) — never hand-edit it; CI fails if it is stale. The doc format is a parse contract (frontmatter keys, Props table shape, `(required)` markers, union-type value tables) — see the `add-component-spec` skill for the rules; generation fails loudly on violations.
+
 ## Known Gaps (Prioritized)
 
 1. `Button` uses native `disabled` instead of `aria-disabled` + `tabIndex={0}`

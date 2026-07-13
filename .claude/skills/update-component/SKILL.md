@@ -147,6 +147,14 @@ Apply all approved changes in this order:
 2. Story file
 3. Spec doc
 
+If the spec doc changed, regenerate the MCP component metadata (from the repo root):
+
+```sh
+npm run metadata:generate -w packages/mcp-builder
+```
+
+The spec doc is machine-parsed into `packages/mcp-builder/src/metadata/components.ts` — never edit that file by hand. If generation fails, the doc violates the parse contract described in the `add-component-spec` skill (Props table format, `(required)` markers, union-type value tables); fix the doc. Commit the regenerated file together with the doc (CI diffs it).
+
 Then run:
 
 ```sh

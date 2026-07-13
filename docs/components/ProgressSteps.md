@@ -43,18 +43,18 @@ A vertical ordered list of steps showing the progress of a multi-stage agent tas
 
 ### `ProgressStepsProps`
 
-| Prop    | Type     | Default | Description           |
-| ------- | -------- | ------- | --------------------- |
-| `steps` | `Step[]` | —       | Ordered list of steps |
+| Prop    | Type     | Default | Description                      |
+| ------- | -------- | ------- | -------------------------------- |
+| `steps` | `Step[]` | —       | Ordered list of steps (required) |
 
 ### `Step`
 
-| Field         | Type         | Default | Description                           |
-| ------------- | ------------ | ------- | ------------------------------------- |
-| `id`          | `string`     | —       | Unique identifier (used as React key) |
-| `label`       | `string`     | —       | Step title                            |
-| `status`      | `StepStatus` | —       | Current state of this step            |
-| `description` | `string`     | —       | Optional sub-text shown below label   |
+| Field         | Type         | Default | Description                                     |
+| ------------- | ------------ | ------- | ----------------------------------------------- |
+| `id`          | `string`     | —       | Unique identifier, used as React key (required) |
+| `label`       | `string`     | —       | Step title (required)                           |
+| `status`      | `StepStatus` | —       | Current state of this step (required)           |
+| `description` | `string`     | —       | Optional sub-text shown below label             |
 
 ---
 

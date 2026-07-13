@@ -84,6 +84,7 @@ Disabled state MUST use `aria-disabled="true"` + `tabIndex={-1}` rather than the
 | `type`        | `"button" \| "submit" \| "reset"`             | `"button"` | HTML button type                                    |
 | `onClick`     | `React.MouseEventHandler`                     | —          | Click handler                                       |
 | `children`    | `React.ReactNode`                             | —          | Button label — MUST be present or `aria-label` set  |
+| `aria-label`  | `string`                                      | —          | Accessible name; required for icon-only buttons     |
 
 ---
 

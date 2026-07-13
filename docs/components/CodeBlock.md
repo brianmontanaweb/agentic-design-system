@@ -22,7 +22,7 @@ A styled container for displaying pre-formatted code. Renders an optional langua
 
 | Prop       | Type        | Default | Description                                                                                                   |
 | ---------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------- |
-| `children` | `ReactNode` | —       | The code content. Preserves whitespace via `white-space: pre`.                                                |
+| `children` | `ReactNode` | —       | The code content; preserves whitespace via `white-space: pre` (required).                                     |
 | `language` | `string`    | —       | Optional language label rendered above the code block (e.g. `"typescript"`). Not syntax-aware — display only. |
 
 ---

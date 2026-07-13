@@ -41,6 +41,7 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
+    "prettier": "^3.8.1",
     "tsx": "^4.16.2",
     "tsup": "^8.5.1",
     "typescript": "^6.0.2",

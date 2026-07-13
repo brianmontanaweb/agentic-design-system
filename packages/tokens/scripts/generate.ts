@@ -11,6 +11,7 @@
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import prettier from 'prettier'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const packageRoot = path.join(__dirname, '..')
@@ -352,7 +353,11 @@ const fullCode = [
   tokenExport,
 ].join('\n')
 
-fs.writeFileSync(outputPath, fullCode)
+// Format through prettier so `npm run build` and `npm run format` agree on
+// the emitted style — otherwise the two rewrite the file back and forth.
+const prettierConfig = await prettier.resolveConfig(outputPath)
+const formatted = await prettier.format(fullCode, { ...prettierConfig, filepath: outputPath })
+fs.writeFileSync(outputPath, formatted)
 console.log(
   `✓ Generated ${outputPath} (${referenceKeys.length} color tokens × ${contextNames.length} modes)`
 )

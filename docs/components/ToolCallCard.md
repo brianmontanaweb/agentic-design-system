@@ -18,7 +18,7 @@ tokens:
       color.surface.elevated,
       color.border.subtle,
     ]
-  durations: [duration.fast, duration.pulse]
+  duration: [duration.fast, duration.pulse]
 wcag: AA
 aria-pattern: https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/
 ---

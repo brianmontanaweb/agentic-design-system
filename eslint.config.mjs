@@ -287,6 +287,7 @@ export default tseslint.config(
       '*.mjs',
       'scripts/**/*.ts',
       'packages/tokens/scripts/**/*.ts',
+      'packages/mcp-builder/scripts/**/*.ts',
       'packages/*/vitest.config.ts',
       'apps/demo-web/vite.config.ts',
       'apps/storybook/.storybook/**/*.ts',

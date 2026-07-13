@@ -16,6 +16,7 @@ tokens:
       color.border.subtle,
     ]
 wcag: AA
+aria-pattern: n/a
 ---
 
 # MessageBubble
@@ -36,12 +37,12 @@ A single message card within a conversation thread. Background color, label colo
 
 ## Props
 
-| Prop        | Type              | Default | Description                                                        |
-| ----------- | ----------------- | ------- | ------------------------------------------------------------------ |
-| `sender`    | `MessageRole`     | —       | Determines visual treatment (required)                             |
-| `content`   | `React.ReactNode` | —       | Message body — can be text, `<StreamingText>`, `<CodeBlock>`, etc. |
-| `label`     | `string`          | —       | Override sender label; falls back to role default                  |
-| `timestamp` | `string`          | —       | Optional timestamp shown in the header row                         |
+| Prop        | Type              | Default | Description                                                            |
+| ----------- | ----------------- | ------- | ---------------------------------------------------------------------- |
+| `sender`    | `MessageRole`     | —       | Determines visual treatment (required)                                 |
+| `content`   | `React.ReactNode` | —       | Message body — text, `<StreamingText>`, `<CodeBlock>`, etc. (required) |
+| `label`     | `string`          | —       | Override sender label; falls back to role default                      |
+| `timestamp` | `string`          | —       | Optional timestamp shown in the header row                             |
 
 ---
 

@@ -15,6 +15,7 @@ Create the spec doc given `$ARGUMENTS` in the format `<ComponentName>`.
 - **The frontmatter token inventory requires active scanning** — extract every semantic token string from the source style props (any quoted dotted name in a Chakra style prop that is not `#`-hex) and list each in the matching `tokens.*` array. Do not write the list from memory.
 - **Every prop in the `export interface` block goes in the props table** — including string-literal-key props like `'aria-label'?: string`.
 - **Use exact TypeScript types in the props table** — `Record<string, unknown>` is not `object`; unions list all members.
+- **The spec doc is machine-parsed** — `packages/mcp-builder/scripts/generate.ts` turns it into the MCP server's component metadata. The format rules in Step 3 are a parse contract, not a style guide; Step 4's regeneration fails loudly if the doc deviates.
 - **No approval gate** — creating one doc is the whole task; proceed without asking.
 
 ---
@@ -69,9 +70,28 @@ mcp-states: [list MCP states surfaced, if applicable]
 
 Body MUST include: description, variants table (if applicable), props table, accessibility requirements with WCAG SC references, do/don't examples. Use MUST/SHOULD/MAY (RFC 2119).
 
+The MCP metadata generator parses the body, so these rules are load-bearing:
+
+- The H1 must equal the frontmatter `component`, which must equal the filename. The single paragraph after the H1 becomes the MCP description.
+- `tokens` is `n/a`, `all`, or a map of group → token-name arrays. `aria-pattern` is a URL or `n/a`.
+- The `## Props` section contains exactly one `Prop | Type | Default | Description` table — or H3 sub-tables: `### <ComponentName>Props` for the props, plus one `### <TypeName>` (`Field | Type | Default | Description`) per structural type (see `ProgressSteps.md`).
+- A prop or field is required iff its description contains `(required)`. Defaults use `—` for none.
+- A named union type in the props (e.g. `ToolCallStatus`) must have a body table whose first-column header appears in the type name (e.g. `Status`) and whose first-column cells are all backticked values — that table defines the union members. Opaque types with no such table are allowed.
+- `## Accessibility` bullets become the MCP `ariaNotes`.
+
+## Step 4 — Regenerate MCP metadata
+
+From the repo root:
+
+```sh
+npm run metadata:generate -w packages/mcp-builder
+```
+
+This regenerates `packages/mcp-builder/src/metadata/components.ts` from all spec docs. If it fails, the new doc violates the parse contract — fix the doc, never the generated file. Include the regenerated file in the same commit as the doc (CI diffs it).
+
 Theming: both light and dark schemes are supported via the semantic tokens listed in the frontmatter — the body only needs a theming note when the component introduced **new** semantic tokens (name them and state that each carries `_dark` and `_light` values) or has scheme-specific contrast considerations (e.g. text on accent backgrounds — see `color.text.on.accent` in `theme.ts`).
 
-## Step 4 — Report
+## Step 5 — Report
 
 ```
 ## Spec doc created: <ComponentName>
@@ -80,6 +100,7 @@ Theming: both light and dark schemes are supported via the semantic tokens liste
 **Frontmatter tokens:** <counts per category>
 **Props documented:** <count>
 **MCP states:** <list or "n/a">
+**MCP metadata:** regenerated (<N> components)
 ```
 
 To score this run against known test cases, see `evals/evals.json`.

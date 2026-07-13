@@ -4,8 +4,10 @@ import { components } from './components.js'
 const VALID_PACKAGES = ['@agentic-ds/core', '@agentic-ds/agents']
 
 const EXPECTED_NAMES = [
+  'AgenticProvider',
   'Button',
   'CodeBlock',
+  'useReducedMotion',
   'AgentStatus',
   'ThinkingIndicator',
   'ProgressSteps',
@@ -26,8 +28,8 @@ const ARIA_REQUIRED = [
 ]
 
 describe('components metadata', () => {
-  it('has the expected number of components', () => {
-    expect(components).toHaveLength(9)
+  it('has one entry per spec doc', () => {
+    expect(components).toHaveLength(11)
   })
 
   it('contains all expected component names', () => {
@@ -46,6 +48,9 @@ describe('components metadata', () => {
     it.each(components)('$name has all required fields', (component) => {
       expect(component.name).toBeTruthy()
       expect(component.description).toBeTruthy()
+      expect(component.category).toBeTruthy()
+      expect(component.status).toBeTruthy()
+      expect(component.wcag).toBeTruthy()
       expect(component.props).toBeDefined()
     })
 
@@ -72,6 +77,16 @@ describe('components metadata', () => {
         ).toBeGreaterThan(0)
       }
     })
+
+    it.each(components)('$name: token groups are non-empty string arrays', (component) => {
+      if (!component.tokens || component.tokens === 'all') return
+      for (const [group, names] of Object.entries(component.tokens)) {
+        expect(names.length, `${component.name} tokens.${group} is empty`).toBeGreaterThan(0)
+        for (const name of names) {
+          expect(typeof name).toBe('string')
+        }
+      }
+    })
   })
 
   describe('accessibility requirements', () => {
@@ -79,6 +94,25 @@ describe('components metadata', () => {
       const component = components.find((c) => c.name === name)
       expect(component, `${name} not found in components`).toBeDefined()
       expect(component?.ariaNotes, `${name} is missing ariaNotes`).toBeTruthy()
+    })
+
+    it.each(ARIA_REQUIRED)('%s declares an ARIA pattern URL', (name) => {
+      const component = components.find((c) => c.name === name)
+      expect(component?.ariaPattern, `${name} is missing ariaPattern`).toMatch(/^https:\/\//)
+    })
+  })
+
+  describe('MCP lifecycle coverage', () => {
+    it('AgentStatus supports all 6 MCP task states', () => {
+      const agentStatus = components.find((c) => c.name === 'AgentStatus')
+      expect(agentStatus?.types?.AgentStatusValue.values).toEqual([
+        'idle',
+        'running',
+        'waiting',
+        'done',
+        'error',
+        'cancelled',
+      ])
     })
   })
 })

@@ -3,8 +3,7 @@ component: AgenticProvider
 package: '@agentic-ds/core'
 category: provider
 status: implemented
-tokens:
-  colors: [all semantic tokens — AgenticProvider is the token resolution root]
+tokens: all # AgenticProvider is the token resolution root
 wcag: AA
 aria-pattern: n/a
 mcp-states: n/a
@@ -12,7 +11,9 @@ mcp-states: n/a
 
 # AgenticProvider
 
-The root provider for the design system. Every application using `@agentic-ds/core` or `@agentic-ds/agents` MUST render `AgenticProvider` at the top of the component tree. It is responsible for:
+The root provider for the design system. Every application using `@agentic-ds/core` or `@agentic-ds/agents` MUST render `AgenticProvider` at the top of the component tree.
+
+It is responsible for:
 
 1. **CSS custom property scope** — all Chakra token variables are emitted under `[data-agentic-ds]`, not `:root`, so the design system never leaks into the host application's global stylesheet.
 2. **Color mode** — stamps `data-color-mode="dark" | "light"` on the `[data-agentic-ds]` wrapper, the single signal that drives both the Chakra `_dark`/`_light` conditions (theme.ts) and the static `tokens.css`. The provider never mutates `<html>` or writes storage; mode is fully scoped to its own subtree, so multiple providers with different schemes can coexist.
@@ -25,7 +26,7 @@ The root provider for the design system. Every application using `@agentic-ds/co
 
 | Prop          | Type                            | Default     | Description                                                                                                                                                         |
 | ------------- | ------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `children`    | `ReactNode`                     | —           | Application content to render inside the provider.                                                                                                                  |
+| `children`    | `ReactNode`                     | —           | Application content to render inside the provider (required).                                                                                                       |
 | `colorScheme` | `"dark" \| "light" \| "system"` | `"dark"`    | Controlled color scheme. `"dark"`/`"light"` pin the mode; `"system"` follows the OS `prefers-color-scheme` and live-updates. Hosts toggle by re-rendering the prop. |
 | `theme`       | `AgenticTheme`                  | stock theme | Branded theme created by `defineAgenticTheme()`. Create it once at module scope — never inside render.                                                              |
 

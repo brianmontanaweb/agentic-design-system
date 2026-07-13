@@ -44,19 +44,22 @@ export function handleGetComponent(args: { name: string }): TextToolResult {
 
   const lines: string[] = [
     `## ${component.name}`,
-    `Package: \`${component.package}\``,
-    ``,
-    component.description,
-    ``,
-    `### Props`,
+    `Package: \`${component.package}\` · Category: ${component.category} · WCAG: ${component.wcag}`,
   ]
+  if (component.ariaPattern) {
+    lines.push(`ARIA pattern: ${component.ariaPattern}`)
+  }
+  lines.push(``, component.description)
 
-  for (const [propName, def] of Object.entries(component.props)) {
-    const req = def.required
-      ? 'required'
-      : `optional${def.default ? `, default: ${def.default}` : ''}`
-    const desc = def.description ? ` — ${def.description}` : ''
-    lines.push(`- **${propName}**: \`${def.type}\` (${req})${desc}`)
+  if (Object.keys(component.props).length > 0) {
+    lines.push(``, `### Props`)
+    for (const [propName, def] of Object.entries(component.props)) {
+      const req = def.required
+        ? 'required'
+        : `optional${def.default ? `, default: ${def.default}` : ''}`
+      const desc = def.description ? ` — ${def.description}` : ''
+      lines.push(`- **${propName}**: \`${def.type}\` (${req})${desc}`)
+    }
   }
 
   if (component.types && Object.keys(component.types).length > 0) {
@@ -65,6 +68,17 @@ export function handleGetComponent(args: { name: string }): TextToolResult {
       const vals = def.values.map((v) => `'${v}'`).join(' | ')
       const desc = def.description ? ` — ${def.description}` : ''
       lines.push(`- **${typeName}**: ${vals}${desc}`)
+    }
+  }
+
+  if (component.tokens) {
+    lines.push(``, `### Tokens`)
+    if (component.tokens === 'all') {
+      lines.push(`All semantic tokens — this component is the token resolution root.`)
+    } else {
+      for (const [group, names] of Object.entries(component.tokens)) {
+        lines.push(`- **${group}**: ${names.join(', ')}`)
+      }
     }
   }
 

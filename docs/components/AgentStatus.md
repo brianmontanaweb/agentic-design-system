@@ -25,7 +25,7 @@ Displays the current lifecycle state of an MCP agent as a colored dot paired wit
 
 ## States
 
-All 6 MCP task lifecycle states must be supported. Do not add states outside this set.
+All 6 MCP task lifecycle states must be supported. Do not add states outside this set. `waiting` maps to the MCP `input_required` state.
 
 | Status      | Token                          | Meaning                      |
 | ----------- | ------------------------------ | ---------------------------- |
