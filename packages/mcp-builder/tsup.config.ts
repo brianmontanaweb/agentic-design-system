@@ -1,4 +1,10 @@
 import { defineConfig } from 'tsup'
+import { writeFileSync } from 'fs'
+import { join } from 'path'
+import { fileURLToPath } from 'url'
+import { buildStaticCss } from './src/static-css'
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 export default defineConfig([
   // MCP server — Node.js binary over stdio
@@ -43,6 +49,15 @@ export default defineConfig([
     outExtension: () => ({ js: '.min.js' }),
     esbuildOptions(options) {
       options.define = { 'process.env.NODE_ENV': '"production"' }
+    },
+    // Emit the static stylesheet next to the IIFE bundles: custom properties
+    // + keyframes for CSP-strict iframes (see src/static-css.ts). Runs on the
+    // last config so dist/iife exists and its clean step has already happened.
+    onSuccess() {
+      const outFile = join(__dirname, 'dist/iife/agentic-ds.css')
+      writeFileSync(outFile, buildStaticCss())
+      console.log(`✓ Generated ${outFile}`)
+      return Promise.resolve()
     },
   },
 ])

@@ -76,6 +76,13 @@ export const components: ComponentDef[] = [
         description:
           'Branded theme created by `defineAgenticTheme()`. Create it once at module scope — never inside render.',
       },
+      injectStyles: {
+        type: 'boolean',
+        required: false,
+        default: 'true',
+        description:
+          "Set `false` for CSP-strict documents (`style-src` without `unsafe-inline`) that link the built stylesheet (`@agentic-ds/mcp-builder/iife/css`) instead of relying on the provider's inline `<style>` keyframes.",
+      },
     },
     ariaNotes:
       '`AgenticProvider` MUST be present for all ARIA live regions, semantic tokens, and keyboard focus indicators to function correctly. Do not render agent components outside a provider. _(WCAG SC 1.3.1, 4.1.2)_\n`prefers-reduced-motion` MUST be respected globally — AgenticProvider handles this automatically via the injected `<style>` block. Do not override `animation-duration` or `transition-duration` with `!important` inside components. _(WCAG SC 2.3.3)_\nColor mode MUST NOT be changed without user intent. The `colorScheme` prop is controlled — hold it in host state and update it only from a user-initiated toggle (or pass `"system"` to follow the OS preference the user already expressed).',

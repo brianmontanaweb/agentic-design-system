@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactElement, type ReactNode } from 'react'
 import { ChakraProvider } from '@chakra-ui/react'
-import { durations } from '@agentic-ds/tokens'
+import { keyframesCss } from '../keyframesCss'
 import { defaultTheme, type AgenticTheme } from '../theme'
 
 export type ColorScheme = 'dark' | 'light' | 'system'
@@ -19,37 +19,14 @@ export interface AgenticProviderProps {
    * underlying style system is stable across re-renders.
    */
   theme?: AgenticTheme
+  /**
+   * Set false to skip the inline <style> keyframes injection for CSP-strict
+   * documents (style-src without 'unsafe-inline'). The document must then
+   * link the built stylesheet (@agentic-ds/mcp-builder/iife/css), which
+   * contains the same keyframes and reduced-motion rules.
+   */
+  injectStyles?: boolean
 }
-
-// Keyframe names use the ds- prefix to prevent collisions in the host app's
-// global stylesheet. Scoping @keyframes inside a selector requires CSS Nesting
-// (Level 4) which isn't universally supported — top-level declarations are
-// safer. The ds- prefix is the primary collision guard.
-const keyframes = `
-@keyframes ds-pulse {
-  0%, 100% { opacity: 0.3; transform: scale(0.85); }
-  50%       { opacity: 1;   transform: scale(1); }
-}
-@keyframes ds-blink {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  @keyframes ds-pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%       { opacity: 1; transform: scale(1); }
-  }
-  @keyframes ds-blink {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 1; }
-  }
-  [data-agentic-ds] *, [data-agentic-ds] *::before, [data-agentic-ds] *::after {
-    animation-duration: ${durations.instant.$value} !important;
-    transition-duration: ${durations.instant.$value} !important;
-  }
-}
-`
 
 // SSR has no matchMedia, so the first render resolves to dark (the brand
 // default) and corrects itself after hydration if the OS prefers light.
@@ -72,6 +49,7 @@ export function AgenticProvider({
   children,
   colorScheme = 'dark',
   theme = defaultTheme,
+  injectStyles = true,
 }: AgenticProviderProps): ReactElement {
   const systemScheme = useSystemScheme()
   const resolved = colorScheme === 'system' ? systemScheme : colorScheme
@@ -93,7 +71,7 @@ export function AgenticProvider({
       data-color-mode={resolved}
       style={{ colorScheme: resolved }}
     >
-      <style>{keyframes}</style>
+      {injectStyles && <style>{keyframesCss}</style>}
       <ChakraProvider value={theme.system}>{children}</ChakraProvider>
     </div>
   )

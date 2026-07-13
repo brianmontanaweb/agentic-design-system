@@ -24,11 +24,12 @@ It is responsible for:
 
 ## Props
 
-| Prop          | Type                            | Default     | Description                                                                                                                                                         |
-| ------------- | ------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `children`    | `ReactNode`                     | —           | Application content to render inside the provider (required).                                                                                                       |
-| `colorScheme` | `"dark" \| "light" \| "system"` | `"dark"`    | Controlled color scheme. `"dark"`/`"light"` pin the mode; `"system"` follows the OS `prefers-color-scheme` and live-updates. Hosts toggle by re-rendering the prop. |
-| `theme`       | `AgenticTheme`                  | stock theme | Branded theme created by `defineAgenticTheme()`. Create it once at module scope — never inside render.                                                              |
+| Prop           | Type                            | Default     | Description                                                                                                                                                                                                     |
+| -------------- | ------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `children`     | `ReactNode`                     | —           | Application content to render inside the provider (required).                                                                                                                                                   |
+| `colorScheme`  | `"dark" \| "light" \| "system"` | `"dark"`    | Controlled color scheme. `"dark"`/`"light"` pin the mode; `"system"` follows the OS `prefers-color-scheme` and live-updates. Hosts toggle by re-rendering the prop.                                             |
+| `theme`        | `AgenticTheme`                  | stock theme | Branded theme created by `defineAgenticTheme()`. Create it once at module scope — never inside render.                                                                                                          |
+| `injectStyles` | `boolean`                       | `true`      | Set `false` for CSP-strict documents (`style-src` without `unsafe-inline`) that link the built stylesheet (`@agentic-ds/mcp-builder/iife/css`) instead of relying on the provider's inline `<style>` keyframes. |
 
 With `colorScheme="system"` during SSR, the first render resolves to dark (no `matchMedia` on the server) and corrects itself after hydration if the OS prefers light.
 
@@ -92,6 +93,25 @@ The `[data-agentic-ds]` attribute is the CSS boundary for the entire design syst
 ```
 
 For MCP App iframe embedding, the iframe document SHOULD render its own `AgenticProvider` as the outermost element, ensuring the iframe's token scope is fully self-contained.
+
+### CSP-strict embedding
+
+The provider's default inline `<style>` keyframes are refused under a `style-src` policy without `unsafe-inline`. For those documents, link the built stylesheet and disable injection:
+
+```html
+<link rel="stylesheet" href="agentic-ds.css" />
+<!-- @agentic-ds/mcp-builder/iife/css -->
+<script src="agentic-ds.min.js"></script>
+<!-- @agentic-ds/mcp-builder/iife/min -->
+```
+
+```tsx
+<AgenticProvider injectStyles={false}>
+  <McpAppRoot />
+</AgenticProvider>
+```
+
+The built stylesheet carries the same keyframes and reduced-motion rules plus all `--ds-*` custom properties (both color modes). Chakra's own component styles are unaffected by CSP: in the production IIFE bundle they are inserted via CSSOM `insertRule`, which `style-src` does not restrict. The artifact captures the **stock theme only** — `defineAgenticTheme()` output is runtime-emitted, so branded CSP-strict embeds are not yet supported.
 
 ---
 

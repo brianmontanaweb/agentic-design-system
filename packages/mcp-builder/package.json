@@ -15,7 +15,8 @@
       "types": "./dist/index.d.ts"
     },
     "./iife": "./dist/iife/agentic-ds.global.js",
-    "./iife/min": "./dist/iife/agentic-ds.min.js"
+    "./iife/min": "./dist/iife/agentic-ds.min.js",
+    "./iife/css": "./dist/iife/agentic-ds.css"
   },
   "files": [
     "dist"

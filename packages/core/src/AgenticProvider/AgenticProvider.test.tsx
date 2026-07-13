@@ -55,6 +55,25 @@ describe('AgenticProvider', () => {
       const styleTag = container.querySelector('[data-agentic-ds] style')
       expect(styleTag?.textContent).toContain('ds-blink')
     })
+
+    it('skips the <style> tag with injectStyles={false} (CSP-strict embeds)', () => {
+      const { container } = render(
+        <AgenticProvider injectStyles={false}>
+          <span>child</span>
+        </AgenticProvider>
+      )
+      expect(container.querySelector('[data-agentic-ds] > style')).not.toBeInTheDocument()
+    })
+
+    it('still renders children and the scope wrapper with injectStyles={false}', () => {
+      const { container } = render(
+        <AgenticProvider injectStyles={false}>
+          <span>hello</span>
+        </AgenticProvider>
+      )
+      expect(screen.getByText('hello')).toBeInTheDocument()
+      expect(container.querySelector('[data-agentic-ds]')).toBeInTheDocument()
+    })
   })
 
   describe('token-to-DOM contract', () => {

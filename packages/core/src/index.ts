@@ -12,6 +12,8 @@ export type { CodeBlockProps } from './CodeBlock'
 
 export { useReducedMotion } from './useReducedMotion'
 
+export { keyframesCss } from './keyframesCss'
+
 export {
   Badge,
   Box,
