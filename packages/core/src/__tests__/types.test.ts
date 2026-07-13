@@ -9,9 +9,9 @@ import type {
 } from '../index'
 
 describe('AgenticProviderProps types', () => {
-  it('defaultColorScheme is optional and only accepts dark or light', () => {
-    expectTypeOf<AgenticProviderProps['defaultColorScheme']>().toEqualTypeOf<
-      'dark' | 'light' | undefined
+  it('colorScheme is optional and only accepts dark, light, or system', () => {
+    expectTypeOf<AgenticProviderProps['colorScheme']>().toEqualTypeOf<
+      'dark' | 'light' | 'system' | undefined
     >()
   })
 })

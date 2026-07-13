@@ -125,10 +125,11 @@ Components with animations: `ThinkingIndicator` (pulse), `ToolCallCard` running 
 All tokens in `packages/tokens` MUST use the [W3C Design Tokens Format Module (2025.10)](https://www.designtokens.org/tr/2025.10/format/) — the first stable standard. This means:
 
 - Token properties use `$` prefix: `$value`, `$type`, `$description`
+- Values use the 2025.10 object formats (color: `colorSpace`/`components`/`alpha`/`hex`; dimension and duration: `{ value, unit }`; fontFamily: array)
 - Aliases use the `{path.to.token}` reference syntax
 - [Style Dictionary v4](https://v4.styledictionary.com/reference/utils/dtcg/) and [Tokens Studio](https://github.com/tokens-studio/sd-transforms) both support this format natively
 
-Current tokens use the pre-DTCG format and SHOULD be migrated.
+Light/dark modes use the [DTCG Resolver Module (2025.10)](https://www.designtokens.org/tr/drafts/resolver/): `tokens.resolver.json` declares a `color-scheme` modifier that layers `tokens/color.dark.json` or `tokens/color.light.json` over the mode-independent `tokens/base.json`. Each color is defined once per mode under the same key path — `scripts/generate.ts` fails generation if the two color sets' keys differ. The generator emits a flat `colorModes` map (`'color.accent.interactive' → { dark, light }`) from which the scoped CSS custom properties (`src/css.ts`), the Chakra `semanticTokens` block in core's `theme.ts`, and the MCP `get_token` index are all derived — none of those mappings are hand-maintained. At runtime, the static stylesheet follows `prefers-color-scheme` by default; hosts can pin a mode with `data-color-mode="light" | "dark"` on the `[data-agentic-ds]` element.
 
 ### Three-Tier Token Architecture
 

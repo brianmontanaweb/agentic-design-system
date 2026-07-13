@@ -1,0 +1,156 @@
+{
+  "color": {
+    "surface": {
+      "base": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.9725, 0.9765, 0.9804],
+          "alpha": 1,
+          "hex": "#f8f9fa"
+        },
+        "$type": "color",
+        "$description": "Light mode darkest background layer"
+      },
+      "default": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [1, 1, 1],
+          "alpha": 1,
+          "hex": "#ffffff"
+        },
+        "$type": "color",
+        "$description": "Light mode default surface"
+      },
+      "elevated": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.9412, 0.9412, 0.9608],
+          "alpha": 1,
+          "hex": "#f0f0f5"
+        },
+        "$type": "color",
+        "$description": "Light mode elevated surface — cards, popovers"
+      },
+      "step": {
+        "active": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [0.1451, 0.3882, 0.9216],
+            "alpha": 0.1333,
+            "hex": "#2563eb"
+          },
+          "$type": "color",
+          "$description": "Light mode active step background tint"
+        },
+        "complete": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [0.0863, 0.6392, 0.2902],
+            "alpha": 0.1333,
+            "hex": "#16a34a"
+          },
+          "$type": "color",
+          "$description": "Light mode complete step background tint"
+        },
+        "waiting": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [0.851, 0.4667, 0.0235],
+            "alpha": 0.1333,
+            "hex": "#d97706"
+          },
+          "$type": "color",
+          "$description": "Light mode waiting step background tint"
+        }
+      }
+    },
+    "border": {
+      "subtle": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.8863, 0.8863, 0.9098],
+          "alpha": 1,
+          "hex": "#e2e2e8"
+        },
+        "$type": "color",
+        "$description": "Light mode low-contrast divider and border"
+      }
+    },
+    "text": {
+      "primary": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.0392, 0.0392, 0.0588],
+          "alpha": 1,
+          "hex": "#0a0a0f"
+        },
+        "$type": "color",
+        "$description": "Light mode high-contrast body text"
+      },
+      "muted": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.4, 0.4, 0.6667],
+          "alpha": 1,
+          "hex": "#6666aa"
+        },
+        "$type": "color",
+        "$description": "Light mode de-emphasized or secondary text"
+      },
+      "on": {
+        "accent": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [1, 1, 1],
+            "alpha": 1,
+            "hex": "#ffffff"
+          },
+          "$type": "color",
+          "$description": "Text on accent backgrounds. Light mode accents are dark — white text passes WCAG AA"
+        }
+      }
+    },
+    "accent": {
+      "interactive": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.1451, 0.3882, 0.9216],
+          "alpha": 1,
+          "hex": "#2563eb"
+        },
+        "$type": "color",
+        "$description": "Light mode primary interactive accent"
+      },
+      "success": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.0863, 0.6392, 0.2902],
+          "alpha": 1,
+          "hex": "#16a34a"
+        },
+        "$type": "color",
+        "$description": "Light mode success and done state"
+      },
+      "warning": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.851, 0.4667, 0.0235],
+          "alpha": 1,
+          "hex": "#d97706"
+        },
+        "$type": "color",
+        "$description": "Light mode warning and waiting state"
+      },
+      "danger": {
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [0.8627, 0.149, 0.149],
+          "alpha": 1,
+          "hex": "#dc2626"
+        },
+        "$type": "color",
+        "$description": "Light mode error and danger state"
+      }
+    }
+  }
+}

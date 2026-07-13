@@ -54,7 +54,7 @@ Fix any errors ESLint or vitest reports on this component's files, then re-run t
 Also run the theme-safety check — components must support light/dark via semantic tokens only (see the Theming section of the shared conventions reference):
 
 ```sh
-grep -nE "lightColors|useColorMode|useTheme" packages/<package>/src/<ComponentName>/<ComponentName>.tsx
+grep -nE "colorModes\[.+\]\.(dark|light)|useColorMode|useTheme" packages/<package>/src/<ComponentName>/<ComponentName>.tsx
 ```
 
 Any match is a violation (raw single-scheme palette usage or color-mode branching); fix it by routing through semantic tokens. No output = passing.

@@ -1,6 +1,6 @@
 import React, { type ReactElement, useEffect, useRef } from 'react'
 import { Box, VStack } from '@chakra-ui/react'
-import { colors } from '@agentic-ds/tokens'
+import { colorModes } from '@agentic-ds/tokens'
 
 export interface MessageThreadProps {
   children: React.ReactNode
@@ -37,7 +37,7 @@ export function MessageThread({
         '&::-webkit-scrollbar': { width: '4px' },
         '&::-webkit-scrollbar-track': { background: 'transparent' },
         '&::-webkit-scrollbar-thumb': {
-          background: `var(--ds-color-border-subtle, ${colors.borderSubtle.$value})`,
+          background: `var(--ds-color-border-subtle, ${colorModes['color.border.subtle'].dark})`,
         },
       }}
     >

@@ -8,9 +8,9 @@
 
 ### Theming (light/dark)
 
-- Raw single-scheme palette usage — importing `colors` or `lightColors` from `@agentic-ds/tokens` for color styling in a component (they are only consumed by `theme.ts` when defining semantic tokens)
+- Raw single-scheme palette usage — importing `colorModes` from `@agentic-ds/tokens` and reading one mode's value for color styling in a component (it is only consumed by `theme.ts` when deriving semantic tokens, or as a static CSS-var fallback)
 - Color-mode branching in component code — any `useColorMode`/`useTheme` read or `scheme === 'dark' ? … : …` conditional used for styling; semantic tokens handle scheme switching
-- A semantic token in `packages/core/src/theme.ts` whose value is missing either the `_dark` or `_light` entry
+- A color primitive present in only one of `packages/tokens/tokens/color.dark.json` / `color.light.json` (generation fails on key mismatch — a component must never work around a missing mode value)
 
 ### ARIA / Accessibility
 

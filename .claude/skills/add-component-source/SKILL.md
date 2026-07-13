@@ -17,7 +17,7 @@ If the package is not specified, infer it using the package inference rules in t
 - **Never `import React from 'react'`** — use named type imports (`import type { ReactElement, ReactNode } from 'react'`); write `leftIcon?: ReactElement`, never `React.ReactElement`.
 - **ARIA is mandatory from the first line** — apply the correct live region while writing the component, not in a later audit pass.
 - **`color.on.accent` and similar token names are not hex violations** — only flag `#`-prefixed literal values.
-- **Light/dark support is free if you stay on semantic tokens** — never read color mode in the component and never use raw `colors.*`/`lightColors.*` exports for styling. If a needed color has no semantic token, follow the three-step token addition in the Theming section of the shared conventions reference (raw dark + light values → semantic token with `_dark`/`_light` → use the token name).
+- **Light/dark support is free if you stay on semantic tokens** — never read color mode in the component and never read single-mode values off the raw `colorModes` export for styling. If a needed color has no semantic token, follow the token addition steps in the Theming section of the shared conventions reference (add the color to both `tokens/color.dark.json` and `color.light.json` → `npm run tokens:generate` → use the token name).
 - **No approval gate** — this skill creates exactly the files listed below; proceed without asking. The `/add-component` orchestrator owns plan approval for full scaffolds.
 
 ---

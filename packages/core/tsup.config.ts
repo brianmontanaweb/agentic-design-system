@@ -6,7 +6,7 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   clean: true,
-  external: ['react', 'react-dom', '@chakra-ui/react', 'next-themes'],
+  external: ['react', 'react-dom', '@chakra-ui/react'],
   // @agentic-ds/tokens is inlined into the bundle so consumers don't need to
   // install the internal tokens package separately. noExternal overrides tsup's
   // default of auto-externalizing anything listed in (peer)dependencies.

@@ -15,7 +15,7 @@ mcp-states: n/a
 The root provider for the design system. Every application using `@agentic-ds/core` or `@agentic-ds/agents` MUST render `AgenticProvider` at the top of the component tree. It is responsible for:
 
 1. **CSS custom property scope** — all Chakra token variables are emitted under `[data-agentic-ds]`, not `:root`, so the design system never leaks into the host application's global stylesheet.
-2. **Color mode** — delegates to `next-themes` via a `ThemeProvider`; applies `class` attribute for Tailwind-compatible dark mode toggling.
+2. **Color mode** — stamps `data-color-mode="dark" | "light"` on the `[data-agentic-ds]` wrapper, the single signal that drives both the Chakra `_dark`/`_light` conditions (theme.ts) and the static `tokens.css`. The provider never mutates `<html>` or writes storage; mode is fully scoped to its own subtree, so multiple providers with different schemes can coexist.
 3. **Animation keyframes** — injects `@keyframes ds-pulse` and `@keyframes ds-blink` (and their `prefers-reduced-motion` overrides) into a scoped `<style>` element.
 4. **Reduced-motion enforcement** — under `@media (prefers-reduced-motion: reduce)`, all `animation-duration` and `transition-duration` values inside `[data-agentic-ds]` are collapsed to `0.01ms`.
 
@@ -23,10 +23,12 @@ The root provider for the design system. Every application using `@agentic-ds/co
 
 ## Props
 
-| Prop                 | Type                | Default  | Description                                           |
-| -------------------- | ------------------- | -------- | ----------------------------------------------------- |
-| `children`           | `ReactNode`         | —        | Application content to render inside the provider.    |
-| `defaultColorScheme` | `"dark" \| "light"` | `"dark"` | Initial color mode when no user preference is stored. |
+| Prop          | Type                            | Default  | Description                                                                                                                                                         |
+| ------------- | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `children`    | `ReactNode`                     | —        | Application content to render inside the provider.                                                                                                                  |
+| `colorScheme` | `"dark" \| "light" \| "system"` | `"dark"` | Controlled color scheme. `"dark"`/`"light"` pin the mode; `"system"` follows the OS `prefers-color-scheme` and live-updates. Hosts toggle by re-rendering the prop. |
+
+With `colorScheme="system"` during SSR, the first render resolves to dark (no `matchMedia` on the server) and corrects itself after hydration if the OS prefers light.
 
 ---
 
@@ -80,7 +82,7 @@ Requirements (WCAG 2.2 AA):
 
 - `AgenticProvider` MUST be present for all ARIA live regions, semantic tokens, and keyboard focus indicators to function correctly. Do not render agent components outside a provider. _(WCAG SC 1.3.1, 4.1.2)_
 - `prefers-reduced-motion` MUST be respected globally — AgenticProvider handles this automatically via the injected `<style>` block. Do not override `animation-duration` or `transition-duration` with `!important` inside components. _(WCAG SC 2.3.3)_
-- Color mode MUST NOT be changed without user intent. Use `defaultColorScheme` to set an initial mode; use `next-themes`' `useTheme()` hook to respond to user-initiated changes.
+- Color mode MUST NOT be changed without user intent. The `colorScheme` prop is controlled — hold it in host state and update it only from a user-initiated toggle (or pass `"system"` to follow the OS preference the user already expressed).
 
 ---
 
@@ -93,8 +95,9 @@ Requirements (WCAG 2.2 AA):
 import { AgenticProvider } from '@agentic-ds/core'
 
 function App() {
+  const [scheme, setScheme] = useState<'dark' | 'light'>('dark')
   return (
-    <AgenticProvider defaultColorScheme="dark">
+    <AgenticProvider colorScheme={scheme}>
       <Router>
         <Routes />
       </Router>
@@ -130,7 +133,6 @@ import { system } from '@agentic-ds/core' // banned by no-restricted-imports rul
 
 ## Sources
 
-- [next-themes documentation](https://github.com/pacocoursey/next-themes)
 - [Chakra UI v3 — createSystem](https://www.chakra-ui.com/docs/theming/overview)
 - [WCAG 2.2 SC 2.3.3 — Animation from Interactions](https://www.w3.org/TR/WCAG22/#animation-from-interactions)
 - [CSS `cssVarsRoot` scoping](https://www.chakra-ui.com/docs/theming/token-reference)

@@ -35,7 +35,8 @@ All components must meet WCAG 2.2 AA. Agent-specific components have specific AR
 
 - No hardcoded hex values, px values (outside layout), or timing values in components — use tokens
 - Token names communicate intent, not raw values: `color.agent.status.running` not `accentBlue`
-- New tokens belong in `packages/tokens/tokens.dtcg.json` (regenerated via `npm run tokens:generate`) before they are used in components
+- New tokens belong in `packages/tokens/tokens/` (regenerated via `npm run tokens:generate`) before they are used in components: mode-independent tokens and semantic color aliases in `base.json`; color primitives in **both** `color.dark.json` and `color.light.json` under the same key path (generation fails if the key sets differ). `tokens.resolver.json` (DTCG 2025.10 resolver) wires the sets together
+- CSS variables, the Chakra `semanticTokens` block in core's `theme.ts`, and the MCP `get_token` index are all derived from the generated `colorModes` map — never hand-edit those mappings
 
 ### MCP Lifecycle States
 
@@ -51,10 +52,9 @@ Every implemented component needs a spec file at `docs/components/[ComponentName
 
 ## Known Gaps (Prioritized)
 
-1. DTCG 2025.10 migration incomplete — light/dark are parallel token groups (`colors`/`lightColors`) not DTCG modes, and the `theme.ts` semanticTokens mapping is hand-maintained, not generated
-2. `Button` uses native `disabled` instead of `aria-disabled` + `tabIndex={0}`
-3. No `ErrorBoundary` or `Skeleton` primitives
-4. Zero light-mode visual regression baselines (all 99 are dark-mode captures)
+1. `Button` uses native `disabled` instead of `aria-disabled` + `tabIndex={0}`
+2. No `ErrorBoundary` or `Skeleton` primitives
+3. Zero light-mode visual regression baselines (all 99 are dark-mode captures) — the static stylesheet's `data-color-mode="light"` pin makes capturing them straightforward now
 
 See `PLAN.md` → Known Gaps / Roadmap for the full list, including the Astryx-inspired architecture items.
 

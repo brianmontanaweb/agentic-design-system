@@ -1,0 +1,23 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/resolver.json",
+  "version": "2025.10",
+  "name": "Agentic Design System",
+  "description": "Resolver for the agentic design system tokens: a mode-independent base set (semantic color aliases, spacing, typography, motion, elevation) plus a color-scheme modifier selecting the dark or light primitive color set.",
+  "sets": {
+    "base": {
+      "description": "Mode-independent tokens, including the semantic color alias tier that references primitives supplied by the color-scheme modifier.",
+      "sources": [{ "$ref": "tokens/base.json" }]
+    }
+  },
+  "modifiers": {
+    "color-scheme": {
+      "description": "Dark and light primitive color sets. Both contexts must define an identical token key set — the generator fails otherwise.",
+      "contexts": {
+        "dark": [{ "$ref": "tokens/color.dark.json" }],
+        "light": [{ "$ref": "tokens/color.light.json" }]
+      },
+      "default": "dark"
+    }
+  },
+  "resolutionOrder": [{ "$ref": "#/sets/base" }, { "$ref": "#/modifiers/color-scheme" }]
+}

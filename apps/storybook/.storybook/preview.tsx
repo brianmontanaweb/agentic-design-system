@@ -33,8 +33,15 @@ const preview: Preview = {
     (Story, context) => {
       const scheme = (context.globals['colorScheme'] ?? 'dark') as 'dark' | 'light'
       const bg = scheme === 'light' ? '#f8f9fa' : '#0a0a0f'
+      // The preview page is a host app, so page-level color-scheme is its
+      // call (the provider only scopes color-scheme to its own wrapper).
+      // Keeping the canvas in sync matters for the visual baselines: the
+      // captured story margins show the UA canvas color.
+      React.useEffect(() => {
+        document.documentElement.style.colorScheme = scheme
+      }, [scheme])
       return (
-        <AgenticProvider defaultColorScheme={scheme}>
+        <AgenticProvider colorScheme={scheme}>
           <div style={{ padding: '2rem', minWidth: '400px', backgroundColor: bg }}>
             <Story />
           </div>

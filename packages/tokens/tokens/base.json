@@ -1,0 +1,261 @@
+{
+  "color": {
+    "agent": {
+      "status": {
+        "idle": {
+          "$value": "{color.text.muted}",
+          "$type": "color",
+          "$description": "MCP idle — not started"
+        },
+        "running": {
+          "$value": "{color.accent.interactive}",
+          "$type": "color",
+          "$description": "MCP running — actively processing"
+        },
+        "waiting": {
+          "$value": "{color.accent.warning}",
+          "$type": "color",
+          "$description": "MCP input_required — paused for user input"
+        },
+        "done": {
+          "$value": "{color.accent.success}",
+          "$type": "color",
+          "$description": "MCP completed — successfully finished"
+        },
+        "error": {
+          "$value": "{color.accent.danger}",
+          "$type": "color",
+          "$description": "MCP failed — terminal error"
+        },
+        "cancelled": {
+          "$value": "{color.text.muted}",
+          "$type": "color",
+          "$description": "MCP cancelled — explicitly stopped"
+        }
+      }
+    },
+    "tool": {
+      "status": {
+        "pending": {
+          "$value": "{color.text.muted}",
+          "$type": "color",
+          "$description": "Tool call not yet dispatched"
+        },
+        "running": {
+          "$value": "{color.accent.interactive}",
+          "$type": "color",
+          "$description": "Tool call in progress"
+        },
+        "done": {
+          "$value": "{color.accent.success}",
+          "$type": "color",
+          "$description": "Tool call completed successfully"
+        },
+        "error": {
+          "$value": "{color.accent.danger}",
+          "$type": "color",
+          "$description": "Tool call failed"
+        }
+      }
+    },
+    "stream": {
+      "cursor": {
+        "$value": "{color.accent.interactive}",
+        "$type": "color",
+        "$description": "StreamingText blinking cursor color"
+      }
+    },
+    "message": {
+      "user": {
+        "bg": {
+          "$value": "{color.surface.elevated}",
+          "$type": "color",
+          "$description": "User message bubble background"
+        }
+      },
+      "assistant": {
+        "bg": {
+          "$value": "{color.surface.default}",
+          "$type": "color",
+          "$description": "Assistant message bubble background"
+        }
+      },
+      "tool": {
+        "bg": {
+          "$value": "{color.surface.elevated}",
+          "$type": "color",
+          "$description": "Tool result bubble background"
+        },
+        "border": {
+          "$value": "{color.border.subtle}",
+          "$type": "color",
+          "$description": "Tool result bubble border"
+        }
+      }
+    }
+  },
+  "spacing": {
+    "1": { "$value": { "value": 4, "unit": "px" }, "$type": "dimension" },
+    "2": { "$value": { "value": 8, "unit": "px" }, "$type": "dimension" },
+    "3": { "$value": { "value": 12, "unit": "px" }, "$type": "dimension" },
+    "4": { "$value": { "value": 16, "unit": "px" }, "$type": "dimension" },
+    "5": { "$value": { "value": 20, "unit": "px" }, "$type": "dimension" },
+    "6": { "$value": { "value": 24, "unit": "px" }, "$type": "dimension" },
+    "8": { "$value": { "value": 32, "unit": "px" }, "$type": "dimension" },
+    "10": { "$value": { "value": 40, "unit": "px" }, "$type": "dimension" },
+    "12": { "$value": { "value": 48, "unit": "px" }, "$type": "dimension" },
+    "16": { "$value": { "value": 64, "unit": "px" }, "$type": "dimension" }
+  },
+  "fonts": {
+    "mono": {
+      "$value": ["JetBrains Mono", "Fira Code", "Menlo", "monospace"],
+      "$type": "fontFamily",
+      "$description": "Monospaced font for code and technical content"
+    },
+    "sans": {
+      "$value": ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+      "$type": "fontFamily",
+      "$description": "System sans-serif for body and UI text"
+    },
+    "heading": {
+      "$value": ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+      "$type": "fontFamily",
+      "$description": "Font for headings (alias to sans)"
+    },
+    "body": {
+      "$value": ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+      "$type": "fontFamily",
+      "$description": "Font for body text (alias to sans)"
+    }
+  },
+  "fontSizes": {
+    "xs": { "$value": { "value": 0.75, "unit": "rem" }, "$type": "dimension" },
+    "sm": { "$value": { "value": 0.875, "unit": "rem" }, "$type": "dimension" },
+    "md": { "$value": { "value": 1, "unit": "rem" }, "$type": "dimension" },
+    "lg": { "$value": { "value": 1.125, "unit": "rem" }, "$type": "dimension" },
+    "xl": { "$value": { "value": 1.25, "unit": "rem" }, "$type": "dimension" },
+    "2xl": { "$value": { "value": 1.5, "unit": "rem" }, "$type": "dimension" }
+  },
+  "fontWeights": {
+    "normal": { "$value": 400, "$type": "fontWeight" },
+    "medium": { "$value": 500, "$type": "fontWeight" },
+    "semibold": { "$value": 600, "$type": "fontWeight" },
+    "bold": { "$value": 700, "$type": "fontWeight" }
+  },
+  "durations": {
+    "fast": {
+      "$value": { "value": 100, "unit": "ms" },
+      "$type": "duration",
+      "$description": "Micro-interactions and hover state transitions"
+    },
+    "normal": {
+      "$value": { "value": 200, "unit": "ms" },
+      "$type": "duration",
+      "$description": "Standard UI transitions"
+    },
+    "slow": {
+      "$value": { "value": 400, "unit": "ms" },
+      "$type": "duration",
+      "$description": "Deliberate or complex transitions"
+    },
+    "pulse": {
+      "$value": { "value": 1500, "unit": "ms" },
+      "$type": "duration",
+      "$description": "Status indicator pulse cycle (AgentStatus dot, ToolCallCard running state)"
+    },
+    "instant": {
+      "$value": { "value": 0.01, "unit": "ms" },
+      "$type": "duration",
+      "$description": "Effectively-zero duration for prefers-reduced-motion overrides"
+    },
+    "stream": {
+      "blink": {
+        "$value": { "value": 1000, "unit": "ms" },
+        "$type": "duration",
+        "$description": "StreamingText cursor blink cycle"
+      },
+      "thinking": {
+        "$value": { "value": 1200, "unit": "ms" },
+        "$type": "duration",
+        "$description": "ThinkingIndicator dot pulse cycle"
+      }
+    }
+  },
+  "lineHeights": {
+    "tight": {
+      "$value": 1.25,
+      "$type": "number",
+      "$description": "Compact line spacing for headings"
+    },
+    "base": {
+      "$value": 1.5,
+      "$type": "number",
+      "$description": "Body text line spacing"
+    },
+    "relaxed": {
+      "$value": 1.75,
+      "$type": "number",
+      "$description": "Loose spacing for readability-heavy content"
+    }
+  },
+  "radii": {
+    "sm": { "$value": { "value": 4, "unit": "px" }, "$type": "dimension" },
+    "md": { "$value": { "value": 8, "unit": "px" }, "$type": "dimension" },
+    "lg": { "$value": { "value": 12, "unit": "px" }, "$type": "dimension" },
+    "full": {
+      "$value": { "value": 9999, "unit": "px" },
+      "$type": "dimension",
+      "$description": "Pill / fully-rounded shape — badges, chips"
+    }
+  },
+  "shadows": {
+    "sm": {
+      "$value": {
+        "color": { "colorSpace": "srgb", "components": [0, 0, 0], "alpha": 0.4 },
+        "offsetX": { "value": 0, "unit": "px" },
+        "offsetY": { "value": 1, "unit": "px" },
+        "blur": { "value": 3, "unit": "px" },
+        "spread": { "value": 0, "unit": "px" }
+      },
+      "$type": "shadow",
+      "$description": "Subtle elevation — tooltips, chips"
+    },
+    "md": {
+      "$value": {
+        "color": { "colorSpace": "srgb", "components": [0, 0, 0], "alpha": 0.5 },
+        "offsetX": { "value": 0, "unit": "px" },
+        "offsetY": { "value": 4, "unit": "px" },
+        "blur": { "value": 12, "unit": "px" },
+        "spread": { "value": 0, "unit": "px" }
+      },
+      "$type": "shadow",
+      "$description": "Standard elevation — cards, dropdowns"
+    },
+    "lg": {
+      "$value": {
+        "color": { "colorSpace": "srgb", "components": [0, 0, 0], "alpha": 0.6 },
+        "offsetX": { "value": 0, "unit": "px" },
+        "offsetY": { "value": 8, "unit": "px" },
+        "blur": { "value": 24, "unit": "px" },
+        "spread": { "value": 0, "unit": "px" }
+      },
+      "$type": "shadow",
+      "$description": "High elevation — modals, drawers"
+    }
+  },
+  "zIndex": {
+    "dropdown": { "$value": 1000, "$type": "number", "$description": "Dropdown menus" },
+    "sticky": {
+      "$value": 1100,
+      "$type": "number",
+      "$description": "Sticky headers and position:sticky elements"
+    },
+    "overlay": { "$value": 1200, "$type": "number", "$description": "Overlay backdrops" },
+    "modal": { "$value": 1300, "$type": "number", "$description": "Modal dialogs" },
+    "tooltip": {
+      "$value": 1400,
+      "$type": "number",
+      "$description": "Tooltips — must appear above modals"
+    }
+  }
+}

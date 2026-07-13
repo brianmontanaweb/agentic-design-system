@@ -17,7 +17,7 @@
         "Source exports EvalStatusPillProps interface",
         "Source includes role=\"status\" and aria-live=\"polite\" ARIA attributes",
         "Source uses only Chakra semantic tokens — no hardcoded hex values",
-        "Source does not import colors/lightColors from @agentic-ds/tokens for styling and does not read color mode — light/dark support comes from semantic tokens",
+        "Source does not read single-mode colorModes values from @agentic-ds/tokens for styling and does not read color mode — light/dark support comes from semantic tokens",
         "Source does NOT have a default React import",
         "packages/agents/src/index.ts exports EvalStatusPill and EvalStatusPillProps",
         "No story file was created at apps/storybook/src/stories/EvalStatusPill.stories.tsx",
@@ -40,7 +40,7 @@
         "Source exports EvalIconButton as named export (not default)",
         "Source exports EvalIconButtonProps interface",
         "Source uses only Chakra semantic tokens — no hardcoded hex values",
-        "Source does not import colors/lightColors from @agentic-ds/tokens for styling and does not read color mode — light/dark support comes from semantic tokens",
+        "Source does not read single-mode colorModes values from @agentic-ds/tokens for styling and does not read color mode — light/dark support comes from semantic tokens",
         "Source does NOT have a default React import",
         "packages/core/src/index.ts exports EvalIconButton and EvalIconButtonProps"
       ]

@@ -83,14 +83,14 @@ All components must be rendered inside `<AgenticProvider>`. It scopes the Chakra
 
 ## Tokens
 
-Tokens are available as typed JS constants and as CSS custom properties via `getCSSVariables()`.
+Tokens are authored in the [W3C DTCG 2025.10 format](https://www.designtokens.org/tr/2025.10/format/) with light/dark modes resolved via the [DTCG Resolver Module](https://www.designtokens.org/tr/drafts/resolver/) (`tokens.resolver.json` + `tokens/`). They are available as typed JS constants and as CSS custom properties via `getCSSVariables()`.
 
 ```ts
-import { colors, space, duration, radius } from '@agentic-ds/tokens'
+import { colorModes, spacing, durations, radii } from '@agentic-ds/tokens'
 
-colors.accentBlue // '#4d9fff'
-duration.normal // '200ms'
-radius.md // '8px'
+colorModes['color.accent.interactive'] // { dark: '#4d9fff', light: '#2563eb', $type: 'color' }
+durations.normal.$value // '200ms'
+radii.md.$value // '8px'
 ```
 
 ```ts
@@ -98,7 +98,8 @@ import { getCSSVariables } from '@agentic-ds/tokens'
 
 // Inject into a style tag for use outside the Chakra context.
 // Output is scoped to [data-agentic-ds] — wrap your app in an element with
-// that attribute so the CSS custom properties apply.
+// that attribute so the CSS custom properties apply. Colors follow the OS
+// prefers-color-scheme; pin a scheme with data-color-mode="light" | "dark".
 document.head.insertAdjacentHTML('beforeend', `<style>${getCSSVariables()}</style>`)
 ```
 
@@ -229,10 +230,6 @@ ESLint 10 flat config enforces:
 ## Known Issues / Open Discussion
 
 These gaps are documented and tracked. Contributions and discussion welcome.
-
-### Token Format (Migration In Progress)
-
-Tokens use the [W3C DTCG](https://www.designtokens.org/tr/2025.10/format/) `$value`/`$type`/`$description` structure in `tokens.dtcg.json`, but full 2025.10 compliance is incomplete: light/dark values are parallel token groups (`colors` / `lightColors`) rather than DTCG modes, and the Chakra `semanticTokens` mapping in `theme.ts` is hand-maintained rather than generated. See the roadmap in [PLAN.md](PLAN.md).
 
 ### `Button` Uses Native `disabled` Instead of `aria-disabled`
 

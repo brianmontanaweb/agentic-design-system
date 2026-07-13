@@ -38,9 +38,7 @@ describe('handleGetToken', () => {
 
     it('matches tokens across all categories', () => {
       const categories = [
-        'colors',
-        'lightColors',
-        'semanticColors',
+        'color',
         'spacing',
         'fonts',
         'fontSizes',
@@ -65,7 +63,7 @@ describe('handleGetToken', () => {
     })
 
     it('uses singular "token" when exactly one result is found', () => {
-      // semanticColors.agent.status.running is specific enough to be unique
+      // color.agent.status.running is specific enough to be unique
       const result = handleGetToken({ name: 'agent.status.running' })
       const text = result.content[0].text
       if (text.startsWith('Found 1')) {
@@ -75,10 +73,17 @@ describe('handleGetToken', () => {
 
     it('includes description as a comment when present', () => {
       // Check that at least some token entries include a description comment
-      const result = handleGetToken({ name: 'semanticColors' })
+      const result = handleGetToken({ name: 'agent.status' })
       const text = result.content[0].text
-      // Some semantic tokens have descriptions; at least one should include " // "
+      // Agent status tokens have descriptions; at least one should include " // "
       expect(text).toContain('//')
+    })
+
+    it('reports both mode values for color tokens', () => {
+      const result = handleGetToken({ name: 'accent.interactive' })
+      const text = result.content[0].text
+      expect(text).toContain('(dark)')
+      expect(text).toContain('(light)')
     })
   })
 
@@ -88,13 +93,11 @@ describe('handleGetToken', () => {
       expect(result.content[0].text).toContain('No tokens found matching "xyznotarealtoken".')
     })
 
-    it('lists all 8 available categories', () => {
+    it('lists all available categories', () => {
       const result = handleGetToken({ name: 'xyznotarealtoken' })
       const text = result.content[0].text
       const expected = [
-        'colors',
-        'lightColors',
-        'semanticColors',
+        'color',
         'spacing',
         'fonts',
         'fontSizes',

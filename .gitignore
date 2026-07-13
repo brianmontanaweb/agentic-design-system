@@ -39,3 +39,9 @@ Thumbs.db
 
 # Workflow eval workspaces — generated output from run-workflow-evals.sh / grade-workflow-eval.sh
 .claude/workflows/evals/*-workspace/
+
+# Visual test failure diffs — regenerated on every failing run, never baselines
+apps/storybook/__snapshots__/__diff_output__/
+
+# Playwright MCP session artifacts
+.playwright-mcp/

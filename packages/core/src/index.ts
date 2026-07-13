@@ -1,5 +1,5 @@
 export { AgenticProvider } from './AgenticProvider'
-export type { AgenticProviderProps } from './AgenticProvider'
+export type { AgenticProviderProps, ColorScheme } from './AgenticProvider'
 
 export { Button } from './Button'
 export type { ButtonProps, ButtonVariant, ButtonSize } from './Button'

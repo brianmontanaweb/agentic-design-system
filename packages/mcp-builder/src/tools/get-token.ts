@@ -1,7 +1,5 @@
 import {
-  colors,
-  lightColors,
-  semanticColors,
+  colorModes,
   spacing,
   fonts,
   fontSizes,
@@ -22,7 +20,7 @@ interface TokenEntry {
 }
 
 interface TokenLike {
-  $value: string
+  $value: string | number
   $type: string
   $description?: string
 }
@@ -38,7 +36,7 @@ function flattenTokens(obj: Record<string, unknown>, prefix: string): TokenEntry
     if (isTokenLike(val)) {
       entries.push({
         path,
-        value: val.$value,
+        value: String(val.$value),
         type: val.$type,
         description: val.$description,
       })
@@ -49,10 +47,17 @@ function flattenTokens(obj: Record<string, unknown>, prefix: string): TokenEntry
   return entries
 }
 
+// Color tokens carry both mode values in one entry (paths like
+// "color.accent.interactive"); every other group is mode-independent.
+const colorEntries: TokenEntry[] = Object.entries(colorModes).map(([path, token]) => ({
+  path,
+  value: `${token.dark} (dark) / ${token.light} (light)`,
+  type: token.$type,
+  description: token.$description,
+}))
+
 const allTokens: TokenEntry[] = [
-  ...flattenTokens(colors as unknown as Record<string, unknown>, 'colors'),
-  ...flattenTokens(lightColors as unknown as Record<string, unknown>, 'lightColors'),
-  ...flattenTokens(semanticColors as unknown as Record<string, unknown>, 'semanticColors'),
+  ...colorEntries,
   ...flattenTokens(spacing as unknown as Record<string, unknown>, 'spacing'),
   ...flattenTokens(fonts as unknown as Record<string, unknown>, 'fonts'),
   ...flattenTokens(fontSizes as unknown as Record<string, unknown>, 'fontSizes'),
@@ -70,9 +75,7 @@ export function handleGetToken(args: { name: string }): TextToolResult {
 
   if (results.length === 0) {
     const categories = [
-      'colors',
-      'lightColors',
-      'semanticColors',
+      'color',
       'spacing',
       'fonts',
       'fontSizes',
@@ -92,7 +95,7 @@ export function handleGetToken(args: { name: string }): TextToolResult {
             ``,
             `Available categories: ${categories.join(', ')}`,
             ``,
-            `Examples: "accentBlue", "agent.status", "spacing.4", "durations.fast"`,
+            `Examples: "accent.interactive", "agent.status", "spacing.4", "durations.fast"`,
           ].join('\n'),
         },
       ],

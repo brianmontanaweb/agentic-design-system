@@ -37,23 +37,22 @@ When the target package is not specified:
 - All color values reference Chakra semantic tokens — no hardcoded hex.
 - All timing values reference `duration.*` tokens from `@agentic-ds/tokens` — no literal `ms`/`s` values in `transition`/`animation` props.
 - `color.on.accent` and similar dotted token names are **not** hex violations — only `#`-prefixed literal values are.
-- New tokens belong in `packages/tokens/src/index.ts` before they are used in components.
+- New tokens belong in `packages/tokens/tokens/` (then `npm run tokens:generate`) before they are used in components — never edit `src/generated.ts` directly.
 
 ## Theming (light/dark)
 
 Every component must render correctly in both color schemes. Theme support comes entirely from the semantic token layer — components are theme-agnostic by construction:
 
-- Semantic tokens in `packages/core/src/theme.ts` carry both `_dark` and `_light` values; `AgenticProvider` (via `next-themes`) switches them by setting a class on the `[data-agentic-ds]` root. A component that styles only through semantic tokens supports both schemes with zero theme code.
+- Semantic tokens in `packages/core/src/theme.ts` carry both `_dark` and `_light` values; `AgenticProvider` switches them by stamping `data-color-mode` on the `[data-agentic-ds]` root (controlled `colorScheme` prop: `'dark' | 'light' | 'system'`). A component that styles only through semantic tokens supports both schemes with zero theme code.
 - **Never branch on color mode in component code** — no `useTheme`/`useColorMode` reads, no `scheme === 'dark' ? … : …` conditionals for styling.
-- **Never use raw palette exports** (`colors.*`, `lightColors.*` from `@agentic-ds/tokens`) for color styling in a component — they are single-scheme values. They are only consumed by `theme.ts` when defining semantic tokens.
+- **Never use the raw `colorModes` export** (from `@agentic-ds/tokens`) to pick one mode's value for color styling in a component — single-scheme reads bypass theme switching. `colorModes` is only consumed by `theme.ts` (to derive semantic tokens) and as static CSS-var fallbacks.
 
-When a component needs a color that has no semantic token yet, add the token in three steps before using it:
+When a component needs a color that has no semantic token yet, add the token in two steps before using it:
 
-1. Add the raw value to **both** `colors` (dark) and `lightColors` (light) in `packages/tokens/src/index.ts`.
-2. Add a semantic token in `theme.ts` `semanticTokens.colors` with both `_dark` and `_light` values, named by intent (e.g. `color.agent.status.running`).
-3. Reference the semantic token name in the component.
+1. Add the color under the same key path to **both** `packages/tokens/tokens/color.dark.json` and `color.light.json`, named by intent (e.g. `color.agent.status.running`) — or, for a semantic alias of an existing primitive, to the `color` group in `tokens/base.json`. Run `npm run tokens:generate` (generation fails if the dark and light key sets differ).
+2. Reference the token name in the component — the Chakra semantic token and CSS variable are derived automatically.
 
-Both scheme values must independently meet WCAG AA contrast against the surfaces they appear on — dark-mode accents are light pastels, light-mode accents are dark; a foreground that passes in one scheme can fail in the other (see the `color.text.on.accent` comment in `theme.ts`).
+Both scheme values must independently meet WCAG AA contrast against the surfaces they appear on — dark-mode accents are light pastels, light-mode accents are dark; a foreground that passes in one scheme can fail in the other (see the `color.text.on.accent` `$description` in the token files).
 
 Storybook: the global `colorScheme` toolbar (`.storybook/preview.tsx`) wraps every story in `AgenticProvider` with the selected scheme — stories never wrap themselves in a provider or hardcode scheme-specific background hexes.
 
