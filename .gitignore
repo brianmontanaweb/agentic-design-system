@@ -45,3 +45,6 @@ apps/storybook/__snapshots__/__diff_output__/
 
 # Playwright MCP session artifacts
 .playwright-mcp/
+
+# Figma visual diff scratch artifacts (verify-component-figma skill)
+.figma-diff/
