@@ -103,7 +103,7 @@ For MCP App iframe embedding, the iframe document SHOULD render its own \`Agenti
 
 The provider's default inline \`<style>\` keyframes are refused under a \`style-src\` policy without \`unsafe-inline\`. For those documents, link the built stylesheet (\`@agentic-ds/mcp-builder/iife/css\`) and pass \`injectStyles={false}\`.
 
-The built stylesheet carries the same keyframes and reduced-motion rules plus all \`--ds-*\` custom properties (both color modes). Chakra's own component styles are unaffected by CSP: in the production IIFE bundle they are inserted via CSSOM \`insertRule\`, which \`style-src\` does not restrict. The artifact captures the stock theme only — \`defineAgenticTheme()\` output is runtime-emitted, so branded CSP-strict embeds are not yet supported.
+The built stylesheet carries the same keyframes and reduced-motion rules plus all \`--ds-*\` custom properties (both color modes). Chakra's own component styles are unaffected by CSP: in the production IIFE bundle they are inserted via CSSOM \`insertRule\`, which \`style-src\` does not restrict. The artifact captures the stock theme only — for a branded CSP-strict embed, call \`themeToCss()\` (\`@agentic-ds/core\`) at your own build time with the same options object passed to \`defineAgenticTheme()\`, and link the result alongside the base stylesheet.
 
 ## Animation keyframes
 

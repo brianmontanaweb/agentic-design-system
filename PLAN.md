@@ -186,10 +186,9 @@ Decisions made when the monolithic `add-component` skill was split into an orche
 
 Approaches borrowed from Meta's [Astryx](https://github.com/facebook/astryx) design system, mapped to this codebase's existing gaps. Full analysis in the 2026-07-12 review session. Colocated component spec docs (`<Name>.doc.ts` replacing `docs/components/*.md`) — also Astryx-inspired — landed 2026-07-13; see Docs above.
 
-| Item                                                                                                                                                                                                                                                                                                             | Priority |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| **Per-theme static CSS extraction** — the built CSS artifact (`@agentic-ds/mcp-builder/iife/css`, landed 2026-07-13) captures the stock theme only; branded CSP-strict embeds need a `themeToCss()`-style helper that turns `defineAgenticTheme()` options into a scoped stylesheet at the embedder's build time | Low      |
-| **Data-attribute state exposure** — emit `data-status` on `ToolCallCard` / `AgentStatus` / `ProgressSteps` so host CSS and Tailwind variants can target states without new props; also gives visual-regression and E2E tests stable selectors                                                                    | Low      |
+| Item                                                                                                                                                                                                                                          | Priority |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| **Data-attribute state exposure** — emit `data-status` on `ToolCallCard` / `AgentStatus` / `ProgressSteps` so host CSS and Tailwind variants can target states without new props; also gives visual-regression and E2E tests stable selectors | Low      |
 
 ---
 

@@ -159,6 +159,28 @@ const DARKEST_NEUTRAL = colorModes['color.surface.base'].dark
 
 const THEME_NAME_PATTERN = /^[a-z][a-z0-9-]*$/
 
+function assertThemeName(name: string | undefined): void {
+  if (name !== undefined && !THEME_NAME_PATTERN.test(name)) {
+    throw new Error(
+      `defineAgenticTheme: invalid theme name "${name}". Use lowercase letters, digits, and hyphens, starting with a letter.`
+    )
+  }
+}
+
+/**
+ * The CSS custom properties selector for a theme name — unnamed themes scope
+ * to the provider root, named ones narrow further so differently-branded
+ * providers can coexist on one page. Shared by the runtime Chakra system
+ * (`buildSystem`'s `cssVarsRoot`) and the static extraction helper
+ * (`themeToCss()`) so they never drift apart.
+ */
+export function themeSelector(name?: string): string {
+  assertThemeName(name)
+  return name === undefined
+    ? '[data-agentic-ds]'
+    : `[data-agentic-ds][data-agentic-theme="${name}"]`
+}
+
 function assertHex(value: string, context: string): void {
   if (!isHexColor(value)) {
     throw new Error(
@@ -313,14 +335,7 @@ function buildSystem(
  */
 export function defineAgenticTheme(options: AgenticThemeOptions = {}): AgenticTheme {
   const { name } = options
-  if (name !== undefined && !THEME_NAME_PATTERN.test(name)) {
-    throw new Error(
-      `defineAgenticTheme: invalid theme name "${name}". Use lowercase letters, digits, and hyphens, starting with a letter.`
-    )
-  }
-  const cssVarsRoot =
-    name === undefined ? '[data-agentic-ds]' : `[data-agentic-ds][data-agentic-theme="${name}"]`
-  return { name, system: buildSystem(resolveThemeColors(options), cssVarsRoot) }
+  return { name, system: buildSystem(resolveThemeColors(options), themeSelector(name)) }
 }
 
 // Stock theme used when AgenticProvider receives no `theme` prop. Internal —
