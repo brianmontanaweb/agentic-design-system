@@ -16,12 +16,12 @@ These defuse the most common mistakes before you encounter them:
 - **Read `references/violation-criteria.md` once in Step 2** — it stays in context for Steps 4–6; do not re-read it.
 - **The underlying conventions live in `.claude/skills/shared/references/`** — `conventions.md` (imports, tokens, layout) and `aria-patterns.md` (required ARIA per component type) are the single source of truth shared with the `add-component` skills; `violation-criteria.md` tells you how to _flag_ deviations from them.
 - **Figma is optional** — if the user skips the link, mark "Figma: skipped" in the plan and proceed immediately; never block on it.
-- **`color.on.accent` is not a hex violation** — it is a Chakra semantic token name; do not flag it as a hardcoded color. Do add it to the spec doc frontmatter `tokens.colors` list if it appears in source style props — it is a real token reference that belongs in the frontmatter completeness inventory.
+- **`color.on.accent` is not a hex violation** — it is a Chakra semantic token name; do not flag it as a hardcoded color. Do add it to the spec doc's `tokens.colors` array if it appears in source style props — it is a real token reference that belongs in the tokens completeness inventory.
 - **`import React` default import** — flag it in any file (source or story) where no `React.*` type annotations (`React.ReactElement`, `React.MouseEvent`, `React.ReactNode`) appear; do not flag it if any such annotations are present. Actively scan before deciding.
 - **SC 1.4.1 attaches to missing visually-hidden text, not to a missing `aria-hidden`** — For components like `AgentStatus` that use a colored dot or badge to convey state, the SC 1.4.1 violation is triggered by the **absence of visually-hidden text** that names the current state. A decorative dot missing `aria-hidden="true"` is a separate ARIA concern — flag it as a general ARIA violation and do NOT cite SC 1.4.1 for it.
 - **Fixing SC 1.4.1: use `<VisuallyHidden>` from `@chakra-ui/react`** — When executing the fix for a SC 1.4.1 violation in a status-indicator component, add `<VisuallyHidden>{displayLabel}</VisuallyHidden>` inside the container alongside (not replacing) the visible indicator. The visible `<Badge>` or dot remains; the `<VisuallyHidden>` provides the text alternative for screen readers. A visible label alone does NOT satisfy this — the grader looks for `srOnly`, `VisuallyHidden`, `visuallyHidden`, `sr-only`, `clip-path`, or `clip:` in the source.
 - **Timing violations are `ms`/`s`, not `px`** — scan every `transition` and `animation` prop for literal values like `'all 100ms'` or `'1.2s ease-in-out'`; these are token violations even though they contain no `#`.
-- **Frontmatter token completeness requires active scanning** — extract every token string from the source style objects and compare against the frontmatter `tokens` lists; do not rely on memory or assume the list is complete.
+- **Tokens field completeness requires active scanning** — extract every token string from the source style objects and compare against the spec doc's `tokens` arrays; do not rely on memory or assume the list is complete.
 - **`'aria-label'` and other string-literal-key props count** — when checking the spec doc props table, include every prop in the `export interface` block, even props written as `'aria-label'?: string`.
 - **Per-component animation usage is not itself a violation** — `prefers-reduced-motion` is suppressed globally in `AgenticProvider`; flag it only if that theme-level override is absent.
 - **`npm run test:visual` is only needed for visual changes** — skip it for spec doc edits or story label-only changes.
@@ -32,15 +32,15 @@ These defuse the most common mistakes before you encounter them:
 
 Locate the following files for the named component. Infer the package (`core` or `agents`) from the file location.
 
-| File     | Path                                                     |
-| -------- | -------------------------------------------------------- |
-| Source   | `packages/<package>/src/<ComponentName>.tsx`             |
-| Story    | `apps/storybook/src/stories/<ComponentName>.stories.tsx` |
-| Spec doc | `docs/components/<ComponentName>.md`                     |
+| File     | Path                                                            |
+| -------- | --------------------------------------------------------------- |
+| Source   | `packages/<package>/src/<ComponentName>/<ComponentName>.tsx`    |
+| Story    | `apps/storybook/src/stories/<ComponentName>.stories.tsx`        |
+| Spec doc | `packages/<package>/src/<ComponentName>/<ComponentName>.doc.ts` |
 
 **If the spec doc does not exist**, stop immediately and output:
 
-> `docs/components/<ComponentName>.md` does not exist. Run `/add-component <ComponentName>` first to create the full scaffold, then re-run `/update-component`.
+> `packages/<package>/src/<ComponentName>/<ComponentName>.doc.ts` does not exist. Run `/add-component <ComponentName>` first to create the full scaffold, then re-run `/update-component`.
 
 Do not proceed further.
 
@@ -80,7 +80,7 @@ Using the **Story Gaps** section of `references/violation-criteria.md`, compare 
 
 ## Step 6 — Analyse: spec doc drift
 
-Using the **Spec Doc Drift** section of `references/violation-criteria.md`, compare `docs/components/<ComponentName>.md` against the source. Record every drift.
+Using the **Spec Doc Drift** section of `references/violation-criteria.md`, compare `packages/<package>/src/<ComponentName>/<ComponentName>.doc.ts` against the source. Record every drift.
 
 ---
 
@@ -120,8 +120,8 @@ No changes required.
 — or —
 No changes required.
 
-### Spec doc changes (`docs/components/<ComponentName>.md`)
-<bullet list of props, variants, states, or frontmatter to update>
+### Spec doc changes (`packages/<package>/src/<ComponentName>/<ComponentName>.doc.ts`)
+<bullet list of props, variants, states, or tokens to update>
 — or —
 No changes required.
 
@@ -153,7 +153,7 @@ If the spec doc changed, regenerate the MCP component metadata (from the repo ro
 npm run metadata:generate -w packages/mcp-builder
 ```
 
-The spec doc is machine-parsed into `packages/mcp-builder/src/metadata/components.ts` — never edit that file by hand. If generation fails, the doc violates the parse contract described in the `add-component-spec` skill (Props table format, `(required)` markers, union-type value tables); fix the doc. Commit the regenerated file together with the doc (CI diffs it).
+The spec doc is imported directly into `packages/mcp-builder/src/metadata/components.ts` — never edit that file by hand. If generation fails, either the doc doesn't export `doc` or a duplicate component `name` exists; `npm run lint -w packages/<package>` catches a `ComponentDoc` shape mismatch before generation runs. Commit the regenerated file together with the doc (CI diffs it).
 
 Then run:
 

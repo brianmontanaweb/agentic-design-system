@@ -48,7 +48,8 @@ jobs:
         run: npm run build
 
       # mcp-builder's build regenerates src/metadata/components.ts from
-      # docs/components/*.md; fail if the checked-in copy is stale.
+      # every packages/{core,agents}/src/**/*.doc.ts; fail if the checked-in
+      # copy is stale.
       - name: Check generated MCP metadata is current
         run: git diff --exit-code packages/mcp-builder/src/metadata/components.ts
 

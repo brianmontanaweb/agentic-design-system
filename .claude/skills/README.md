@@ -4,15 +4,15 @@ Custom Claude Code skills for this monorepo. Each skill is a directory containin
 
 ## Skills in this repo
 
-| Skill                  | What it does                                                                | Rubric? |
-| ---------------------- | --------------------------------------------------------------------------- | ------- |
-| `add-component`        | Orchestrates a full scaffold by invoking the five sub-skills below in order | No      |
-| `add-component-source` | Creates the source file, barrel index, and package export                   | No      |
-| `add-component-story`  | Creates/extends the Storybook story for an existing component               | No      |
-| `add-component-tests`  | Creates the unit test file for an existing component and runs it to green   | No      |
-| `add-component-spec`   | Creates the spec doc at `docs/components/<Name>.md`                         | No      |
-| `verify-component`     | Builds, lints, and tests one component's files; fixes errors in them        | No      |
-| `update-component`     | Audits and updates an existing component; plans before writing              | Yes     |
+| Skill                  | What it does                                                                     | Rubric? |
+| ---------------------- | -------------------------------------------------------------------------------- | ------- |
+| `add-component`        | Orchestrates a full scaffold by invoking the five sub-skills below in order      | No      |
+| `add-component-source` | Creates the source file, barrel index, and package export                        | No      |
+| `add-component-story`  | Creates/extends the Storybook story for an existing component                    | No      |
+| `add-component-tests`  | Creates the unit test file for an existing component and runs it to green        | No      |
+| `add-component-spec`   | Creates the colocated spec doc at `<Name>.doc.ts` next to the component's source | No      |
+| `verify-component`     | Builds, lints, and tests one component's files; fixes errors in them             | No      |
+| `update-component`     | Audits and updates an existing component; plans before writing                   | Yes     |
 
 The full accessibility audit is **not** a skill — it is the `/audit-a11y` dynamic workflow at `.claude/workflows/audit-a11y.js` (one agent per component, adversarial verification, merged report). Its criteria live in `shared/references/a11y-audit-criteria.md` and its eval cases and rubric in `.claude/workflows/evals/audit-a11y/`.
 
@@ -71,4 +71,4 @@ Skills and workflows that operate _on_ existing components (`update-component`, 
 | File overwritten from git-tracked state        | `git restore <path>`                               |
 | File that may or may not be in git yet         | `git restore <path> 2>/dev/null \|\| rm -f <path>` |
 
-The third pattern protects spec docs that are listed as gaps today but will eventually be committed. Use it for any component spec doc in `packages/agents/` that doesn't yet have a committed `docs/components/<Name>.md`.
+The third pattern protects spec docs that are listed as gaps today but will eventually be committed. Use it for any component spec doc that doesn't yet have a committed `packages/<package>/src/<Name>/<Name>.doc.ts`.

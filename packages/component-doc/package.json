@@ -1,0 +1,41 @@
+{
+  "name": "@agentic-ds/component-doc",
+  "version": "0.1.0",
+  "description": "Shared TypeScript schema for colocated component documentation (*.doc.ts) consumed by the MCP component metadata generator",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brianmontanaweb/agentic-design-system.git",
+    "directory": "packages/component-doc"
+  },
+  "keywords": [
+    "design-system",
+    "agentic",
+    "mcp",
+    "component-metadata"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc",
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

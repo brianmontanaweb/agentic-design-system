@@ -3,9 +3,9 @@
 # Run from the project root after the skill has applied its changes.
 # Outputs [PASS] / [FAIL] / [SKIP] lines; exits with the number of failures.
 
-SOURCE="packages/agents/src/AgentStatus.tsx"
+SOURCE="packages/agents/src/AgentStatus/AgentStatus.tsx"
 STORY="apps/storybook/src/stories/AgentStatus.stories.tsx"
-SPEC="docs/components/AgentStatus.md"
+SPEC="packages/agents/src/AgentStatus/AgentStatus.doc.ts"
 FAILS=0
 
 pass() { echo "[PASS] $1"; }
@@ -82,54 +82,33 @@ else
   fail "'waiting' or 'cancelled' missing from story file argTypes options"
 fi
 
-# 11. mcp-states frontmatter lists all 6 states
+# 11. types.AgentStatusValue lists all 6 MCP states
 python3 - "$SPEC" <<'EOF'
 import re, sys
 content = open(sys.argv[1]).read()
-parts = content.split('---', 2)
-fm = parts[1] if len(parts) >= 3 else ''
 required = {'idle', 'running', 'waiting', 'done', 'error', 'cancelled'}
-found = set(re.findall(r'\b(idle|running|waiting|done|error|cancelled)\b', fm))
+found = set(re.findall(r"'(idle|running|waiting|done|error|cancelled)'", content))
 missing = required - found
-if missing:
-    print(f"Missing from mcp-states frontmatter: {', '.join(sorted(missing))}", file=sys.stderr)
-    sys.exit(1)
-sys.exit(0)
+sys.exit(1 if missing else 0)
 EOF
 if [ $? -eq 0 ]; then
-  pass "mcp-states frontmatter lists all 6 states"
+  pass "types.AgentStatusValue lists all 6 states"
 else
-  fail "mcp-states frontmatter missing states: $(python3 - "$SPEC" 2>&1 1>/dev/null <<'EOF'
-import re, sys
-content = open(sys.argv[1]).read()
-parts = content.split('---', 2)
-fm = parts[1] if len(parts) >= 3 else ''
-required = {'idle', 'running', 'waiting', 'done', 'error', 'cancelled'}
-found = set(re.findall(r'\b(idle|running|waiting|done|error|cancelled)\b', fm))
-print(', '.join(sorted(required - found)))
-EOF
-)"
+  fail "types.AgentStatusValue is missing one or more of: idle, running, waiting, done, error, cancelled"
 fi
 
-# 12. Spec doc states table has waiting and cancelled rows
-if grep -q 'waiting' "$SPEC" && grep -q 'cancelled' "$SPEC"; then
-  pass "States table rows for 'waiting' and 'cancelled' found in spec doc"
+# 12. ariaNotes documents role="status", aria-live, and visually-hidden text
+if grep -qE 'role="status"|role=.status.' "$SPEC" && grep -qE 'aria-live' "$SPEC" && grep -qiE 'visually-hidden|VisuallyHidden' "$SPEC"; then
+  pass "ariaNotes documents role=\"status\", aria-live, and visually-hidden text"
 else
-  fail "'waiting' or 'cancelled' row missing from spec doc states table"
+  fail "ariaNotes is missing role=\"status\", aria-live, or visually-hidden text documentation"
 fi
 
-# 13. ARIA section in spec
-if grep -qiE '^#{1,3} (ARIA|A11y|Accessibility)' "$SPEC"; then
-  pass "ARIA/Accessibility section found in spec doc"
-else
-  fail "No ARIA/Accessibility section in spec doc"
-fi
-
-# 14. ESLint on modified files
-if npx eslint "$SOURCE" "$STORY" > /dev/null 2>&1; then
+# 13. ESLint on modified files
+if npx eslint "$SOURCE" "$STORY" "$SPEC" > /dev/null 2>&1; then
   pass "ESLint passes on modified source and story files"
 else
-  fail "ESLint errors in modified files — run: npx eslint $SOURCE $STORY"
+  fail "ESLint errors in modified files — run: npx eslint $SOURCE $STORY $SPEC"
 fi
 
 echo ""

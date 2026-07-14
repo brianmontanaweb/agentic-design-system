@@ -49,6 +49,7 @@
     "react-dom": "^18 || ^19"
   },
   "devDependencies": {
+    "@agentic-ds/component-doc": "*",
     "@agentic-ds/core": "*",
     "@agentic-ds/tokens": "*",
     "@testing-library/dom": "^10.4.1",

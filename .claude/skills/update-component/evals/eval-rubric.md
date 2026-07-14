@@ -46,9 +46,9 @@ Two modes are available. Use both to get a full 100-point score.
 #    Do NOT approve the changes yet.
 
 # 4. Restore original files
-git restore packages/agents/src/<ComponentName>.tsx \
+git restore packages/<pkg>/src/<ComponentName>/<ComponentName>.tsx \
+            packages/<pkg>/src/<ComponentName>/<ComponentName>.doc.ts \
             apps/storybook/src/stories/<ComponentName>.stories.tsx
-git restore docs/components/<ComponentName>.md 2>/dev/null || rm -f docs/components/<ComponentName>.md
 ```
 
 ### Execution evals (dimensions 4–5) — evals.json ids 4, 5, 6
@@ -66,9 +66,9 @@ actual file state against the assertions, then teardown restores everything.
 # 3. Grade the actual file state against dimensions 4–5.
 
 # 4. Restore — teardown in evals.json handles this automatically:
-git restore packages/<pkg>/src/<ComponentName>.tsx \
+git restore packages/<pkg>/src/<ComponentName>/<ComponentName>.tsx \
+            packages/<pkg>/src/<ComponentName>/<ComponentName>.doc.ts \
             apps/storybook/src/stories/<ComponentName>.stories.tsx
-git restore docs/components/<ComponentName>.md 2>/dev/null || rm -f docs/components/<ComponentName>.md
 ```
 
 ---
@@ -81,21 +81,21 @@ git restore docs/components/<ComponentName>.md 2>/dev/null || rm -f docs/compone
 
 ```bash
 cp .claude/skills/update-component/references/fixtures/ToolCallCard/source.tsx \
-   packages/agents/src/ToolCallCard.tsx
+   packages/agents/src/ToolCallCard/ToolCallCard.tsx
 
 cp .claude/skills/update-component/references/fixtures/ToolCallCard/story.tsx \
    apps/storybook/src/stories/ToolCallCard.stories.tsx
 
-cp .claude/skills/update-component/references/fixtures/ToolCallCard/spec.md \
-   docs/components/ToolCallCard.md
+cp .claude/skills/update-component/references/fixtures/ToolCallCard/doc.ts \
+   packages/agents/src/ToolCallCard/ToolCallCard.doc.ts
 ```
 
 ### Teardown
 
 ```bash
-git restore packages/agents/src/ToolCallCard.tsx \
+git restore packages/agents/src/ToolCallCard/ToolCallCard.tsx \
             apps/storybook/src/stories/ToolCallCard.stories.tsx \
-            docs/components/ToolCallCard.md
+            packages/agents/src/ToolCallCard/ToolCallCard.doc.ts
 ```
 
 ### Expected violations
@@ -106,11 +106,11 @@ git restore packages/agents/src/ToolCallCard.tsx \
 | ARIA         | Expand/collapse trigger is a `<Box>` (div) with `onClick` — must be `<button>` with `aria-expanded` and `aria-controls`               | source |
 | Code quality | `import React, { useId, useState }` — default `React` import unused with jsx-runtime; should be `import { useId, useState }`          | source |
 | Story gap    | No `Pending` story — `pending` is a valid `ToolCallStatus` value with no story coverage                                               | story  |
-| Spec drift   | `defaultOpen` prop missing from props table                                                                                           | spec   |
+| Spec drift   | `defaultOpen` prop missing from `props`                                                                                               | spec   |
 | Spec drift   | `input` prop type is `object` — should be `Record<string, unknown>`                                                                   | spec   |
-| Spec drift   | `pending` state missing from states table                                                                                             | spec   |
-| Spec drift   | No ARIA section documenting the WAI-ARIA Disclosure pattern requirement                                                               | spec   |
-| Spec drift   | Frontmatter `tokens` list is empty — should list semantic tokens used                                                                 | spec   |
+| Spec drift   | `pending` missing from `types.ToolCallStatus`                                                                                         | spec   |
+| Spec drift   | `ariaNotes` doesn't document the WAI-ARIA Disclosure pattern requirement                                                              | spec   |
+| Spec drift   | `tokens` is empty — should list semantic tokens used                                                                                  | spec   |
 
 **Recall target:** plan must surface all 9 violations.
 
@@ -126,21 +126,21 @@ git restore packages/agents/src/ToolCallCard.tsx \
 
 ```bash
 cp .claude/skills/update-component/references/fixtures/AgentStatus/source.tsx \
-   packages/agents/src/AgentStatus.tsx
+   packages/agents/src/AgentStatus/AgentStatus.tsx
 
 cp .claude/skills/update-component/references/fixtures/AgentStatus/story.tsx \
    apps/storybook/src/stories/AgentStatus.stories.tsx
 
-cp .claude/skills/update-component/references/fixtures/AgentStatus/spec.md \
-   docs/components/AgentStatus.md
+cp .claude/skills/update-component/references/fixtures/AgentStatus/doc.ts \
+   packages/agents/src/AgentStatus/AgentStatus.doc.ts
 ```
 
 ### Teardown
 
 ```bash
-git restore packages/agents/src/AgentStatus.tsx \
+git restore packages/agents/src/AgentStatus/AgentStatus.tsx \
             apps/storybook/src/stories/AgentStatus.stories.tsx \
-            docs/components/AgentStatus.md
+            packages/agents/src/AgentStatus/AgentStatus.doc.ts
 ```
 
 ### Expected violations
@@ -154,10 +154,10 @@ git restore packages/agents/src/AgentStatus.tsx \
 | Story gap  | No `Waiting` story                                                                       | story  |
 | Story gap  | No `Cancelled` story                                                                     | story  |
 | Story gap  | `argTypes.status.options` lists only 4 values — should include `waiting` and `cancelled` | story  |
-| Spec drift | `mcp-states` frontmatter only lists 4 states — should be all 6                           | spec   |
-| Spec drift | States table missing `waiting` and `cancelled` rows                                      | spec   |
+| Spec drift | `types.AgentStatusValue` only lists 4 states — should be all 6                           | spec   |
+| Spec drift | `types.AgentStatusValue` missing `waiting` and `cancelled`                               | spec   |
 | Spec drift | `status` prop type is missing `waiting` and `cancelled` union members                    | spec   |
-| Spec drift | No ARIA section documenting `role="status"`, `aria-live="polite"`, visually-hidden text  | spec   |
+| Spec drift | `ariaNotes` doesn't document `role="status"`, `aria-live="polite"`, visually-hidden text | spec   |
 
 **Recall target:** plan must surface all 11 violations.
 
@@ -173,32 +173,32 @@ git restore packages/agents/src/AgentStatus.tsx \
 
 ```bash
 cp .claude/skills/update-component/references/fixtures/Button/source.tsx \
-   packages/core/src/Button.tsx
+   packages/core/src/Button/Button.tsx
 
 cp .claude/skills/update-component/references/fixtures/Button/story.tsx \
    apps/storybook/src/stories/Button.stories.tsx
 
-cp .claude/skills/update-component/references/fixtures/Button/spec.md \
-   docs/components/Button.md
+cp .claude/skills/update-component/references/fixtures/Button/doc.ts \
+   packages/core/src/Button/Button.doc.ts
 ```
 
 ### Teardown
 
 ```bash
-git restore packages/core/src/Button.tsx \
+git restore packages/core/src/Button/Button.tsx \
             apps/storybook/src/stories/Button.stories.tsx \
-            docs/components/Button.md
+            packages/core/src/Button/Button.doc.ts
 ```
 
 ### Expected violations
 
-| Category     | Violation                                                                                                                                         | File   |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| Tokens       | `transition: 'all 100ms'` in `baseStyles` — hardcoded timing value; should reference `var(--ds-duration-fast)`                                    | source |
-| Code quality | `import React from 'react'` in story — unused default import with jsx-runtime transform                                                           | story  |
-| Spec drift   | `aria-label` prop missing from props table                                                                                                        | spec   |
-| Spec drift   | `color.on.accent` missing from frontmatter `tokens.colors` list                                                                                   | spec   |
-| Spec drift   | Accessibility note contradicts implementation: says `tabIndex={-1}` but source correctly uses `tabIndex={0}` to keep disabled button in tab order | spec   |
+| Category     | Violation                                                                                                                              | File   |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| Tokens       | `transition: 'all 100ms'` in `baseStyles` — hardcoded timing value; should reference `var(--ds-duration-fast)`                         | source |
+| Code quality | `import React from 'react'` in story — unused default import with jsx-runtime transform                                                | story  |
+| Spec drift   | `aria-label` prop missing from `props`                                                                                                 | spec   |
+| Spec drift   | `color.on.accent` missing from `tokens.colors`                                                                                         | spec   |
+| Spec drift   | `notes` contradicts implementation: says `tabIndex={-1}` but source correctly uses `tabIndex={0}` to keep disabled button in tab order | spec   |
 
 **Recall target:** plan must surface all 5 violations.
 

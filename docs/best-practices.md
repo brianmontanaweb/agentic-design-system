@@ -205,27 +205,35 @@ Token names communicate **intent**, not raw values. `color.agent.status.running`
 
 ## 5. Component Documentation Standard
 
-Every implemented component MUST have a corresponding spec file at `docs/components/[ComponentName].md`.
+Every implemented component MUST have a corresponding spec doc colocated with its source: `packages/<package>/src/[ComponentName]/[ComponentName].doc.ts`, a typed `ComponentDoc` object (schema in `packages/component-doc`) — not a separate markdown file.
 
-Spec files MUST include:
+Spec docs MUST include:
 
-```yaml
----
-component: ComponentName
-package: '@agentic-ds/[package]'
-status: implemented | planned
-tokens: [list of tokens used]
-wcag: AA
-aria-pattern: [URL to WAI-ARIA APG pattern if applicable]
-mcp-states: [list of MCP states the component surfaces, if applicable]
----
+```ts
+import type { ComponentDoc } from '@agentic-ds/component-doc'
+
+export const doc: ComponentDoc = {
+  name: 'ComponentName',
+  package: '@agentic-ds/[package]',
+  category: '[category]',
+  status: 'implemented',
+  wcag: 'AA',
+  ariaPattern: '[URL to WAI-ARIA APG pattern — omit if none]',
+  tokens: { colors: ['[tokens used]'] /* radius, duration, fonts as needed */ },
+  description: '[one paragraph]',
+  props: {
+    /* one entry per prop: { type, required, default?, description? } */
+  },
+  ariaNotes: '[accessibility requirements, one per line, joined by \\n]',
+  // bestPractices, notes: optional — see Button.doc.ts for the full shape
+}
 ```
 
-The body MUST include: variants table, props table, accessibility requirements (with WCAG SC references), and do/don't examples.
+`props`, `tokens`, and `ariaNotes` are checked by `tsc` against the `ComponentDoc` interface — there is no separate parse contract to satisfy. Every string in the file (including `notes` and `bestPractices` prose) is still subject to the token-usage lint rules: no raw hex, no `rgb()`/`hsl()`/`oklch()`, no literal `ms`/`s` timing values, even in documentation text.
 
-Spec files are written for LLM consumption — use `MUST`/`SHOULD`/`MAY` (RFC 2119 keywords) for requirements.
+Spec docs are written for LLM consumption — use `MUST`/`SHOULD`/`MAY` (RFC 2119 keywords) in `ariaNotes` and `bestPractices` descriptions.
 
-Currently missing spec files: `AgentStatus`, `ThinkingIndicator`, `ProgressSteps`, `ToolCallCard`, `StreamingText`, `MessageBubble`, `MessageThread`.
+All current components have spec docs. See `packages/core/src/Button/Button.doc.ts` for a complete example including `types`, `bestPractices`, and `notes`.
 
 ---
 

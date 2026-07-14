@@ -43,7 +43,7 @@ Use the `/add-component` skill if you have Claude Code installed:
 /add-component MyComponent agents
 ```
 
-Otherwise, follow the pattern in `packages/agents/src/` — source file, Storybook story, spec doc in `docs/components/`, and index export.
+Otherwise, follow the pattern in `packages/agents/src/` — source file, Storybook story, colocated `<Name>.doc.ts` spec doc, and index export.
 
 ### Modifying an existing component
 

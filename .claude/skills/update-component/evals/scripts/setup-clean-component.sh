@@ -70,43 +70,43 @@ export const Error:   Story = { args: { status: 'error' } }
 ENDSTORY
 
 # Spec doc — all sections complete, no missing props or tokens.
-cat > docs/components/EvalCleanComponent.md << 'ENDSPEC'
----
-title: EvalCleanComponent
-package: "@agentic-ds/agents"
-status: stable
-mcp-states: [idle, running, done, error]
-tokens:
-  colors:
-    - color.agent.status.idle
-    - color.agent.status.running
-    - color.agent.status.done
-    - color.agent.status.error
----
+cat > packages/agents/src/EvalCleanComponent.doc.ts << 'ENDSPEC'
+import type { ComponentDoc } from '@agentic-ds/component-doc'
 
-# EvalCleanComponent
-
-Minimal eval fixture component with no known violations. Used by the `already-compliant` eval to verify that `/update-component` produces a no-op plan on a clean component.
-
-## Props
-
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `status` | `'idle' \| 'running' \| 'done' \| 'error'` | — | Current status |
-| `label` | `string` | — | Override display label; defaults to the status value |
-
-## States
-
-| State | Token |
-|---|---|
-| `idle` | `color.agent.status.idle` |
-| `running` | `color.agent.status.running` |
-| `done` | `color.agent.status.done` |
-| `error` | `color.agent.status.error` |
-
-## Accessibility
-
-`role="status"` and `aria-live="polite"` on the container announce state changes to screen readers. A visually-hidden `<span>` provides the full label text. The visible badge is `aria-hidden="true"` to prevent duplication.
+export const doc: ComponentDoc = {
+  name: 'EvalCleanComponent',
+  package: '@agentic-ds/agents',
+  category: 'feedback',
+  status: 'implemented',
+  wcag: 'AA',
+  tokens: {
+    colors: [
+      'color.agent.status.idle',
+      'color.agent.status.running',
+      'color.agent.status.done',
+      'color.agent.status.error',
+    ],
+  },
+  description:
+    'Minimal eval fixture component with no known violations. Used by the already-compliant eval to verify that /update-component produces a no-op plan on a clean component.',
+  props: {
+    status: {
+      type: '"idle" | "running" | "done" | "error"',
+      required: true,
+      description: 'Current status',
+    },
+    label: {
+      type: 'string',
+      required: false,
+      description: 'Override display label; defaults to the status value',
+    },
+  },
+  types: {
+    EvalCleanStatus: { values: ['idle', 'running', 'done', 'error'] },
+  },
+  ariaNotes:
+    '`role="status"` and `aria-live="polite"` on the container announce state changes to screen readers. A visually-hidden `<span>` provides the full label text. The visible badge is `aria-hidden="true"` to prevent duplication.',
+}
 ENDSPEC
 
 # Add to package index

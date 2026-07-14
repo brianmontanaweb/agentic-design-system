@@ -113,16 +113,19 @@ Storybook 10 with `@storybook/react-vite`:
 
 ## Docs
 
-### `docs/components/`
+### Component spec docs (`<ComponentName>.doc.ts`)
 
-Agent-readable component specs — Markdown files structured so an LLM can implement a component correctly without follow-up questions. Each file includes:
+Agent-readable component specs — colocated with each component's source (`packages/<package>/src/<ComponentName>/<ComponentName>.doc.ts`), not a separate `docs/` tree. Migrated 2026-07-13 from a `docs/components/*.md` + hand-rolled markdown parser to typed `ComponentDoc` objects (schema in `packages/component-doc`), following Meta's [Astryx](https://github.com/facebook/astryx) pattern. Each file includes:
 
-- YAML frontmatter (component name, package, tokens used, ARIA pattern URL, WCAG level)
-- Variants, sizes, and states as tables with explicit requirements (MUST / SHOULD)
-- Full prop table with types and defaults
-- Accessibility requirements referencing WCAG 2.2 AA and WAI-ARIA APG
-- Do / Don't code examples
-- Implementation notes scoped to this codebase
+- Identity and classification (`name`, `package`, `category`, `status`, `wcag`, `ariaPattern`)
+- `tokens` used, by group (colors, radius, duration, fonts)
+- `props`, typed and matched 1:1 against the exported `<ComponentName>Props` interface
+- `types` for named unions or structural types referenced by props
+- `ariaNotes` — accessibility requirements referencing WCAG 2.2 AA and WAI-ARIA APG
+- `bestPractices` — do/don't guidance as prose
+- `notes` — free-form markdown for anything else (size/state tables, implementation notes, sources)
+
+`packages/mcp-builder/scripts/generate.ts` imports every `*.doc.ts` directly to build `packages/mcp-builder/src/metadata/components.ts` — no markdown parsing, no parse-contract validation; `tsc` and `eslint` are the only gates.
 
 ---
 
@@ -181,7 +184,7 @@ Decisions made when the monolithic `add-component` skill was split into an orche
 
 ### Architecture (Astryx-inspired, 2026-07-12)
 
-Approaches borrowed from Meta's [Astryx](https://github.com/facebook/astryx) design system, mapped to this codebase's existing gaps. Full analysis in the 2026-07-12 review session.
+Approaches borrowed from Meta's [Astryx](https://github.com/facebook/astryx) design system, mapped to this codebase's existing gaps. Full analysis in the 2026-07-12 review session. Colocated component spec docs (`<Name>.doc.ts` replacing `docs/components/*.md`) — also Astryx-inspired — landed 2026-07-13; see Docs above.
 
 | Item                                                                                                                                                                                                                                                                                                             | Priority |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |

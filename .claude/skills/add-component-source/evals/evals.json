@@ -21,7 +21,7 @@
         "Source does NOT have a default React import",
         "packages/agents/src/index.ts exports EvalStatusPill and EvalStatusPillProps",
         "No story file was created at apps/storybook/src/stories/EvalStatusPill.stories.tsx",
-        "No spec doc was created at docs/components/EvalStatusPill.md",
+        "No spec doc was created at packages/agents/src/EvalStatusPill/EvalStatusPill.doc.ts",
         "No test file was created at packages/agents/src/EvalStatusPill/EvalStatusPill.test.tsx"
       ]
     },

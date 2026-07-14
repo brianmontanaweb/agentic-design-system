@@ -10,9 +10,10 @@ All files for a component live in `packages/<package>/src/<ComponentName>/`:
 | -------------------------- | ------------------------------------------- |
 | `<ComponentName>.tsx`      | Source                                      |
 | `<ComponentName>.test.tsx` | Unit tests                                  |
+| `<ComponentName>.doc.ts`   | Spec doc — typed `ComponentDoc` object      |
 | `index.ts`                 | Barrel: `export * from './<ComponentName>'` |
 
-The package root `packages/<package>/src/index.ts` re-exports from `'./<ComponentName>'`, which resolves to the barrel. Stories live in `apps/storybook/src/stories/<ComponentName>.stories.tsx`; spec docs in `docs/components/<ComponentName>.md`.
+The package root `packages/<package>/src/index.ts` re-exports from `'./<ComponentName>'`, which resolves to the barrel. Stories live in `apps/storybook/src/stories/<ComponentName>.stories.tsx`. Spec docs are colocated (`<ComponentName>.doc.ts`, not a separate markdown file) and import their schema from `@agentic-ds/component-doc`.
 
 ## Package inference
 
@@ -62,7 +63,7 @@ All styles must be scoped to `[data-agentic-ds]` — never `:root`.
 
 ## Build order
 
-Run `npm run build` before `npm run lint` or any scoped `eslint`/`tsc` — `tsc --noEmit` requires the tokens package to be built first.
+Run `npm run build` before `npm run lint` or any scoped `eslint`/`tsc` — `tsc --noEmit` requires the `tokens` and `component-doc` packages to be built first (`<ComponentName>.doc.ts` files import types from `@agentic-ds/component-doc`).
 
 ## Figma
 

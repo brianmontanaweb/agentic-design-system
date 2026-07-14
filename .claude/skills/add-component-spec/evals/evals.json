@@ -4,19 +4,20 @@
     {
       "id": 1,
       "name": "spec-for-existing-component",
-      "description": "Fixture component exists — tests frontmatter completeness (tokens scanned from source), full props table, and a11y section with SC references",
+      "description": "Fixture component exists — tests tokens completeness (scanned from source), full props coverage, and an ariaNotes entry with SC references",
       "prompt": "Write the spec doc for EvalStatusPill",
-      "expected_output": "## Spec doc created: EvalStatusPill\n\n**File:** docs/components/EvalStatusPill.md\n**Frontmatter tokens:** colors: 1 (color.text.muted), fonts: 1 (mono)\n**Props documented:** 2 (status, label)\n**MCP states:** idle, running, done, error",
+      "expected_output": "## Spec doc created: EvalStatusPill\n\n**File:** packages/agents/src/EvalStatusPill/EvalStatusPill.doc.ts\n**Tokens:** colors: 1 (color.text.muted), fonts: 1 (mono)\n**Props documented:** 2 (status, label)\n**MCP metadata:** regenerated (N components)",
       "setup": ".claude/skills/shared/scripts/setup-eval-component.sh",
       "teardown": ".claude/skills/shared/scripts/teardown-eval-component.sh",
       "assertions": [
-        "Spec doc created at docs/components/EvalStatusPill.md",
-        "Frontmatter includes component, package '@agentic-ds/agents', status, wcag, and mcp-states fields",
-        "Frontmatter tokens.colors includes color.text.muted (scanned from source, not invented)",
-        "Props table includes both status and label with exact TypeScript types (status union lists all four members)",
-        "Body includes an accessibility section referencing role=\"status\" / aria-live=\"polite\" with a WCAG SC reference",
-        "Body includes do/don't examples",
-        "Body uses RFC 2119 keywords (MUST/SHOULD/MAY)",
+        "Spec doc created at packages/agents/src/EvalStatusPill/EvalStatusPill.doc.ts",
+        "The doc exports `const doc: ComponentDoc` with name, package '@agentic-ds/agents', category, status, and wcag fields",
+        "tokens.colors includes color.text.muted (scanned from source, not invented)",
+        "props includes both status and label with exact TypeScript types (status union lists all four members) and correct required booleans",
+        "types includes the status union's member values (idle, running, done, error) if represented as a named type",
+        "ariaNotes references role=\"status\" / aria-live=\"polite\" with a WCAG SC reference",
+        "bestPractices or notes include do/don't guidance as prose (no embedded code)",
+        "The file type-checks against ComponentDoc and passes eslint (no raw hex/timing values in prose)",
         "Component source file was not modified",
         "No story or test file was created"
       ]
@@ -28,9 +29,9 @@
       "prompt": "Write the spec doc for EvalGhostPanel",
       "expected_output": "## No source: EvalGhostPanel\n\nNeither package contains `EvalGhostPanel`. Create it first with\n`/add-component-source EvalGhostPanel` (source only) or `/add-component EvalGhostPanel` (full scaffold).",
       "setup": null,
-      "teardown": "rm -f docs/components/EvalGhostPanel.md && rm -rf packages/core/src/EvalGhostPanel packages/agents/src/EvalGhostPanel && git restore packages/core/src/index.ts packages/agents/src/index.ts 2>/dev/null || true",
+      "teardown": "rm -rf packages/core/src/EvalGhostPanel packages/agents/src/EvalGhostPanel && git restore packages/core/src/index.ts packages/agents/src/index.ts 2>/dev/null || true",
       "assertions": [
-        "No spec doc was created at docs/components/EvalGhostPanel.md",
+        "No spec doc was created at packages/core/src/EvalGhostPanel/EvalGhostPanel.doc.ts or packages/agents/src/EvalGhostPanel/EvalGhostPanel.doc.ts",
         "No component source was created in either package",
         "Skill reported that the component source does not exist",
         "Skill suggested /add-component-source or /add-component"

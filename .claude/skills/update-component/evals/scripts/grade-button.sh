@@ -3,9 +3,9 @@
 # Run from the project root after the skill has applied its changes.
 # Outputs [PASS] / [FAIL] / [SKIP] lines; exits with the number of failures.
 
-SOURCE="packages/core/src/Button.tsx"
+SOURCE="packages/core/src/Button/Button.tsx"
 STORY="apps/storybook/src/stories/Button.stories.tsx"
-SPEC="docs/components/Button.md"
+SPEC="packages/core/src/Button/Button.doc.ts"
 FAILS=0
 
 pass() { echo "[PASS] $1"; }
@@ -40,28 +40,21 @@ else
   fail "Default React import removed from source — it is required for React.* type annotations"
 fi
 
-# 5. aria-label in spec doc props table
-if grep -q 'aria-label' "$SPEC"; then
-  pass "aria-label found in spec doc props table"
+# 5. aria-label in spec doc props
+if grep -q "'aria-label'" "$SPEC"; then
+  pass "aria-label found in spec doc props"
 else
-  fail "aria-label missing from spec doc props table"
+  fail "aria-label missing from spec doc props"
 fi
 
-# 6. color.on.accent in spec frontmatter tokens list
-python3 - "$SPEC" <<'EOF'
-import re, sys
-content = open(sys.argv[1]).read()
-parts = content.split('---', 2)
-fm = parts[1] if len(parts) >= 3 else ''
-sys.exit(0 if 'color.on.accent' in fm else 1)
-EOF
-if [ $? -eq 0 ]; then
-  pass "color.on.accent found in spec frontmatter tokens list"
+# 6. color.on.accent in spec doc tokens.colors
+if grep -q 'color.on.accent' "$SPEC"; then
+  pass "color.on.accent found in spec doc tokens.colors"
 else
-  fail "color.on.accent missing from spec frontmatter tokens list"
+  fail "color.on.accent missing from spec doc tokens.colors"
 fi
 
-# 7. tabIndex accessibility note corrected to {0} not {-1}
+# 7. tabIndex note corrected to {0} not {-1}
 if grep -qE 'tabIndex=\{-1\}' "$SPEC"; then
   fail "Spec doc still references tabIndex={-1} (should be tabIndex={0})"
 elif grep -qE 'tabIndex=\{0\}|tabIndex={0}' "$SPEC"; then
@@ -71,10 +64,10 @@ else
 fi
 
 # 8. ESLint on modified files
-if npx eslint "$SOURCE" "$STORY" > /dev/null 2>&1; then
+if npx eslint "$SOURCE" "$STORY" "$SPEC" > /dev/null 2>&1; then
   pass "ESLint passes on modified source and story files"
 else
-  fail "ESLint errors in modified files — run: npx eslint $SOURCE $STORY"
+  fail "ESLint errors in modified files — run: npx eslint $SOURCE $STORY $SPEC"
 fi
 
 echo ""

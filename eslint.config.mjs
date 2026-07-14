@@ -148,7 +148,10 @@ export default tseslint.config(
 
   // --- core: @agentic-ds/tokens is a devDependency by design ---
   // tsup `noExternal` inlines it into the core bundle (see packages/core/tsup.config.ts),
-  // so it must not appear as a runtime dependency.
+  // so it must not appear as a runtime dependency. @agentic-ds/component-doc is
+  // also a devDependency by design: *.doc.ts files import only its types
+  // (`import type`), fully erased at compile time — never part of the bundle,
+  // never a runtime dependency.
   {
     files: ['packages/core/src/**/*.{ts,tsx}'],
     rules: {
@@ -157,7 +160,23 @@ export default tseslint.config(
         {
           peerDependencies: true,
           devDependencies: ['**/*.test.{ts,tsx}', '**/__tests__/**'],
-          whitelist: ['@agentic-ds/tokens'],
+          whitelist: ['@agentic-ds/tokens', '@agentic-ds/component-doc'],
+        },
+      ],
+    },
+  },
+
+  // --- agents: @agentic-ds/component-doc is a devDependency by design ---
+  // Same rationale as core above — *.doc.ts files import only its types.
+  {
+    files: ['packages/agents/src/**/*.{ts,tsx}'],
+    rules: {
+      'import-x/no-extraneous-dependencies': [
+        'error',
+        {
+          peerDependencies: true,
+          devDependencies: ['**/*.test.{ts,tsx}', '**/__tests__/**'],
+          whitelist: ['@agentic-ds/component-doc'],
         },
       ],
     },

@@ -3,9 +3,9 @@
 # Run from the project root after the skill has applied its changes.
 # Outputs [PASS] / [FAIL] / [SKIP] lines; exits with the number of failures.
 
-SOURCE="packages/agents/src/ToolCallCard.tsx"
+SOURCE="packages/agents/src/ToolCallCard/ToolCallCard.tsx"
 STORY="apps/storybook/src/stories/ToolCallCard.stories.tsx"
-SPEC="docs/components/ToolCallCard.md"
+SPEC="packages/agents/src/ToolCallCard/ToolCallCard.doc.ts"
 FAILS=0
 
 pass() { echo "[PASS] $1"; }
@@ -47,11 +47,11 @@ else
   fail "No Pending story found in story file"
 fi
 
-# 6. defaultOpen in spec doc props table
+# 6. defaultOpen in spec doc props
 if grep -q 'defaultOpen' "$SPEC"; then
   pass "defaultOpen found in spec doc"
 else
-  fail "defaultOpen missing from spec doc props table"
+  fail "defaultOpen missing from spec doc props"
 fi
 
 # 7. input prop type is Record<string, unknown> in spec
@@ -61,47 +61,40 @@ else
   fail "input prop type not updated to Record<string, unknown> in spec doc"
 fi
 
-# 8. ARIA / Accessibility section in spec
-if grep -qiE '^#{1,3} (ARIA|A11y|Accessibility)' "$SPEC"; then
-  pass "ARIA/Accessibility section found in spec doc"
+# 8. types.ToolCallStatus includes 'pending' (single-quoted — distinct from the
+#    double-quoted union string on props.status.type)
+if grep -q "'pending'" "$SPEC"; then
+  pass "'pending' found in types.ToolCallStatus"
 else
-  fail "No ARIA/Accessibility section in spec doc"
+  fail "'pending' missing from types.ToolCallStatus"
 fi
 
-# 9. Tokens frontmatter is not empty (at least one list entry under tokens:)
-python3 - "$SPEC" <<'EOF'
-import re, sys
-content = open(sys.argv[1]).read()
-parts = content.split('---', 2)
-fm = parts[1] if len(parts) >= 3 else ''
-in_tokens = False
-for line in fm.splitlines():
-    if re.match(r'^tokens:', line):
-        in_tokens = True
-    elif in_tokens and re.match(r'^\s+-\s+\S', line):
-        sys.exit(0)  # found at least one entry
-    elif in_tokens and re.match(r'^\S', line):
-        break        # left tokens section without finding an entry
-sys.exit(1)
-EOF
-if [ $? -eq 0 ]; then
-  pass "Tokens frontmatter contains at least one entry"
+# 9. ariaNotes documents the button/aria-expanded/aria-controls contract
+if grep -qE 'aria-expanded|aria-controls' "$SPEC"; then
+  pass "ariaNotes documents aria-expanded/aria-controls"
 else
-  fail "Tokens frontmatter appears empty"
+  fail "ariaNotes does not document aria-expanded/aria-controls"
 fi
 
-# 10. accent.green preserved in source (semantic token — must not be removed)
+# 10. tokens is no longer the empty fixture placeholder
+if grep -q 'tokens: {}' "$SPEC"; then
+  fail "tokens is still the empty {} placeholder in spec doc"
+else
+  pass "tokens is populated in spec doc"
+fi
+
+# 11. accent.green preserved in source (semantic token — must not be removed)
 if grep -q 'accent.green' "$SOURCE"; then
   pass "color='accent.green' preserved in source"
 else
   fail "color='accent.green' removed from source (it is a semantic token and must stay)"
 fi
 
-# 11. ESLint on modified files
-if npx eslint "$SOURCE" "$STORY" > /dev/null 2>&1; then
+# 12. ESLint on modified files
+if npx eslint "$SOURCE" "$STORY" "$SPEC" > /dev/null 2>&1; then
   pass "ESLint passes on modified source and story files"
 else
-  fail "ESLint errors in modified files — run: npx eslint $SOURCE $STORY"
+  fail "ESLint errors in modified files — run: npx eslint $SOURCE $STORY $SPEC"
 fi
 
 echo ""

@@ -1,7 +1,7 @@
 ---
 name: add-component-spec
 context: fork
-description: Creates the spec doc at docs/components/[ComponentName].md for an existing component — YAML frontmatter with token inventory, props table, accessibility requirements with WCAG SC references. Use when a component is missing its spec doc, when documenting a component, or as step 4 of the /add-component flow.
+description: Creates the colocated <ComponentName>.doc.ts spec next to an existing component's source — a typed ComponentDoc object with token inventory, props, and accessibility requirements with WCAG SC references. Use when a component is missing its doc, when documenting a component, or as step 4 of the /add-component flow.
 ---
 
 # Add Component Spec Doc
@@ -12,10 +12,10 @@ Create the spec doc given `$ARGUMENTS` in the format `<ComponentName>`.
 
 ## Gotchas
 
-- **The frontmatter token inventory requires active scanning** — extract every semantic token string from the source style props (any quoted dotted name in a Chakra style prop that is not `#`-hex) and list each in the matching `tokens.*` array. Do not write the list from memory.
-- **Every prop in the `export interface` block goes in the props table** — including string-literal-key props like `'aria-label'?: string`.
-- **Use exact TypeScript types in the props table** — `Record<string, unknown>` is not `object`; unions list all members.
-- **The spec doc is machine-parsed** — `packages/mcp-builder/scripts/generate.ts` turns it into the MCP server's component metadata. The format rules in Step 3 are a parse contract, not a style guide; Step 4's regeneration fails loudly if the doc deviates.
+- **The tokens field requires active scanning** — extract every semantic token string from the source style props (any quoted dotted name in a Chakra style prop that is not `#`-hex) and list each in the matching `tokens.*` array. Do not write the list from memory.
+- **Every prop in the `export interface` block goes in `props`** — including string-literal-key props like `'aria-label'?: string`.
+- **Use exact TypeScript types in `props`** — `Record<string, unknown>` is not `object`; unions list all members.
+- **The doc is real TypeScript, not markdown** — `packages/mcp-builder/scripts/generate.ts` imports it directly to build the MCP server's component metadata. There is no parse contract to satisfy; `tsc` and `eslint` are the only gates. Step 4's regeneration only fails if the file doesn't type-check as `ComponentDoc` or a required field is missing.
 - **No approval gate** — creating one doc is the whole task; proceed without asking.
 
 ---
@@ -42,42 +42,59 @@ Infer the package (`core` or `agents`) from which path exists.
 Skip anything already in context from earlier in this conversation:
 
 - The component source file — props interface, variants, states, ARIA attributes, token usage
-- `docs/components/Button.md` — the spec doc format to follow
-- If `docs/components/<ComponentName>.md` already exists, **stop** and suggest `/update-component <ComponentName>` instead — spec drift is that skill's job.
+- `packages/core/src/Button/Button.doc.ts` — the `ComponentDoc` shape to follow
+- `packages/component-doc/src/index.ts` — the authoritative `ComponentDoc`/`PropDoc`/`TypeDoc` interfaces
+- If `packages/<package>/src/<ComponentName>/<ComponentName>.doc.ts` already exists, **stop** and suggest `/update-component <ComponentName>` instead — spec drift is that skill's job.
 
 ## Step 3 — Create the spec doc
 
-File: `docs/components/<ComponentName>.md`
+File: `packages/<package>/src/<ComponentName>/<ComponentName>.doc.ts`
 
-Use the YAML frontmatter format from `docs/components/Button.md`:
+```ts
+import type { ComponentDoc } from '@agentic-ds/component-doc'
 
-```yaml
----
-component: <ComponentName>
-package: '@agentic-ds/<package>'
-category: <category>
-status: implemented
-tokens:
-  colors: [list semantic tokens used]
-  radius: [list if component uses radius tokens]
-  duration: [list if animated]
-  fonts: [list if component uses font tokens]
-wcag: AA
-aria-pattern: <URL to WAI-ARIA APG pattern if applicable>
-mcp-states: [list MCP states surfaced, if applicable]
----
+export const doc: ComponentDoc = {
+  name: '<ComponentName>',
+  package: '@agentic-ds/<package>',
+  category: '<category>',
+  status: 'implemented',
+  wcag: 'AA',
+  ariaPattern: '<URL to WAI-ARIA APG pattern, or omit entirely if none>',
+  tokens: {
+    colors: ['<list semantic tokens used>'],
+    radius: ['<list if component uses radius tokens>'],
+    duration: ['<list if animated>'],
+    fonts: ['<list if component uses font tokens>'],
+  },
+  description: '<one paragraph — becomes the MCP description>',
+  props: {
+    /* one entry per prop in the exported Props interface, e.g.: */
+    variant: {
+      type: '"solid" | "outline"',
+      required: false,
+      default: '"solid"',
+      description: 'Visual style',
+    },
+  },
+  // types: only when a prop's type is a named union or structural type not
+  // spelled out inline (e.g. `Step[]`) — see ProgressSteps.doc.ts for both
+  // a structural type (`Step`) and an enum (`StepStatus`).
+  ariaNotes: ['<one WCAG requirement per array entry>'].join('\n'),
+  // bestPractices: do/don't guidance as prose (no embedded code) — omit
+  // the field entirely if the component has none worth stating.
+  // notes: free-form markdown for anything structural that doesn't fit a
+  // typed field above (size/state tables, implementation notes, sources).
+  // Omit entirely if there's nothing left over.
+}
 ```
 
-Body MUST include: description, variants table (if applicable), props table, accessibility requirements with WCAG SC references, do/don't examples. Use MUST/SHOULD/MAY (RFC 2119).
+Reference file for the full shape in practice, including `types`, `bestPractices`, and `notes`: `packages/core/src/Button/Button.doc.ts`.
 
-The MCP metadata generator parses the body, so these rules are load-bearing:
-
-- The H1 must equal the frontmatter `component`, which must equal the filename. The single paragraph after the H1 becomes the MCP description.
-- `tokens` is `n/a`, `all`, or a map of group → token-name arrays. `aria-pattern` is a URL or `n/a`.
-- The `## Props` section contains exactly one `Prop | Type | Default | Description` table — or H3 sub-tables: `### <ComponentName>Props` for the props, plus one `### <TypeName>` (`Field | Type | Default | Description`) per structural type (see `ProgressSteps.md`).
-- A prop or field is required iff its description contains `(required)`. Defaults use `—` for none.
-- A named union type in the props (e.g. `ToolCallStatus`) must have a body table whose first-column header appears in the type name (e.g. `Status`) and whose first-column cells are all backticked values — that table defines the union members. Opaque types with no such table are allowed.
-- `## Accessibility` bullets become the MCP `ariaNotes`.
+- `tokens` is omitted entirely (not present as a key) when the component uses no tokens, or set to `'all'` for the token-resolution root (`AgenticProvider`).
+- `ariaPattern` is omitted entirely when there is no applicable WAI-ARIA pattern — do not write `'n/a'` as a string.
+- A prop's `required` is a literal `true`/`false` — set it directly from whether the TS prop is optional (`?`) in the source interface.
+- `ariaNotes` becomes the MCP server's accessibility section — one WCAG requirement per line, joined with `\n`.
+- **Every string in the file is checked by `no-restricted-syntax`** — raw hex colors, `rgb()`/`hsl()`/`oklch()` calls, and literal `ms`/`s` timing values are banned even inside prose in `notes` or `bestPractices` descriptions (e.g. write "a near-zero duration" instead of `"0.01ms"`, or drop a parenthetical value entirely). Fix these by rewording — never add an `eslint-disable` comment.
 
 ## Step 4 — Regenerate MCP metadata
 
@@ -87,19 +104,20 @@ From the repo root:
 npm run metadata:generate -w packages/mcp-builder
 ```
 
-This regenerates `packages/mcp-builder/src/metadata/components.ts` from all spec docs. If it fails, the new doc violates the parse contract — fix the doc, never the generated file. Include the regenerated file in the same commit as the doc (CI diffs it).
+This imports every `packages/{core,agents}/src/**/*.doc.ts` and rebuilds `packages/mcp-builder/src/metadata/components.ts`. If it fails, either the new file doesn't export `doc`, or a duplicate component `name` exists — fix the doc file, never the generated file. Include the regenerated file in the same commit as the doc (CI diffs it).
 
-Theming: both light and dark schemes are supported via the semantic tokens listed in the frontmatter — the body only needs a theming note when the component introduced **new** semantic tokens (name them and state that each carries `_dark` and `_light` values) or has scheme-specific contrast considerations (e.g. text on accent backgrounds — see `color.text.on.accent` in `theme.ts`).
+Also run `npm run lint -w packages/<package>` — this is what actually catches a `ComponentDoc` shape mismatch (tsc) and token-usage violations (eslint) before metadata generation ever runs.
+
+Theming: both light and dark schemes are supported via the semantic tokens listed in `tokens` — `notes` only needs a theming callout when the component introduced **new** semantic tokens (name them and state that each carries `_dark` and `_light` values) or has scheme-specific contrast considerations (e.g. text on accent backgrounds — see `color.text.on.accent` in `theme.ts`).
 
 ## Step 5 — Report
 
 ```
 ## Spec doc created: <ComponentName>
 
-**File:** docs/components/<ComponentName>.md
-**Frontmatter tokens:** <counts per category>
+**File:** packages/<package>/src/<ComponentName>/<ComponentName>.doc.ts
+**Tokens:** <counts per category>
 **Props documented:** <count>
-**MCP states:** <list or "n/a">
 **MCP metadata:** regenerated (<N> components)
 ```
 

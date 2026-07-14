@@ -77,7 +77,7 @@ Files to create:
 - `packages/<package>/src/<ComponentName>/index.ts`
 - `packages/<package>/src/<ComponentName>/<ComponentName>.test.tsx`
 - `apps/storybook/src/stories/<ComponentName>.stories.tsx`
-- `docs/components/<ComponentName>.md`
+- `packages/<package>/src/<ComponentName>/<ComponentName>.doc.ts`
 
 Shall I proceed? Reply **yes** to create all files, or clarify anything first (package, ARIA pattern, MCP states).
 ```
@@ -88,13 +88,13 @@ Wait for explicit approval before invoking any sub-skill.
 
 Invoke each via the Skill tool, in this exact order:
 
-| Order | Skill                  | Args                        | Produces                                         |
-| ----- | ---------------------- | --------------------------- | ------------------------------------------------ |
-| 1     | `add-component-source` | `<ComponentName> <package>` | Source file, barrel `index.ts`, package export   |
-| 2     | `add-component-story`  | `<ComponentName>`           | Storybook story                                  |
-| 3     | `add-component-tests`  | `<ComponentName>`           | Unit test file (and runs it)                     |
-| 4     | `add-component-spec`   | `<ComponentName>`           | Spec doc at `docs/components/<ComponentName>.md` |
-| 5     | `verify-component`     | `<ComponentName>`           | Build + scoped lint + scoped tests, output shown |
+| Order | Skill                  | Args                        | Produces                                                        |
+| ----- | ---------------------- | --------------------------- | --------------------------------------------------------------- |
+| 1     | `add-component-source` | `<ComponentName> <package>` | Source file, barrel `index.ts`, package export                  |
+| 2     | `add-component-story`  | `<ComponentName>`           | Storybook story                                                 |
+| 3     | `add-component-tests`  | `<ComponentName>`           | Unit test file (and runs it)                                    |
+| 4     | `add-component-spec`   | `<ComponentName>`           | Spec doc at `<ComponentName>.doc.ts`, colocated with the source |
+| 5     | `verify-component`     | `<ComponentName>`           | Build + scoped lint + scoped tests, output shown                |
 
 Pass the ARIA pattern, MCP states, and theming decision from Step 3 as extra context in the `add-component-source` args (e.g., `EvalStatusPill agents — role="status" aria-live="polite", states: idle/running/done/error, tokens: existing semantic only` or `…, new token: color.eval.status.queued (dark + light)`).
 

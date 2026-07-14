@@ -266,7 +266,7 @@ Available via `/skill-name` in Claude Code:
 | `/add-component-source <Name> [core\|agents]` | Source file, barrel index, and package export only                              |
 | `/add-component-story <Name>`                 | Storybook story for an existing component                                       |
 | `/add-component-tests <Name>`                 | Unit tests for an existing component, run to green                              |
-| `/add-component-spec <Name>`                  | Spec doc at `docs/components/<Name>.md` for an existing component               |
+| `/add-component-spec <Name>`                  | Colocated spec doc at `<Name>.doc.ts` for an existing component                 |
 | `/verify-component <Name>`                    | Build + scoped lint + scoped tests for one component; fixes errors in its files |
 | `/update-component <Name>`                    | Audits source, story, and spec doc; plans fixes and waits for approval          |
 
@@ -286,7 +286,7 @@ npx tsx scripts/eval-skills.ts update-component         # one skill
 npx tsx scripts/eval-skills.ts update-component --id 1  # one case
 ```
 
-Eval design follows Anthropic's guidance on [evaluating agent outputs](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) — each case has a specific prompt, graded assertions, and setup/teardown scripts. Setup copies fixture files into the real component paths (`packages/agents/src/`, `apps/storybook/src/stories/`, `docs/components/`) so the skill runs against its normal file resolution logic, including cross-referencing live token and theme files. Teardown uses `git restore` to guarantee a clean state regardless of what the skill did.
+Eval design follows Anthropic's guidance on [evaluating agent outputs](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) — each case has a specific prompt, graded assertions, and setup/teardown scripts. Setup copies fixture files into the real component paths (`packages/agents/src/`, `apps/storybook/src/stories/`) so the skill runs against its normal file resolution logic, including cross-referencing live token and theme files. Teardown uses `git restore` to guarantee a clean state regardless of what the skill did.
 
 Assertions mix recall checks (did the plan catch all violations?) and precision checks (did it avoid false positives?). See [`.claude/skills/update-component/references/eval-rubric.md`](.claude/skills/update-component/references/eval-rubric.md) for scoring dimensions.
 

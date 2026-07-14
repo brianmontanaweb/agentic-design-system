@@ -57,10 +57,10 @@ All styles scoped to `[data-agentic-ds]` — not `:root`
 
 ## Spec Doc Drift
 
-- Props table missing entries — read the full `export interface <ComponentName>Props` block in the source; every prop, including those with string-literal keys (e.g., `'aria-label'?: string`), must appear in the spec doc props table
-- Props table contains entries that no longer exist in the source
+- `props` missing entries — read the full `export interface <ComponentName>Props` block in the source; every prop, including those with string-literal keys (e.g., `'aria-label'?: string`), must appear in the spec doc's `props` object
+- `props` contains entries that no longer exist in the source
 - Prop types, defaults, or descriptions that don't match the implementation — **compare exact TypeScript types**: generic types like `Record<string, unknown>` are not equivalent to `object`; union types must include all members; report the spec doc type vs. the source type as `old → new`
-- Variants or states table out of sync with the source
-- YAML frontmatter `tokens` list incomplete — extract every semantic token reference from the source (any quoted string in a Chakra style prop that is not `#`-hex), then verify each one appears in the appropriate `tokens.*` list in the frontmatter. Any token used in source but absent from the list is a drift violation.
-- `mcp-states` frontmatter missing or incomplete (for `AgentStatus` / `ProgressSteps`)
-- Implementation notes or accessibility notes that contradict current code — verify stated prop values (e.g., `tabIndex` values, `aria-disabled` usage) against the actual source implementation
+- `types` (named unions/structural types) out of sync with the source
+- `tokens` incomplete — extract every semantic token reference from the source (any quoted string in a Chakra style prop that is not `#`-hex), then verify each one appears in the appropriate `tokens.*` array in the doc. Any token used in source but absent from the list is a drift violation.
+- `types.AgentStatusValue` / `types.StepStatus` (or equivalent) missing or incomplete for `AgentStatus` / `ProgressSteps` — all 6 MCP lifecycle states (or the component's full state set) must be listed
+- `notes` or `ariaNotes` that contradict current code — verify stated prop values (e.g., `tabIndex` values, `aria-disabled` usage) against the actual source implementation
