@@ -77,6 +77,20 @@ describe('AgentStatus', () => {
     })
   })
 
+  describe('data-status attribute', () => {
+    it.each(allStatuses)('reflects status "%s" on the status role element', (status) => {
+      renderWithProviders(<AgentStatus status={status} />)
+      expect(screen.getByRole('status')).toHaveAttribute('data-status', status)
+    })
+
+    it('updates on rerender', () => {
+      const { rerender } = renderWithProviders(<AgentStatus status="running" />)
+      expect(screen.getByRole('status')).toHaveAttribute('data-status', 'running')
+      rerender(<AgentStatus status="done" />)
+      expect(screen.getByRole('status')).toHaveAttribute('data-status', 'done')
+    })
+  })
+
   describe('waiting and cancelled state transitions', () => {
     it('announces the waiting state when status changes from running to waiting', () => {
       const { rerender } = renderWithProviders(<AgentStatus status="running" />)

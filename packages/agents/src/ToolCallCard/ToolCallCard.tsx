@@ -40,6 +40,7 @@ export function ToolCallCard({
 
   return (
     <Box
+      data-status={status}
       bg="color.surface.default"
       border="1px solid"
       borderColor="color.border.subtle"

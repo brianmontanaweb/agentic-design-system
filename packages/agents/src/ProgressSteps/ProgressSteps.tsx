@@ -43,6 +43,7 @@ export function ProgressSteps({ steps }: ProgressStepsProps): ReactElement {
         return (
           <HStack
             key={step.id}
+            data-status={step.status}
             gap={3}
             alignItems="flex-start"
             role="listitem"

@@ -99,6 +99,7 @@ The \`running\` status dot animates with \`ds-pulse\`. \`useReducedMotion()\` di
 - Content panel ID is generated with React's \`useId()\` — do not use a hand-written string, as it won't be collision-safe in multi-card views.
 - Input is serialized with \`JSON.stringify(input, null, 2)\` — the component does not validate or sanitize input structure.
 - Output color is driven by \`status\`: \`error\` → \`color.accent.danger\`, all others → \`color.accent.success\`.
+- The card's outer container carries \`data-status="<status>"\` — a styling/testing hook for host CSS (e.g. Tailwind \`data-[status=error]:\`) and stable E2E/visual-regression selectors. It is not an ARIA attribute; the visually-hidden status text remains the accessible source of truth.
 
 ## Sources
 

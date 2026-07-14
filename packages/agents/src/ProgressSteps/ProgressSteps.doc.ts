@@ -69,6 +69,7 @@ export const doc: ComponentDoc = {
 - \`color.surface.step.*\` tokens use 8-digit hex (\`RRGGBBAA\`) for a 13% opacity tint — do not replace with an rgba color function, which would break the semantic token contract.
 - Do not show a connector line between steps in the current implementation — layout relies on \`VStack\` gap only.
 - The \`waiting\` status signals \`input_required\` in the MCP protocol; it is visually distinct from \`active\` via \`color.accent.warning\`.
+- Each \`listitem\` carries its own \`data-status="<status>"\` — a styling/testing hook for host CSS (e.g. Tailwind \`data-[status=active]:\`) and stable E2E/visual-regression selectors, independent of and in addition to \`aria-current\`.
 
 ## Sources
 

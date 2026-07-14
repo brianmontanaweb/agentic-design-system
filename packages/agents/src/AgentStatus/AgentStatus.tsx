@@ -25,6 +25,7 @@ export function AgentStatus({ status, label }: AgentStatusProps): ReactElement {
   const displayLabel = label ?? config.label
   return (
     <HStack
+      data-status={status}
       gap={2}
       display="inline-flex"
       alignItems="center"

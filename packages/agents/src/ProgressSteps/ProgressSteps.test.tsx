@@ -121,6 +121,25 @@ describe('ProgressSteps', () => {
     })
   })
 
+  describe('data-status attribute', () => {
+    const allStatuses: Step['status'][] = ['pending', 'active', 'complete', 'waiting', 'cancelled']
+    it.each(allStatuses)('reflects status "%s" on its listitem', (status) => {
+      renderWithProviders(<ProgressSteps steps={[makeStep({ status })]} />)
+      expect(screen.getByRole('listitem')).toHaveAttribute('data-status', status)
+    })
+
+    it("reflects each step's own status independently", () => {
+      const steps = [
+        makeStep({ id: 'a', label: 'A', status: 'complete' }),
+        makeStep({ id: 'b', label: 'B', status: 'active' }),
+      ]
+      renderWithProviders(<ProgressSteps steps={steps} />)
+      const items = screen.getAllByRole('listitem')
+      expect(items[0]).toHaveAttribute('data-status', 'complete')
+      expect(items[1]).toHaveAttribute('data-status', 'active')
+    })
+  })
+
   describe('aria-current updates on rerender', () => {
     it('moves aria-current to the newly active step', () => {
       const steps = [

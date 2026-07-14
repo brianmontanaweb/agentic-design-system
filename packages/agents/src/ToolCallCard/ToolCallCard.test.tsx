@@ -108,6 +108,19 @@ describe('ToolCallCard', () => {
     })
   })
 
+  describe('data-status attribute', () => {
+    const statuses: ToolCallStatus[] = ['pending', 'running', 'done', 'error']
+    it.each(statuses)('reflects status "%s" on the card container', (status) => {
+      const { container } = renderWithProviders(<ToolCallCard toolName="tool" status={status} />)
+      expect(container.querySelector(`[data-status="${status}"]`)).toBeInTheDocument()
+    })
+
+    it('defaults to "done" when status is omitted', () => {
+      const { container } = renderWithProviders(<ToolCallCard toolName="tool" />)
+      expect(container.querySelector('[data-status="done"]')).toBeInTheDocument()
+    })
+  })
+
   describe('keyboard navigation', () => {
     it('button is focusable via Tab', async () => {
       const user = userEvent.setup()

@@ -75,6 +75,7 @@ The \`running\` dot animates with \`ds-pulse\`. All other states are static. \`u
 - Use \`color.agent.status.*\` semantic tokens — not raw \`accent.*\` tokens — so the meaning survives palette changes.
 - The \`ds-pulse\` keyframe is injected by \`AgenticProvider\` and scoped to \`[data-agentic-ds]\`.
 - Visually-hidden technique uses \`clipPath: inset(50%)\` rather than \`clip: rect(0,0,0,0)\` (the latter is deprecated).
+- The \`role="status"\` element carries \`data-status="<status>"\` — a styling/testing hook for host CSS (e.g. Tailwind \`data-[status=error]:\`) and stable E2E/visual-regression selectors. It is not an ARIA attribute; the visually-hidden phrase remains the accessible source of truth.
 
 ## Sources
 

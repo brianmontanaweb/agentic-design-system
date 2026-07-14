@@ -184,11 +184,7 @@ Decisions made when the monolithic `add-component` skill was split into an orche
 
 ### Architecture (Astryx-inspired, 2026-07-12)
 
-Approaches borrowed from Meta's [Astryx](https://github.com/facebook/astryx) design system, mapped to this codebase's existing gaps. Full analysis in the 2026-07-12 review session. Colocated component spec docs (`<Name>.doc.ts` replacing `docs/components/*.md`) — also Astryx-inspired — landed 2026-07-13; see Docs above.
-
-| Item                                                                                                                                                                                                                                          | Priority |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| **Data-attribute state exposure** — emit `data-status` on `ToolCallCard` / `AgentStatus` / `ProgressSteps` so host CSS and Tailwind variants can target states without new props; also gives visual-regression and E2E tests stable selectors | Low      |
+Approaches borrowed from Meta's [Astryx](https://github.com/facebook/astryx) design system, mapped to this codebase's existing gaps. Full analysis in the 2026-07-12 review session. Colocated component spec docs (`<Name>.doc.ts` replacing `docs/components/*.md`) landed 2026-07-13; per-theme static CSS extraction (`themeToCss()`) and data-attribute state exposure (`data-status` on `ToolCallCard` / `AgentStatus` / `ProgressSteps`) both landed 2026-07-13. All items from this review are now complete.
 
 ---
 
