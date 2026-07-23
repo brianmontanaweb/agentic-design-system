@@ -241,6 +241,23 @@ export function resolveThemeColors(
     }
   }
 
+  // A custom warning accent (set via `colors`) needs its on-warning text
+  // re-derived the same way — the stock on.warning value is only guaranteed
+  // to contrast against the stock warning hue. Runs before the colors loop
+  // below so an explicit color.text.on.warning override still wins.
+  const warningOverride = colors['color.accent.warning']
+  if (warningOverride !== undefined) {
+    const pair = toModePair(
+      warningOverride,
+      resolved['color.accent.warning'],
+      'colors["color.accent.warning"]'
+    )
+    resolved['color.text.on.warning'] = {
+      dark: pickHigherContrast(pair.dark, WHITE, DARKEST_NEUTRAL),
+      light: pickHigherContrast(pair.light, WHITE, DARKEST_NEUTRAL),
+    }
+  }
+
   for (const [path, value] of Object.entries(colors)) {
     if (!(path in colorModes)) {
       throw new Error(`defineAgenticTheme: unknown color token "${path}".`)

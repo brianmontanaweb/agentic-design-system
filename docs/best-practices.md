@@ -143,9 +143,9 @@ Tokens MUST follow the three-tier model:
 
 Current tokens are hybrid primitives. A formal semantic alias layer MUST be added before new components are built.
 
-### Required Semantic Tokens (Not Yet Implemented)
+### Implemented Semantic Tokens
 
-These tokens MUST be added to `packages/tokens` to replace hardcoded values in components:
+`packages/tokens/tokens/base.json` defines the semantic alias tier consumed by components — every one of these resolves through `colorModes` to a primitive in `color.dark.json`/`color.light.json`:
 
 ```ts
 // Agent lifecycle
@@ -173,11 +173,13 @@ These tokens MUST be added to `packages/tokens` to replace hardcoded values in c
 'color.message.tool.bg'
 'color.message.tool.border'
 
-// Step states
-'color.step.pending'
-'color.step.active'
-'color.step.complete'
+// Step states — dot border, label, and background per status
+'color.step.{pending,active,complete,waiting,cancelled}.dot'
+'color.step.{pending,active,complete,waiting,cancelled}.label'
+'color.step.{pending,active,complete,waiting,cancelled}.bg'
 ```
+
+When a component needs a new semantic concept not covered above, add it to `base.json` (or a primitive to both `color.dark.json` and `color.light.json`, per the parity rule above) before referencing it from component source — never reach for a raw primitive or hex value directly.
 
 ### No Hardcoded Values in Components
 
@@ -193,7 +195,7 @@ Follow the [EightShapes token naming taxonomy](https://medium.com/eightshapes-ll
 
 **Formula:** `[namespace]-[category]-[concept]-[property]-[variant]-[state]`
 
-- **Namespace:** `ads` (agentic-ds) — prefix for CSS custom properties only, not JS token names
+- **Namespace:** `ds` — prefix for CSS custom properties only, not JS token names (e.g. `--ds-color-agent-status-running`, emitted by `packages/tokens/src/css.ts`)
 - **Category:** `color`, `font`, `duration`, `radius`, `space`
 - **Concept:** the semantic subject (`agent`, `tool`, `message`, `stream`, `step`)
 - **Property:** `bg`, `border`, `color`, `size`, `weight`

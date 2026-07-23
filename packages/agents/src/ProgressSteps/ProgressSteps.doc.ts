@@ -9,16 +9,22 @@ export const doc: ComponentDoc = {
   ariaPattern: 'https://www.w3.org/WAI/ARIA/apg/patterns/listbox/',
   tokens: {
     colors: [
-      'color.accent.interactive',
-      'color.accent.success',
-      'color.accent.warning',
+      'color.step.pending.dot',
+      'color.step.pending.label',
+      'color.step.pending.bg',
+      'color.step.active.dot',
+      'color.step.active.label',
+      'color.step.active.bg',
+      'color.step.complete.dot',
+      'color.step.complete.label',
+      'color.step.complete.bg',
+      'color.step.waiting.dot',
+      'color.step.waiting.label',
+      'color.step.waiting.bg',
+      'color.step.cancelled.dot',
+      'color.step.cancelled.label',
+      'color.step.cancelled.bg',
       'color.text.muted',
-      'color.text.primary',
-      'color.border.subtle',
-      'color.surface.step.active',
-      'color.surface.step.complete',
-      'color.surface.step.waiting',
-      'color.surface.elevated',
     ],
   },
   description:
@@ -56,19 +62,21 @@ export const doc: ComponentDoc = {
   ],
   notes: `## Step statuses
 
-| Status      | Dot border token           | Step background token         | Indicator   | Label weight |
-| ----------- | --------------------------- | ------------------------------ | ----------- | ------------ |
-| \`pending\`   | \`color.border.subtle\`      | \`color.surface.elevated\`      | Step number | normal       |
-| \`active\`    | \`color.accent.interactive\` | \`color.surface.step.active\`   | Step number | medium       |
-| \`complete\`  | \`color.accent.success\`     | \`color.surface.step.complete\` | ✓ checkmark | normal       |
-| \`waiting\`   | \`color.accent.warning\`     | \`color.surface.step.waiting\`  | Step number | medium       |
-| \`cancelled\` | \`color.text.muted\`         | \`color.surface.elevated\`      | — em-dash   | normal       |
+Each status maps to a \`color.step.<status>.{dot,label,bg}\` semantic token triple — the component never reaches for a primitive or a raw accent/surface token directly.
+
+| Status      | Dot border token          | Label token                  | Background token           | Indicator   | Label weight |
+| ----------- | -------------------------- | ----------------------------- | --------------------------- | ----------- | ------------ |
+| \`pending\`   | \`color.step.pending.dot\`   | \`color.step.pending.label\`   | \`color.step.pending.bg\`    | Step number | normal       |
+| \`active\`    | \`color.step.active.dot\`    | \`color.step.active.label\`    | \`color.step.active.bg\`     | Step number | medium       |
+| \`complete\`  | \`color.step.complete.dot\`  | \`color.step.complete.label\`  | \`color.step.complete.bg\`   | ✓ checkmark | normal       |
+| \`waiting\`   | \`color.step.waiting.dot\`   | \`color.step.waiting.label\`   | \`color.step.waiting.bg\`    | Step number | medium       |
+| \`cancelled\` | \`color.step.cancelled.dot\` | \`color.step.cancelled.label\` | \`color.step.cancelled.bg\`  | — em-dash   | normal       |
 
 ## Implementation notes
 
-- \`color.surface.step.*\` tokens use 8-digit hex (\`RRGGBBAA\`) for a 13% opacity tint — do not replace with an rgba color function, which would break the semantic token contract.
+- \`color.step.{active,complete,waiting}.bg\` alias \`color.surface.step.*\`, which use 8-digit hex (\`RRGGBBAA\`) for a 13% opacity tint — do not replace with an rgba color function, which would break the semantic token contract.
 - Do not show a connector line between steps in the current implementation — layout relies on \`VStack\` gap only.
-- The \`waiting\` status signals \`input_required\` in the MCP protocol; it is visually distinct from \`active\` via \`color.accent.warning\`.
+- The \`waiting\` status signals \`input_required\` in the MCP protocol; it is visually distinct from \`active\` via \`color.step.waiting.dot\` (aliasing \`color.accent.warning\`).
 - Each \`listitem\` carries its own \`data-status="<status>"\` — a styling/testing hook for host CSS (e.g. Tailwind \`data-[status=active]:\`) and stable E2E/visual-regression selectors, independent of and in addition to \`aria-current\`.
 
 ## Sources

@@ -151,6 +151,27 @@ describe('MCP lifecycle states', () => {
   })
 })
 
+// ---- ProgressSteps semantic layer ----
+
+describe('step tokens', () => {
+  it('has dot, label, and bg for all 5 step statuses', () => {
+    for (const status of ['pending', 'active', 'complete', 'waiting', 'cancelled']) {
+      for (const property of ['dot', 'label', 'bg']) {
+        expect(colorModes).toHaveProperty(`color.step.${status}.${property}`)
+      }
+    }
+  })
+})
+
+// ---- Warning text contrast ----
+
+describe('color.text.on.warning', () => {
+  it('resolves to a hex value distinct per mode where needed', () => {
+    expect(colorModes['color.text.on.warning'].dark).toMatch(HEX_RE)
+    expect(colorModes['color.text.on.warning'].light).toMatch(HEX_RE)
+  })
+})
+
 // ---- z-index ordering ----
 
 describe('z-index ordering', () => {

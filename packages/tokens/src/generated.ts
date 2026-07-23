@@ -92,6 +92,96 @@ export const colorModes = Object.freeze({
     $type: 'color',
     $description: 'Tool result bubble border',
   },
+  'color.step.pending.dot': {
+    dark: '#2a2a38',
+    light: '#e2e2e8',
+    $type: 'color',
+    $description: 'ProgressSteps pending step dot border',
+  },
+  'color.step.pending.label': {
+    dark: '#8888aa',
+    light: '#6666aa',
+    $type: 'color',
+    $description: 'ProgressSteps pending step label',
+  },
+  'color.step.pending.bg': {
+    dark: '#1c1c26',
+    light: '#f0f0f5',
+    $type: 'color',
+    $description: 'ProgressSteps pending step background',
+  },
+  'color.step.active.dot': {
+    dark: '#4d9fff',
+    light: '#2563eb',
+    $type: 'color',
+    $description: 'ProgressSteps active step dot border',
+  },
+  'color.step.active.label': {
+    dark: '#f0f0f5',
+    light: '#0a0a0f',
+    $type: 'color',
+    $description: 'ProgressSteps active step label',
+  },
+  'color.step.active.bg': {
+    dark: '#4d9fff22',
+    light: '#2563eb22',
+    $type: 'color',
+    $description: 'ProgressSteps active step background tint',
+  },
+  'color.step.complete.dot': {
+    dark: '#3dd68c',
+    light: '#166534',
+    $type: 'color',
+    $description: 'ProgressSteps complete step dot border',
+  },
+  'color.step.complete.label': {
+    dark: '#8888aa',
+    light: '#6666aa',
+    $type: 'color',
+    $description: 'ProgressSteps complete step label',
+  },
+  'color.step.complete.bg': {
+    dark: '#3dd68c22',
+    light: '#16a34a22',
+    $type: 'color',
+    $description: 'ProgressSteps complete step background tint',
+  },
+  'color.step.waiting.dot': {
+    dark: '#f59e0b',
+    light: '#d97706',
+    $type: 'color',
+    $description: 'ProgressSteps waiting step dot border',
+  },
+  'color.step.waiting.label': {
+    dark: '#f0f0f5',
+    light: '#0a0a0f',
+    $type: 'color',
+    $description: 'ProgressSteps waiting step label',
+  },
+  'color.step.waiting.bg': {
+    dark: '#f59e0b22',
+    light: '#d9770622',
+    $type: 'color',
+    $description: 'ProgressSteps waiting step background tint',
+  },
+  'color.step.cancelled.dot': {
+    dark: '#8888aa',
+    light: '#6666aa',
+    $type: 'color',
+    $description: 'ProgressSteps cancelled step dot border',
+  },
+  'color.step.cancelled.label': {
+    dark: '#8888aa',
+    light: '#6666aa',
+    $type: 'color',
+    $description: 'ProgressSteps cancelled step label',
+  },
+  'color.step.cancelled.bg': {
+    dark: '#1c1c26',
+    light: '#f0f0f5',
+    $type: 'color',
+    $description: 'ProgressSteps cancelled step background',
+  },
   'color.surface.base': {
     dark: '#0a0a0f',
     light: '#f8f9fa',
@@ -159,6 +249,13 @@ export const colorModes = Object.freeze({
     $type: 'color',
     $description:
       "Text on the danger background. Fixed independently of color.text.on.accent — a custom theme accent (e.g. a dark brand purple) can flip on.accent to white, which fails against dark mode's light salmon danger red (≈2.8:1); near-black holds >7:1 here regardless of theme",
+  },
+  'color.text.on.warning': {
+    dark: '#0a0a0f',
+    light: '#0a0a0f',
+    $type: 'color',
+    $description:
+      "Text on the warning background. Fixed independently of color.text.on.accent for the same reason as on.danger — near-black holds ≈9.2:1 against dark mode's light amber warning regardless of theme",
   },
   'color.accent.interactive': {
     dark: '#4d9fff',

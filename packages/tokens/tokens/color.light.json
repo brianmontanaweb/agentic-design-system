@@ -106,7 +106,7 @@
             "hex": "#ffffff"
           },
           "$type": "color",
-          "$description": "Text on accent backgrounds. Light mode accents are dark — white text passes WCAG AA"
+          "$description": "Text on accent backgrounds. Light mode's interactive/danger/success accents are dark enough for white text to pass WCAG AA; color.accent.warning is a lighter amber and uses color.text.on.warning instead — see its description"
         },
         "danger": {
           "$value": {
@@ -117,6 +117,16 @@
           },
           "$type": "color",
           "$description": "Text on the danger background. Fixed independently of color.text.on.accent (see dark-mode counterpart) — light mode's deep danger red passes with white text at ≈4.8:1"
+        },
+        "warning": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [0.0392, 0.0392, 0.0588],
+            "alpha": 1,
+            "hex": "#0a0a0f"
+          },
+          "$type": "color",
+          "$description": "Text on the warning background. White fails here (light mode's amber warning is too light — ≈3.2:1, below AA's 4.5:1 for normal text); near-black holds ≈6.2:1"
         }
       }
     },

@@ -92,6 +92,93 @@
           "$description": "Tool result bubble border"
         }
       }
+    },
+    "step": {
+      "pending": {
+        "dot": {
+          "$value": "{color.border.subtle}",
+          "$type": "color",
+          "$description": "ProgressSteps pending step dot border"
+        },
+        "label": {
+          "$value": "{color.text.muted}",
+          "$type": "color",
+          "$description": "ProgressSteps pending step label"
+        },
+        "bg": {
+          "$value": "{color.surface.elevated}",
+          "$type": "color",
+          "$description": "ProgressSteps pending step background"
+        }
+      },
+      "active": {
+        "dot": {
+          "$value": "{color.accent.interactive}",
+          "$type": "color",
+          "$description": "ProgressSteps active step dot border"
+        },
+        "label": {
+          "$value": "{color.text.primary}",
+          "$type": "color",
+          "$description": "ProgressSteps active step label"
+        },
+        "bg": {
+          "$value": "{color.surface.step.active}",
+          "$type": "color",
+          "$description": "ProgressSteps active step background tint"
+        }
+      },
+      "complete": {
+        "dot": {
+          "$value": "{color.accent.success}",
+          "$type": "color",
+          "$description": "ProgressSteps complete step dot border"
+        },
+        "label": {
+          "$value": "{color.text.muted}",
+          "$type": "color",
+          "$description": "ProgressSteps complete step label"
+        },
+        "bg": {
+          "$value": "{color.surface.step.complete}",
+          "$type": "color",
+          "$description": "ProgressSteps complete step background tint"
+        }
+      },
+      "waiting": {
+        "dot": {
+          "$value": "{color.accent.warning}",
+          "$type": "color",
+          "$description": "ProgressSteps waiting step dot border"
+        },
+        "label": {
+          "$value": "{color.text.primary}",
+          "$type": "color",
+          "$description": "ProgressSteps waiting step label"
+        },
+        "bg": {
+          "$value": "{color.surface.step.waiting}",
+          "$type": "color",
+          "$description": "ProgressSteps waiting step background tint"
+        }
+      },
+      "cancelled": {
+        "dot": {
+          "$value": "{color.text.muted}",
+          "$type": "color",
+          "$description": "ProgressSteps cancelled step dot border"
+        },
+        "label": {
+          "$value": "{color.text.muted}",
+          "$type": "color",
+          "$description": "ProgressSteps cancelled step label"
+        },
+        "bg": {
+          "$value": "{color.surface.elevated}",
+          "$type": "color",
+          "$description": "ProgressSteps cancelled step background"
+        }
+      }
     }
   },
   "spacing": {

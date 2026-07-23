@@ -11,6 +11,7 @@ import { AgenticProvider } from '../AgenticProvider'
 const WHITE = rgbToHex({ r: 1, g: 1, b: 1 })
 const NEAR_BLACK = colorModes['color.surface.base'].dark
 const STOCK_ACCENT = colorModes['color.accent.interactive']
+const STOCK_WARNING = colorModes['color.accent.warning']
 const RED = colorModes['color.accent.danger'].dark
 
 describe('resolveThemeColors', () => {
@@ -65,6 +66,37 @@ describe('resolveThemeColors', () => {
         colors: { 'color.text.on.accent': RED },
       })
       expect(resolved['color.text.on.accent']).toEqual({ dark: RED, light: RED })
+    })
+  })
+
+  describe('warning', () => {
+    it('leaves on-warning at the stock value when warning is not customized', () => {
+      const resolved = resolveThemeColors()
+      const stock = colorModes['color.text.on.warning']
+      expect(resolved['color.text.on.warning']).toEqual({ dark: stock.dark, light: stock.light })
+    })
+
+    it('re-derives on-warning text when color.accent.warning is overridden', () => {
+      const resolved = resolveThemeColors({ colors: { 'color.accent.warning': NEAR_BLACK } })
+      expect(resolved['color.text.on.warning']).toEqual({ dark: WHITE, light: WHITE })
+    })
+
+    it('always yields at least AA-large contrast between a custom warning and its on-warning text', () => {
+      for (const warning of [RED, NEAR_BLACK, WHITE, STOCK_WARNING.light]) {
+        const resolved = resolveThemeColors({ colors: { 'color.accent.warning': warning } })
+        const ratio = contrastRatio(
+          hexToRgb(resolved['color.accent.warning'].dark),
+          hexToRgb(resolved['color.text.on.warning'].dark)
+        )
+        expect(ratio).toBeGreaterThanOrEqual(3)
+      }
+    })
+
+    it('does not clobber an explicit on-warning override', () => {
+      const resolved = resolveThemeColors({
+        colors: { 'color.accent.warning': NEAR_BLACK, 'color.text.on.warning': RED },
+      })
+      expect(resolved['color.text.on.warning']).toEqual({ dark: RED, light: RED })
     })
   })
 

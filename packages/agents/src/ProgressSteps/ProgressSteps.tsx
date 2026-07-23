@@ -14,25 +14,32 @@ export interface ProgressStepsProps {
   steps: Step[]
 }
 
-const stepColors: Record<StepStatus, { dot: string; label: string }> = {
-  pending: { dot: 'color.border.subtle', label: 'color.text.muted' },
-  active: { dot: 'color.accent.interactive', label: 'color.text.primary' },
-  complete: { dot: 'color.accent.success', label: 'color.text.muted' },
-  waiting: { dot: 'color.accent.warning', label: 'color.text.primary' },
-  cancelled: { dot: 'color.text.muted', label: 'color.text.muted' },
-}
-
-function stepBg(status: StepStatus): string {
-  switch (status) {
-    case 'complete':
-      return 'color.surface.step.complete'
-    case 'active':
-      return 'color.surface.step.active'
-    case 'waiting':
-      return 'color.surface.step.waiting'
-    default:
-      return 'color.surface.elevated'
-  }
+const stepColors: Record<StepStatus, { dot: string; label: string; bg: string }> = {
+  pending: {
+    dot: 'color.step.pending.dot',
+    label: 'color.step.pending.label',
+    bg: 'color.step.pending.bg',
+  },
+  active: {
+    dot: 'color.step.active.dot',
+    label: 'color.step.active.label',
+    bg: 'color.step.active.bg',
+  },
+  complete: {
+    dot: 'color.step.complete.dot',
+    label: 'color.step.complete.label',
+    bg: 'color.step.complete.bg',
+  },
+  waiting: {
+    dot: 'color.step.waiting.dot',
+    label: 'color.step.waiting.label',
+    bg: 'color.step.waiting.bg',
+  },
+  cancelled: {
+    dot: 'color.step.cancelled.dot',
+    label: 'color.step.cancelled.label',
+    bg: 'color.step.cancelled.bg',
+  },
 }
 
 export function ProgressSteps({ steps }: ProgressStepsProps): ReactElement {
@@ -53,7 +60,7 @@ export function ProgressSteps({ steps }: ProgressStepsProps): ReactElement {
               w="24px"
               h="24px"
               borderRadius="full"
-              bg={stepBg(step.status)}
+              bg={colors.bg}
               border="1px solid"
               borderColor={colors.dot}
               display="flex"
@@ -63,11 +70,11 @@ export function ProgressSteps({ steps }: ProgressStepsProps): ReactElement {
               mt="1px"
             >
               {step.status === 'complete' ? (
-                <Text fontSize="xs" color="color.accent.success" fontWeight="bold" lineHeight={1}>
+                <Text fontSize="xs" color={colors.dot} fontWeight="bold" lineHeight={1}>
                   ✓
                 </Text>
               ) : step.status === 'cancelled' ? (
-                <Text fontSize="xs" color="color.text.muted" fontWeight="bold" lineHeight={1}>
+                <Text fontSize="xs" color={colors.dot} fontWeight="bold" lineHeight={1}>
                   —
                 </Text>
               ) : (

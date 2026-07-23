@@ -117,6 +117,16 @@
           },
           "$type": "color",
           "$description": "Text on the danger background. Fixed independently of color.text.on.accent — a custom theme accent (e.g. a dark brand purple) can flip on.accent to white, which fails against dark mode's light salmon danger red (≈2.8:1); near-black holds >7:1 here regardless of theme"
+        },
+        "warning": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [0.0392, 0.0392, 0.0588],
+            "alpha": 1,
+            "hex": "#0a0a0f"
+          },
+          "$type": "color",
+          "$description": "Text on the warning background. Fixed independently of color.text.on.accent for the same reason as on.danger — near-black holds ≈9.2:1 against dark mode's light amber warning regardless of theme"
         }
       }
     },
