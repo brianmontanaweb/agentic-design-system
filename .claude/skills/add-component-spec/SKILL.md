@@ -39,7 +39,7 @@ Infer the package (`core` or `agents`) from which path exists.
 
 ## Step 2 — Read context
 
-Skip anything already in context from earlier in this conversation:
+Read:
 
 - The component source file — props interface, variants, states, ARIA attributes, token usage
 - `packages/core/src/Button/Button.doc.ts` — the `ComponentDoc` shape to follow

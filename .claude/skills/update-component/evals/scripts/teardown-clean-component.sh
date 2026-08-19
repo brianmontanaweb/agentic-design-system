@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
 git restore packages/agents/src/index.ts
-rm -f packages/agents/src/EvalCleanComponent.tsx \
-      apps/storybook/src/stories/EvalCleanComponent.stories.tsx \
-      packages/agents/src/EvalCleanComponent.doc.ts
+rm -rf packages/agents/src/EvalCleanComponent
+rm -f apps/storybook/src/stories/EvalCleanComponent.stories.tsx

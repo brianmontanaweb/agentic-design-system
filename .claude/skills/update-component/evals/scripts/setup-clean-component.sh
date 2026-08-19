@@ -3,7 +3,8 @@ set -euo pipefail
 
 # Source — fully compliant: semantic tokens, named export, role=status + aria-live,
 # visually-hidden text, no default React import, no hardcoded hex.
-cat > packages/agents/src/EvalCleanComponent.tsx << 'ENDSOURCE'
+mkdir -p packages/agents/src/EvalCleanComponent
+cat > packages/agents/src/EvalCleanComponent/EvalCleanComponent.tsx << 'ENDSOURCE'
 import { Box, Text } from '@chakra-ui/react'
 
 export type EvalCleanStatus = 'idle' | 'running' | 'done' | 'error'
@@ -70,7 +71,7 @@ export const Error:   Story = { args: { status: 'error' } }
 ENDSTORY
 
 # Spec doc — all sections complete, no missing props or tokens.
-cat > packages/agents/src/EvalCleanComponent.doc.ts << 'ENDSPEC'
+cat > packages/agents/src/EvalCleanComponent/EvalCleanComponent.doc.ts << 'ENDSPEC'
 import type { ComponentDoc } from '@agentic-ds/component-doc'
 
 export const doc: ComponentDoc = {
@@ -108,6 +109,11 @@ export const doc: ComponentDoc = {
     '`role="status"` and `aria-live="polite"` on the container announce state changes to screen readers. A visually-hidden `<span>` provides the full label text. The visible badge is `aria-hidden="true"` to prevent duplication.',
 }
 ENDSPEC
+
+# Component-level barrel
+cat > packages/agents/src/EvalCleanComponent/index.ts << 'ENDINDEX'
+export * from './EvalCleanComponent'
+ENDINDEX
 
 # Add to package index
 printf '\nexport { EvalCleanComponent } from '"'"'./EvalCleanComponent'"'"'\nexport type { EvalCleanComponentProps, EvalCleanStatus } from '"'"'./EvalCleanComponent'"'"'\n' \

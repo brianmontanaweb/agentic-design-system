@@ -143,13 +143,6 @@ Decisions made when the monolithic `add-component` skill was split into an orche
 | `add-component-spec` refuses when the spec doc already exists and redirects to `/update-component`                                                                                  | Spec _drift_ is `update-component`'s job; keeps the two skills' scopes disjoint                                                                                                                                                            |
 | Eval paths corrected from flat (`packages/<pkg>/src/<Name>.tsx`) to subdirectory (`packages/<pkg>/src/<Name>/<Name>.tsx`) layout; teardowns use `rm -rf` on the component directory | The repo migrated to subdirectory layout; old `rm -f` teardowns never cleaned up and expected-file lists omitted the test file                                                                                                             |
 
-### Follow-up
-
-| Item                                                                                                                                                                                        | Priority |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `update-component` still assumes the flat layout internally (Step 1 file table, `references/fixtures/`, eval setup/grade scripts) — fix together as one pass                                | Medium   |
-| Sub-skills still say "Skip anything already in context from earlier in this conversation" — vestigial under `context: fork` (a fork never has prior context); reword to unconditional reads | Low      |
-
 ---
 
 ## Toolchain

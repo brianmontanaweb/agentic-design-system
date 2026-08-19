@@ -41,7 +41,7 @@ Do not read, write, or modify any files.
 
 ## Step 2 — Read context
 
-Skip anything already in context from earlier in this conversation:
+Read:
 
 - `.claude/skills/shared/references/conventions.md` — file layout, package inference, import/export/token rules
 - `.claude/skills/shared/references/aria-patterns.md` — ARIA pattern per component type, MCP states

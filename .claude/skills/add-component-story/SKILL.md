@@ -39,7 +39,7 @@ Infer the package (`core` or `agents`) from which path exists.
 
 ## Step 2 — Read context
 
-Skip anything already in context from earlier in this conversation:
+Read:
 
 - `.claude/skills/shared/references/conventions.md` — import rules, file layout
 - The component source file — enumerate every prop, variant, enum value, and state
