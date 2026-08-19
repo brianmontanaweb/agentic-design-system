@@ -68,12 +68,13 @@ export function Button({
   return (
     <ButtonEl
       type={type}
-      disabled={disabled}
+      aria-disabled={disabled}
+      tabIndex={disabled ? 0 : undefined}
       aria-busy={loading}
       aria-label={loading && loadingText ? loadingText : ariaLabel}
       pointerEvents={loading ? 'none' : undefined}
       width={fullWidth ? '100%' : undefined}
-      onClick={!loading ? onClick : undefined}
+      onClick={!loading && !disabled ? onClick : undefined}
       {...styles}
     >
       {/* Absolutely positioned overlay preserves button width during loading */}

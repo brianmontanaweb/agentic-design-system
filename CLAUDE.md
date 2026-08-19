@@ -55,9 +55,8 @@ Spec docs are the single source of truth for the MCP server's component metadata
 
 ## Known Gaps (Prioritized)
 
-1. `Button` uses native `disabled` instead of `aria-disabled` + `tabIndex={0}`
-2. No `ErrorBoundary` or `Skeleton` primitives
-3. Zero light-mode visual regression baselines (all 99 are dark-mode captures) — the static stylesheet's `data-color-mode="light"` pin makes capturing them straightforward now
+1. No `ErrorBoundary` or `Skeleton` primitives
+2. Zero light-mode visual regression baselines (all 99 are dark-mode captures) — the static stylesheet's `data-color-mode="light"` pin makes capturing them straightforward now
 
 See `PLAN.md` → Known Gaps / Roadmap for the full list, including the Astryx-inspired architecture items.
 

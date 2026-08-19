@@ -202,7 +202,7 @@ Default size: \`md\`. Touch targets MUST meet WCAG 2.2 SC 2.5.8 minimum of 24×2
 
 Focus ring MUST use \`:focus-visible\`, not \`:focus\`, to avoid showing the ring on mouse click.
 
-Disabled state MUST use \`aria-disabled="true"\` + \`tabIndex={-1}\` rather than the HTML \`disabled\` attribute when the button must remain in the tab order for accessibility tools.
+Disabled state MUST use \`aria-disabled="true"\` + \`tabIndex={0}\` rather than the HTML \`disabled\` attribute — this keeps the button in the tab order so keyboard and screen-reader users can discover it and learn why the action is unavailable.
 
 ## Implementation notes
 

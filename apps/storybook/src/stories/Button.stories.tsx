@@ -1,4 +1,3 @@
-import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { HStack, VStack, Text } from '@agentic-ds/core'
 import { Button } from '@agentic-ds/core'
