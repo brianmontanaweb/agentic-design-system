@@ -16,12 +16,38 @@ const snapshotOptions: MatchImageSnapshotOptions = {
   diffDirection: 'horizontal',
 }
 
+// STORYBOOK_COLOR_SCHEME=light opts an entire run into light-mode capture.
+// Snapshot identifiers get a '-light' suffix so they land as new files
+// alongside the (unsuffixed) dark-mode baselines instead of overwriting them.
+const colorScheme = process.env.STORYBOOK_COLOR_SCHEME === 'light' ? 'light' : undefined
+
+interface StorybookChannel {
+  emit: (event: string, payload: unknown) => void
+  once: (event: string, listener: () => void) => void
+}
+
 const config: TestRunnerConfig = {
   setup() {
     expect.extend({ toMatchImageSnapshot })
   },
 
+  async preVisit(page) {
+    if (!colorScheme) return
+    // Overrides the AgenticProvider colorScheme global via the same
+    // addons-channel event the toolbar's Dark/Light switch uses, before the
+    // story renders (preVisit runs ahead of the render step).
+    await page.evaluate((scheme) => {
+      const channel = (window as unknown as { __STORYBOOK_ADDONS_CHANNEL__: StorybookChannel })
+        .__STORYBOOK_ADDONS_CHANNEL__
+      return new Promise<void>((resolve) => {
+        channel.once('globalsUpdated', () => resolve())
+        channel.emit('updateGlobals', { globals: { colorScheme: scheme } })
+      })
+    }, colorScheme)
+  },
+
   async postVisit(page, context) {
+    const idSuffix = colorScheme ? `-${colorScheme}` : ''
     // 1. Accessibility check — runs axe-core against the story root.
     //    Any WCAG 2.x violation fails the test with a descriptive message.
     const results = await new AxeBuilder({ page }).include('#storybook-root').analyze()
@@ -48,7 +74,7 @@ const config: TestRunnerConfig = {
     const reducedImage = await (reducedRoot ?? page).screenshot()
     expect(reducedImage).toMatchImageSnapshot({
       ...snapshotOptions,
-      customSnapshotIdentifier: `${context.id}-reduced-motion`,
+      customSnapshotIdentifier: `${context.id}${idSuffix}-reduced-motion`,
     })
     await page.emulateMedia({ reducedMotion: 'no-preference' })
 
@@ -75,7 +101,7 @@ const config: TestRunnerConfig = {
 
     expect(image).toMatchImageSnapshot({
       ...snapshotOptions,
-      customSnapshotIdentifier: context.id,
+      customSnapshotIdentifier: `${context.id}${idSuffix}`,
     })
   },
 }

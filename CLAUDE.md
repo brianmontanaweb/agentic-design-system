@@ -56,7 +56,7 @@ Spec docs are the single source of truth for the MCP server's component metadata
 ## Known Gaps (Prioritized)
 
 1. No `ErrorBoundary` or `Skeleton` primitives
-2. Zero light-mode visual regression baselines (all 99 are dark-mode captures) — the static stylesheet's `data-color-mode="light"` pin makes capturing them straightforward now
+2. Light-mode visual regression baselines: 90/96 captured (2026-08-18) via `npm run test:visual:light:update:docker`; the remaining 6 are blocked by real WCAG AA color-contrast bugs — see `PLAN.md` → Known Gaps / Roadmap → Testing
 
 See `PLAN.md` → Known Gaps / Roadmap for the full list, including the Astryx-inspired architecture items.
 

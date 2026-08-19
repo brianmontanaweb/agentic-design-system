@@ -7,7 +7,9 @@
     "dev": "storybook dev -p 6006",
     "build": "storybook build",
     "test:visual": "test-storybook",
-    "test:visual:update": "test-storybook -u"
+    "test:visual:update": "test-storybook -u",
+    "test:visual:light": "STORYBOOK_COLOR_SCHEME=light test-storybook",
+    "test:visual:light:update": "STORYBOOK_COLOR_SCHEME=light test-storybook -u"
   },
   "dependencies": {
     "@agentic-ds/agents": "*",
