@@ -81,9 +81,12 @@ describe('Button', () => {
   })
 
   describe('disabled state', () => {
-    it('applies native disabled attribute', () => {
+    it('applies aria-disabled and keeps the button in the tab order', () => {
       renderWithProviders(<Button disabled>Save</Button>)
-      expect(screen.getByRole('button')).toBeDisabled()
+      const button = screen.getByRole('button')
+      expect(button).not.toBeDisabled()
+      expect(button).toHaveAttribute('aria-disabled', 'true')
+      expect(button).toHaveAttribute('tabindex', '0')
     })
 
     it('does not call onClick when disabled', async () => {
