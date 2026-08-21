@@ -12,11 +12,6 @@
           "$type": "color",
           "$description": "MCP running — actively processing"
         },
-        "waiting": {
-          "$value": "{color.accent.warning}",
-          "$type": "color",
-          "$description": "MCP input_required — paused for user input"
-        },
         "done": {
           "$value": "{color.accent.success}",
           "$type": "color",

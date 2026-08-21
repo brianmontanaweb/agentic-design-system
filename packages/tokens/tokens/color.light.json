@@ -1,5 +1,19 @@
 {
   "color": {
+    "agent": {
+      "status": {
+        "waiting": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [0.6863, 0.3176, 0.0],
+            "alpha": 1,
+            "hex": "#af5100"
+          },
+          "$type": "color",
+          "$description": "Light mode MCP input_required — paused for user input. Darkened from color.accent.warning's #d97706 (2026-08-20): AgentStatus renders this as text color (not a background fill), and #d97706 as text is only ~3.0-3.2:1 against light surfaces, failing WCAG AA's 4.5:1 for normal text. #af5100 holds ≥4.6:1 against every light surface token while staying in the same amber hue family."
+        }
+      }
+    },
     "surface": {
       "base": {
         "$value": {
@@ -90,12 +104,12 @@
       "muted": {
         "$value": {
           "colorSpace": "srgb",
-          "components": [0.4, 0.4, 0.6667],
+          "components": [0.3608, 0.3608, 0.6235],
           "alpha": 1,
-          "hex": "#6666aa"
+          "hex": "#5c5c9f"
         },
         "$type": "color",
-        "$description": "Light mode de-emphasized or secondary text"
+        "$description": "Light mode de-emphasized or secondary text. Darkened from #6666aa (2026-08-20): the original was only 4.57:1 against color.surface.elevated, and defineAgenticTheme's neutralWarmth tint (lightness-preserving in OKLCH, but WCAG contrast is luminance-based, not OKLCH-lightness-based) could drop it below the 4.5:1 AA floor. 5.3:1 baseline leaves headroom for the tint."
       },
       "on": {
         "accent": {

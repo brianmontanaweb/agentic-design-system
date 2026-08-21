@@ -4,7 +4,7 @@
 export const colorModes = Object.freeze({
   'color.agent.status.idle': {
     dark: '#8888aa',
-    light: '#6666aa',
+    light: '#5c5c9f',
     $type: 'color',
     $description: 'MCP idle — not started',
   },
@@ -13,12 +13,6 @@ export const colorModes = Object.freeze({
     light: '#2563eb',
     $type: 'color',
     $description: 'MCP running — actively processing',
-  },
-  'color.agent.status.waiting': {
-    dark: '#f59e0b',
-    light: '#d97706',
-    $type: 'color',
-    $description: 'MCP input_required — paused for user input',
   },
   'color.agent.status.done': {
     dark: '#3dd68c',
@@ -34,13 +28,20 @@ export const colorModes = Object.freeze({
   },
   'color.agent.status.cancelled': {
     dark: '#8888aa',
-    light: '#6666aa',
+    light: '#5c5c9f',
     $type: 'color',
     $description: 'MCP cancelled — explicitly stopped',
   },
+  'color.agent.status.waiting': {
+    dark: '#f59e0b',
+    light: '#af5100',
+    $type: 'color',
+    $description:
+      "MCP input_required — paused for user input. Same value as color.accent.warning's dark-mode hex; kept as its own primitive (not an alias) so light mode can diverge for contrast (see color.light.json).",
+  },
   'color.tool.status.pending': {
     dark: '#8888aa',
-    light: '#6666aa',
+    light: '#5c5c9f',
     $type: 'color',
     $description: 'Tool call not yet dispatched',
   },
@@ -100,7 +101,7 @@ export const colorModes = Object.freeze({
   },
   'color.step.pending.label': {
     dark: '#8888aa',
-    light: '#6666aa',
+    light: '#5c5c9f',
     $type: 'color',
     $description: 'ProgressSteps pending step label',
   },
@@ -136,7 +137,7 @@ export const colorModes = Object.freeze({
   },
   'color.step.complete.label': {
     dark: '#8888aa',
-    light: '#6666aa',
+    light: '#5c5c9f',
     $type: 'color',
     $description: 'ProgressSteps complete step label',
   },
@@ -166,13 +167,13 @@ export const colorModes = Object.freeze({
   },
   'color.step.cancelled.dot': {
     dark: '#8888aa',
-    light: '#6666aa',
+    light: '#5c5c9f',
     $type: 'color',
     $description: 'ProgressSteps cancelled step dot border',
   },
   'color.step.cancelled.label': {
     dark: '#8888aa',
-    light: '#6666aa',
+    light: '#5c5c9f',
     $type: 'color',
     $description: 'ProgressSteps cancelled step label',
   },
@@ -232,7 +233,7 @@ export const colorModes = Object.freeze({
   },
   'color.text.muted': {
     dark: '#8888aa',
-    light: '#6666aa',
+    light: '#5c5c9f',
     $type: 'color',
     $description: 'De-emphasized or secondary text',
   },

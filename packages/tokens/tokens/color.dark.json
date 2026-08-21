@@ -1,5 +1,19 @@
 {
   "color": {
+    "agent": {
+      "status": {
+        "waiting": {
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [0.9608, 0.6196, 0.0431],
+            "alpha": 1,
+            "hex": "#f59e0b"
+          },
+          "$type": "color",
+          "$description": "MCP input_required — paused for user input. Same value as color.accent.warning's dark-mode hex; kept as its own primitive (not an alias) so light mode can diverge for contrast (see color.light.json)."
+        }
+      }
+    },
     "surface": {
       "base": {
         "$value": {
